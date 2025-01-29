@@ -1,6 +1,8 @@
-# Wordle
+# Zordle
 
 This project was created because 1 wordle a day is simply not enough
+
+[https://zordle.fly.dev/](https://zordle.fly.dev/)
 
 ---
 
