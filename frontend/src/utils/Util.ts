@@ -119,18 +119,25 @@ function changeGridColour(
     setGridColourState: React.Dispatch<React.SetStateAction<GridColourState[][]>>,
 ) {
     const letterFreq: Record<string, number> = getLetterFreq(selectedWord)
-    const newColourStateRow: GridColourState[] = []
+    const newColourStateRow: GridColourState[] = new Array(MAX_WORD_LENGTH).fill("gray")
 
+    /*
+        Iterate through current word twice. First iteration to identify all the greens.
+        Second iteration to fill in the yellows. Default colour is set to gray.
+    */
     for (let pos = 0; pos < MAX_WORD_LENGTH; pos++) {
         if (currentWord[pos] === selectedWord[pos]) {
             letterFreq[currentWord[pos]]--
-            newColourStateRow.push('green')
-        } else if (selectedWord.includes(currentWord[pos]) && letterFreq[currentWord[pos]] > 0) {
-            letterFreq[currentWord[pos]]--
-            newColourStateRow.push('yellow')
-        } else {
-            newColourStateRow.push('gray')
+            newColourStateRow[pos] = "green"
         }
+    }
+    for (let pos = 0; pos < MAX_WORD_LENGTH; pos++) {
+        if (currentWord[pos] !== selectedWord[pos] && // the letter does not match
+            selectedWord.includes(currentWord[pos]) && // the letter is in the word
+            letterFreq[currentWord[pos]] > 0) {
+            letterFreq[currentWord[pos]]--
+            newColourStateRow[pos] = "yellow"
+        } 
     }
     
     setGridColourState([
@@ -170,7 +177,7 @@ function changeKeyboardColour(
         if (currentWord[pos] === selectedWord[pos]) {
             newKeyboardColourState[currentWord[pos] as Letter] = "green"
         } else if (selectedWord.includes(currentWord[pos])) {
-            if (keyboardColourState[currentWord[pos] as Letter] !== "green") newKeyboardColourState[currentWord[pos] as Letter] = "yellow"
+            if (newKeyboardColourState[currentWord[pos] as Letter] !== "green") newKeyboardColourState[currentWord[pos] as Letter] = "yellow"
         } else {
             newKeyboardColourState[currentWord[pos] as Letter] = "dark gray"
         }
