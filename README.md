@@ -1,8 +1,10 @@
 # Zordle
 
-This project was created because 1 wordle a day is simply not enough
+This project was created because 1 wordle a day is simply not enough. Click the link below to visit zordle!
 
-[https://zordle.fly.dev/](https://zordle.fly.dev/)
+<a href="https://zordle.fly.dev/" 
+    target="_blank">https://zordle.fly.dev/
+</a>
 
 ---
 
