@@ -4,15 +4,15 @@ import { words_to_guess } from "./words-to-guess";
 import { words_to_accept } from "./words-to-accept";
 
 const app = express();
-const port = 8000;
-
-const corsOptions = {
-  origin: ['http://localhost:5173', 'http://localhost:8000']
-}
+const PORT = 8000;
 
 // Middlewares
 app.use(express.json());
-app.use(cors(corsOptions))
+app.use(cors({
+  origin: ["http://localhost:5173", "https://zordle.fly.dev"] , // Allow requests from dev and prod frontends
+  methods: "GET,POST,PUT,DELETE",
+  credentials: true, // If using cookies or authentication
+}));
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Server is running');
@@ -53,6 +53,6 @@ app.get('/is-word-in-DB/:word', (req: Request, res: Response) => {
   }
 })
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server is running on port ${PORT}`);
 });
