@@ -21,11 +21,12 @@ export default function KeyboardListener() {
 
     useEffect(() => {
         function handleKeyDown(event: KeyboardEvent) {
-            switch (event.key) {
-                case "Enter":
+            const key: string = event.key.toLowerCase()
+            switch (key) {
+                case "enter":
                     handleEnter(words, wordIdx, setWordIdx, setWords, selectedWord, gridColourState, setGridColourState, keyboardColourState, setKeyboardColourState, isGameOver, setIsGameOver, setPopupMessage, setTriggerWordShakeAnimation, setTriggerLettersFlipAnimation, isKeyboardDisabled, setIsKeyboardDisabled)
                     break
-                case "Backspace":
+                case "backspace":
                     handleBackspace(words, wordIdx, setWords, isGameOver)
                     break
                 case "a":
