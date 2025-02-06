@@ -66,9 +66,9 @@ export async function handleEnter(
 
     changeGridColour(currentWord, selectedWord, wordIdx, gridColourState, setGridColourState)
     triggerLettersFlipAnimation(setTriggerLettersFlipAnimation)
-    setWordIdx(prevIdx => prevIdx + 1)
     
     setTimeout(() => {
+        setWordIdx(prevIdx => prevIdx + 1)
         setIsKeyboardDisabled(false)
         changeKeyboardColour(currentWord, selectedWord, keyboardColourState, setKeyboardColourState)
         if (currentWord === selectedWord) {

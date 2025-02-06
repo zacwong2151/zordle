@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const DEV_BASE_URL = 'http://localhost:8000'
-const PROD_BASE_URL = "https://wordservice.fly.dev"
+const DEV_WORD_SERVICE_URL = 'http://localhost:8000'
+const PROD_WORD_SERVICE_URL = "https://wordservice.fly.dev"
 const GET_RANDOM_WORD_URL = '/random-word'
 const IS_WORD_IN_DB_URL = '/is-word-in-DB'
 
@@ -10,7 +10,7 @@ const IS_WORD_IN_DB_URL = '/is-word-in-DB'
  */
 export async function getRandomWord() {
     try {
-        const response = await axios.get(DEV_BASE_URL + GET_RANDOM_WORD_URL)
+        const response = await axios.get(DEV_WORD_SERVICE_URL + GET_RANDOM_WORD_URL)
         return response.data.word
     } catch (error) {
         console.error(error)
@@ -23,7 +23,7 @@ export async function getRandomWord() {
  */
 export async function isWordInDB(word: string) {
     try {
-        const response = await axios.get(DEV_BASE_URL + IS_WORD_IN_DB_URL + `/${word}`, {
+        const response = await axios.get(DEV_WORD_SERVICE_URL + IS_WORD_IN_DB_URL + `/${word}`, {
             validateStatus: (status) => {
                 // Accept all HTTP status codes, so 404 doesn't trigger the catch block
                 return status >= 200 && status < 500;

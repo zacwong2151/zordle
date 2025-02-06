@@ -1,19 +1,21 @@
-import Grid from "./components/Grid/Grid"
-import Keyboard from "./components/Keyboard/Keyboard"
-import NavBar from "./components/NavBar"
 import { WordleContextProvider } from "./contexts/WordleContext"
+import { BrowserRouter, Routes, Route } from "react-router";
+import HomePage from "./components/HomePage";
+import Login from "./components/Auth/Login";
+import Signup from "./components/Auth/Signup";
 
 export default function App() {
   return (
     <>
       <WordleContextProvider>
-        <NavBar />
-        <div className="h-max w-screen flex flex-col items-center justify-center gap-4 my-12">
-            <Grid />
-            <Keyboard />
-        </div>
+        <BrowserRouter>
+          <Routes>
+              <Route path="/" element={<HomePage />}/>
+              <Route path="/login" element={<Login />}/>
+              <Route path="/signup" element={<Signup />}/>
+          </Routes>
+        </BrowserRouter>
       </WordleContextProvider>
-    
     </>
   )
 }

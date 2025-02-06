@@ -25,6 +25,8 @@ type WordleStateType = {
     setTriggerLettersFlipAnimation: React.Dispatch<React.SetStateAction<boolean>>,
     isKeyboardDisabled: boolean,
     setIsKeyboardDisabled: React.Dispatch<React.SetStateAction<boolean>>,
+    isUserStatsModalOpen: boolean,
+    setIsUserStatsModalOpen: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 const WordleContext = createContext<WordleStateType | null>(null)
@@ -51,6 +53,7 @@ const WordleContextProvider = ({ children } : { children: ReactNode }) => {
     const [triggerWordShakeAnimation, setTriggerWordShakeAnimation] = useState<boolean>(false)
     const [triggerLettersFlipAnimation, setTriggerLettersFlipAnimation] = useState<boolean>(false)
     const [isKeyboardDisabled, setIsKeyboardDisabled] = useState<boolean>(false)
+    const [isUserStatsModalOpen, setIsUserStatsModalOpen] = useState<boolean>(false)
     
     /**
      * Initialize keyboardColourState with all letters set to "gray"
@@ -86,6 +89,7 @@ const WordleContextProvider = ({ children } : { children: ReactNode }) => {
         triggerWordShakeAnimation, setTriggerWordShakeAnimation,
         triggerLettersFlipAnimation, setTriggerLettersFlipAnimation,
         isKeyboardDisabled, setIsKeyboardDisabled,
+        isUserStatsModalOpen, setIsUserStatsModalOpen,
     }
     
     return (
