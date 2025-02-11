@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router";
 import HomePage from "./components/HomePage";
 import Login from "./components/Auth/Login";
 import Signup from "./components/Auth/Signup";
+import Battle from "./components/Battle/Battle";
 
 export default function App() {
   return (
@@ -11,8 +12,9 @@ export default function App() {
         <BrowserRouter>
           <Routes>
               <Route path="/" element={<HomePage />}/>
-              <Route path="/login" element={<Login />}/>
-              <Route path="/signup" element={<Signup />}/>
+              <Route path="/my-login" element={<Login />}/>
+              <Route path="/my-signup" element={<Signup />}/>
+              <Route path="/battle" element={<Battle />}/>
           </Routes>
         </BrowserRouter>
       </WordleContextProvider>

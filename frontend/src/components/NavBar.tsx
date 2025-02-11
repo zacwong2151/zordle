@@ -4,15 +4,18 @@ import { useWordleContext } from "../contexts/WordleContext";
 import { getRandomWord } from "../apis/WordleApi";
 import { Letter } from "../types/Letter";
 import { KeyboardColourState } from "../types/ColourState";
+import { GiBattleGear } from "react-icons/gi";
+import { useNavigate } from "react-router-dom"
 
 export default function NavBar() {
-    const { 
+    const navigate = useNavigate()
+    const {
         isKeyboardDisabled,
-        setWords, 
-        setWordIdx, 
-        setSelectedWord, 
-        setGridColourState, 
-        setKeyboardColourState, 
+        setWords,
+        setWordIdx,
+        setSelectedWord,
+        setGridColourState,
+        setKeyboardColourState,
         setIsGameOver,
         setPopupMessage,
         setTriggerWordShakeAnimation,
@@ -44,13 +47,13 @@ export default function NavBar() {
                 ['white', 'white', 'white', 'white', 'white']
             ]
         )
-        
+
         const initialKeyboardState: Record<Letter, KeyboardColourState> = {} as Record<Letter, KeyboardColourState>
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letter => {
             initialKeyboardState[letter as Letter] = "gray"
         })
         setKeyboardColourState(initialKeyboardState)
-        
+
         setIsGameOver(false)
         setPopupMessage(null)
         setTriggerWordShakeAnimation(false)
@@ -61,10 +64,11 @@ export default function NavBar() {
 
     return (
         <nav className="bg-slate-200 text-gray-800 p-4 w-full border-b border-gray-200 shadow-sm">
-          <div className="max-w-7xl mx-auto flex items-center justify-center h-8 gap-x-24">
-            <IoMdRefresh size={24} className="hover:text-blue-700 cursor-pointer" onClick={handleRefresh} />
-            <FaUser className="hover:text-blue-700 cursor-pointer" onClick={() => setIsUserStatsModalOpen(true)}/>
-          </div>
+            <div className="max-w-7xl mx-auto flex items-center justify-center h-8 gap-x-24">
+                <FaUser className="hover:text-blue-700 cursor-pointer" onClick={() => setIsUserStatsModalOpen(true)} />
+                <IoMdRefresh size={24} className="hover:text-blue-700 cursor-pointer" onClick={handleRefresh} />
+                <GiBattleGear className="hover:text-blue-700 cursor-pointer" onClick={() => navigate('/battle')}/>
+            </div>
         </nav>
     )
 }
