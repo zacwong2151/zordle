@@ -6,7 +6,9 @@
     "strict": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
+    "module": "ESNext",
     "target": "es6",
+    "types": ["vite/client"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]

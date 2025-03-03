@@ -6,6 +6,7 @@ import { Letter } from "../types/Letter";
 import { KeyboardColourState } from "../types/ColourState";
 import { GiBattleGear } from "react-icons/gi";
 import { useNavigate } from "react-router-dom"
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function NavBar() {
     const navigate = useNavigate()
@@ -23,6 +24,7 @@ export default function NavBar() {
         setIsKeyboardDisabled,
         setIsUserStatsModalOpen,
     } = useWordleContext()
+    const { user } = useAuth0()
 
     /**
      * Resets all state to default state.
@@ -68,6 +70,7 @@ export default function NavBar() {
                 <FaUser className="hover:text-blue-700 cursor-pointer" onClick={() => setIsUserStatsModalOpen(true)} />
                 <IoMdRefresh size={24} className="hover:text-blue-700 cursor-pointer" onClick={handleRefresh} />
                 <GiBattleGear className="hover:text-blue-700 cursor-pointer" onClick={() => navigate('/battle')}/>
+                {user ? user.name : 'not authenticated'}
             </div>
         </nav>
     )
