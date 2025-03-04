@@ -1,14 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-    darkMode: ["class"],
+    darkMode: ['class'],
     content: [
-        "./index.html",
-        "./src/**/*.{js,ts,jsx,tsx}",
+        './index.html',
+        './src/**/*.{js,ts,jsx,tsx}'
     ],
     theme: {
   	extend: {
             animation: {
-                shake: "shake 0.5s ease-in-out",
+                shake: 'shake 0.5s ease-in-out'
             },
   		borderRadius: {
   			lg: 'var(--radius)',
@@ -59,5 +59,5 @@ export default {
   		}
   	}
     },
-    plugins: [require("tailwindcss-animate")],
+    plugins: [require('tailwindcss-animate')]
 }

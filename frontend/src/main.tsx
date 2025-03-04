@@ -8,7 +8,7 @@ import App from './App'
 const rootElement = document.getElementById('root');
 
 if (!rootElement) {
-  throw new Error("Root element with ID 'root' not found in the DOM.");
+    throw new Error("Root element with ID 'root' not found in the DOM.");
 }
 
 /**
@@ -18,11 +18,11 @@ if (!rootElement) {
  */
 
 createRoot(rootElement).render(
-  <StrictMode>
-    <BrowserRouter>
-      <Auth0ProviderWithNavigate>
-        <App />
-      </Auth0ProviderWithNavigate>
-    </BrowserRouter>
-  </StrictMode>
+    <StrictMode>
+        <BrowserRouter>
+            <Auth0ProviderWithNavigate>
+                <App />
+            </Auth0ProviderWithNavigate>
+        </BrowserRouter>
+    </StrictMode>
 );

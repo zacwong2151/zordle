@@ -7,23 +7,23 @@ import CallBackPage from "./components/CallBackPage";
 import { useAuth0 } from "@auth0/auth0-react";
 
 export default function App() {
-  const { isLoading } = useAuth0()
+    const { isLoading } = useAuth0()
 
-  if (isLoading) {
-    return (
-      <div>TODO: put a page loading screen here</div>
-    )
-  }
+    if (isLoading) {
+        return (
+            <div>TODO: put a page loading screen here</div>
+        )
+    }
   
-  return (
-    <>
-      <WordleContextProvider>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/battle" element={<ProtectedRoute component={Battle} />} />
-          <Route path="/callback" element={<CallBackPage />} />
-        </Routes>
-      </WordleContextProvider>
-    </>
-  )
+    return (
+        <>
+            <WordleContextProvider>
+                <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/battle" element={<ProtectedRoute component={Battle} />} />
+                    <Route path="/callback" element={<CallBackPage />} />
+                </Routes>
+            </WordleContextProvider>
+        </>
+    )
 }
