@@ -27,3 +27,4 @@ jobs:
         env:
           VALIDATE_ALL_CODEBASE: false # false: Lint only the changed files, not the entire codebase.
           DEFAULT_BRANCH: "master"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
