@@ -52,10 +52,6 @@ export default function UserStats() {
 
     const authenticatedContent = user && (
         <>
-            <img src={user.picture} />
-            <div>{user.nickname}</div>
-            <div>{user.email}</div>
-
             <Button
                 className="w-3/4 text-base bg-black text-white rounded-3xl"
                 size="lg"
@@ -72,7 +68,7 @@ export default function UserStats() {
     return (
         <Dialog open={isUserStatsModalOpen} onOpenChange={() => setIsUserStatsModalOpen(false)}>
             <DialogContent className="sm:max-w-md">
-                <DialogTitle></DialogTitle>
+                <DialogTitle>{isAuthenticated && user ? `Hello ${user.nickname}` : ""}</DialogTitle>
                 <DialogDescription></DialogDescription>
                 <div className="flex flex-col items-center space-y-6 text-center">
                     <img

@@ -1,5 +1,5 @@
-import Grid from "./Grid/Grid";
-import Keyboard from "./Keyboard/Keyboard";
+import Grid from "../Grid/Grid";
+import Keyboard from "../Keyboard/Keyboard";
 import NavBar from "./NavBar";
 import UserStats from "./UserStats";
 

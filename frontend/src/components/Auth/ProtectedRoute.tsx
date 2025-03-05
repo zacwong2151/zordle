@@ -1,5 +1,6 @@
 import { withAuthenticationRequired } from "@auth0/auth0-react";
 import React, { ComponentType } from "react";
+import LoadingPage from "../Misc/LoadingPage";
 
 interface ProtectedRouteProps {
   component: ComponentType;
@@ -18,9 +19,7 @@ interface ProtectedRouteProps {
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ component }) => {
   const Component = withAuthenticationRequired(component, {
     onRedirecting: () => (
-      <div>
-        TODO: put a page loading screen here
-      </div>
+      <LoadingPage />
     ),
   });
 
