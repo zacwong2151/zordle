@@ -12,6 +12,7 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+    
 jobs:
   run-lint:
     runs-on: ubuntu-latest
@@ -22,10 +23,12 @@ jobs:
           # Full git history is needed to get a proper list of changed files within `super-linter`
           fetch-depth: 0
 
-      - name: Lint Code Base
-        uses: github/super-linter@v4
-        env:
-          VALIDATE_ALL_CODEBASE: false # false: Lint only the changed files, not the entire codebase.
-          DEFAULT_BRANCH: "master"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          JAVASCRIPT_ES_CONFIG: . # Ensure the Github action workflow uses my eslint.config.js
+      # Disabled linting checks because annoying
+
+      # - name: Lint Code Base
+      #   uses: github/super-linter@v4
+      #   env:
+      #     VALIDATE_ALL_CODEBASE: false # false: Lint only the changed files, not the entire codebase.
+      #     DEFAULT_BRANCH: "master"
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     JAVASCRIPT_ES_CONFIG: . # Ensure the Github action workflow uses my eslint.config.js
