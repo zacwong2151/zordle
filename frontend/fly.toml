@@ -7,9 +7,10 @@ app = 'zordle'
 primary_region = 'hkg'
 
 [build]
+  dockerfile = "Dockerfile"   # Explicitly tell Fly.io to use your Dockerfile
 
 [http_service]
-  internal_port = 80
+  internal_port = 80          # Matches the port exposed by Nginx
   force_https = true
   auto_stop_machines = 'stop'
   auto_start_machines = true

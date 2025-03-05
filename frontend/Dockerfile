@@ -8,14 +8,15 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
 
-# Copy source code
+# Copy source code and build
 COPY . .
-
-# Build the frontend
 RUN npm run build
 
-# Use a lightweight web server to serve the built frontend
+# Use a lightweight web server (Nginx) to serve the built frontend
 FROM nginx:alpine
+
+# Add custom Nginx config for React Router (for deployment to Fly.io)
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy built files to Nginx's HTML directory
 COPY --from=build /app/dist /usr/share/nginx/html

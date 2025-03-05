@@ -26,13 +26,13 @@ This project was created because 1 wordle a day is simply not enough. Click the 
 
 
 > ### Phase 3: extend functionality to n-letter words 
-> WIP
+> KIV
 
  
 
 > ### Phase 4: implement user service
-> WIP
-  - TODO: log in and sign up system (only needed to unlock phase 5 features. The main wordle is F2P)
+> completed on 5th March 2025
+  - DONE: basic login logout functions using Auth0. Make the /battle route protected
 
 
 > ### Phase 5.1: implement user stats (e.g. similar to wordle's accuracy system)
