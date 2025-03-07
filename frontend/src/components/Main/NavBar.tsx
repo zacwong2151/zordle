@@ -6,7 +6,7 @@ import { Letter } from "../../types/Letter";
 import { KeyboardColourState } from "../../types/ColourState";
 import { GiBattleGear } from "react-icons/gi";
 import { useNavigate } from "react-router-dom"
-import { useAuth0 } from "@auth0/auth0-react";
+import { useUserContext } from "@/contexts/UserContext";
 
 export default function NavBar() {
     const navigate = useNavigate()
@@ -24,7 +24,7 @@ export default function NavBar() {
         setIsKeyboardDisabled,
         setIsUserStatsModalOpen,
     } = useWordleContext()
-    const { user } = useAuth0()
+    const { isAuth, picture } = useUserContext()
 
     /**
      * Resets all state to default state.
@@ -64,8 +64,8 @@ export default function NavBar() {
         setIsUserStatsModalOpen(false)
     }
 
-    const unauthenticatedUserProfile = !user && (
-        <div className="absolute right-12 rounded-full bg-slate-300 hover:brightness-90 w-10 h-10 flex items-center justify-center" >
+    const unauthenticatedUserProfile = !isAuth && (
+        <div className="absolute right-8 rounded-full bg-slate-300 hover:brightness-90 w-10 h-10 flex items-center justify-center" >
             <CiUser
                 className="text-2xl cursor-pointer"
                 onClick={() => setIsUserStatsModalOpen(true)}
@@ -73,9 +73,9 @@ export default function NavBar() {
         </div>
     )
 
-    const authenticatedUserProfile = user && (
+    const authenticatedUserProfile = isAuth && (
         <img
-            src={user.picture}
+            src={picture}
             className="rounded-full absolute right-8 w-10 cursor-pointer hover:brightness-90"
             onClick={() => setIsUserStatsModalOpen(true)}
         />
@@ -86,7 +86,7 @@ export default function NavBar() {
             <div className="max-w-7xl mx-auto flex items-center justify-center h-8 gap-x-24">
                 <IoMdRefresh size={24} className="hover:text-blue-700 cursor-pointer" onClick={handleRefresh} />
                 <GiBattleGear className="hover:text-blue-700 cursor-pointer" onClick={() => navigate('/battle')} />
-                {user ? authenticatedUserProfile : unauthenticatedUserProfile}
+                {isAuth ? authenticatedUserProfile : unauthenticatedUserProfile}
             </div>
         </nav>
     )

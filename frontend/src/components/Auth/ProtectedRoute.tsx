@@ -3,7 +3,7 @@ import React, { ComponentType } from "react";
 import LoadingPage from "../Misc/LoadingPage";
 
 interface ProtectedRouteProps {
-  component: ComponentType;
+    component: ComponentType;
 }
 
 /*
@@ -17,11 +17,11 @@ interface ProtectedRouteProps {
 */
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ component }) => {
-  const Component = withAuthenticationRequired(component, {
-    onRedirecting: () => (
-      <LoadingPage />
-    ),
-  });
+    const Component = withAuthenticationRequired(component, {
+        onRedirecting: () => (
+            <LoadingPage />
+        ),
+    });
 
-  return <Component />;
+    return <Component />;
 };

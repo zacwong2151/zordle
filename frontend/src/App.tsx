@@ -1,4 +1,3 @@
-import { WordleContextProvider } from "./contexts/WordleContext"
 import HomePage from "./components/Main/HomePage";
 import Battle from "./components/Battle/Battle";
 import { ProtectedRoute } from "./components/Auth/ProtectedRoute";
@@ -15,16 +14,14 @@ export default function App() {
             <LoadingPage />
         )
     }
-  
+
     return (
         <>
-            <WordleContextProvider>
-                <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/battle" element={<ProtectedRoute component={Battle} />} />
-                    <Route path="/callback" element={<CallBackPage />} />
-                </Routes>
-            </WordleContextProvider>
+            <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/battle" element={<ProtectedRoute component={Battle} />} />
+                <Route path="/callback" element={<CallBackPage />} />
+            </Routes>
         </>
     )
 }

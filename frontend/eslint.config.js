@@ -33,10 +33,8 @@ export default [
                 'warn',
                 { allowConstantExport: true },
             ],
-            // ✅ Enforce 4-space indentation for JS and JSX:
-            'indent': ['error', 4, { SwitchCase: 1 }], 
-            'react/jsx-indent': ['error', 4], 
-            'react/jsx-indent-props': ['error', 4],
+            // ✅ Enforce 4-space indentation
+            "indent": ["error", "tab"]
         },
     },
 ]

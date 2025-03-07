@@ -1,7 +1,9 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from "react-router-dom";
-import { Auth0ProviderWithNavigate } from './components/Auth/Auth0ProviderWithNavigate';
+import { Auth0ContextProvider } from './contexts/Auth0Context';
+import { UserContextProvider } from './contexts/UserContext';
+import { WordleContextProvider } from './contexts/WordleContext';
 import './index.css'
 import App from './App'
 
@@ -17,12 +19,17 @@ if (!rootElement) {
  * you need to wrap the Auth0Provider with BrowserRouter from React Router
  */
 
+
 createRoot(rootElement).render(
     <StrictMode>
         <BrowserRouter>
-            <Auth0ProviderWithNavigate>
-                <App />
-            </Auth0ProviderWithNavigate>
+            <Auth0ContextProvider>
+                <UserContextProvider>
+                    <WordleContextProvider>
+                        <App />
+                    </WordleContextProvider>
+                </UserContextProvider>
+            </Auth0ContextProvider>
         </BrowserRouter>
     </StrictMode>
 );

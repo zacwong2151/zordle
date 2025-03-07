@@ -23,6 +23,7 @@ This project was created because 1 wordle a day is simply not enough. Click the 
 3. Build docker image and run container locally to test if `Dockerfile` is correct
 4. Run `fly launch` -> to deploy new application (remember to be at the correct directory)
 5. Run `fly deploy` -> to redeploy after new changes (you don’t have to push changes to GitHub to redeploy on Fly.io. Fly.io deploys directly from your local machine)
+    - remember to point the URLs in WordleApi to PROD before deploying to flyio
 
 
 > ### Phase 3: extend functionality to n-letter words 
