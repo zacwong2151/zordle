@@ -1,5 +1,6 @@
 import HomePage from "./components/Main/HomePage";
-import Battle from "./components/Battle/Battle";
+import FindBattle from "./components/Battle/FindBattle";
+import BattlePage from "./components/Battle/BattlePage";
 import { ProtectedRoute } from "./components/Auth/ProtectedRoute";
 import { Routes, Route } from "react-router-dom";
 import CallBackPage from "./components/Main/CallBackPage";
@@ -19,7 +20,8 @@ export default function App() {
         <>
             <Routes>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/battle" element={<ProtectedRoute component={Battle} />} />
+                <Route path="/battle" element={<ProtectedRoute component={FindBattle} />} />
+                <Route path="/battle/:roomId" element={<ProtectedRoute component={BattlePage} />} />
                 <Route path="/callback" element={<CallBackPage />} />
             </Routes>
         </>

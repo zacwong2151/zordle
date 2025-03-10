@@ -27,6 +27,12 @@ type WordleStateType = {
     setIsKeyboardDisabled: React.Dispatch<React.SetStateAction<boolean>>,
     isUserStatsModalOpen: boolean,
     setIsUserStatsModalOpen: React.Dispatch<React.SetStateAction<boolean>>,
+    isCreateRoomModalOpen: boolean,
+    setIsCreateRoomModalOpen: React.Dispatch<React.SetStateAction<boolean>>,
+    isJoinRoomModalOpen: boolean,
+    setIsJoinRoomModalOpen: React.Dispatch<React.SetStateAction<boolean>>,
+    isInvalidRoomModalOpen: boolean,
+    setIsInvalidRoomModalOpen: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 const WordleContext = createContext<WordleStateType | null>(null)
@@ -53,7 +59,11 @@ const WordleContextProvider = ({ children } : { children: ReactNode }) => {
     const [triggerWordShakeAnimation, setTriggerWordShakeAnimation] = useState<boolean>(false)
     const [triggerLettersFlipAnimation, setTriggerLettersFlipAnimation] = useState<boolean>(false)
     const [isKeyboardDisabled, setIsKeyboardDisabled] = useState<boolean>(false)
+
     const [isUserStatsModalOpen, setIsUserStatsModalOpen] = useState<boolean>(false)
+    const [isCreateRoomModalOpen, setIsCreateRoomModalOpen] = useState<boolean>(false)
+    const [isJoinRoomModalOpen, setIsJoinRoomModalOpen] = useState<boolean>(false)
+    const [isInvalidRoomModalOpen, setIsInvalidRoomModalOpen] = useState<boolean>(false)
     
     /**
      * Initialize keyboardColourState with all letters set to "gray"
@@ -90,6 +100,9 @@ const WordleContextProvider = ({ children } : { children: ReactNode }) => {
         triggerLettersFlipAnimation, setTriggerLettersFlipAnimation,
         isKeyboardDisabled, setIsKeyboardDisabled,
         isUserStatsModalOpen, setIsUserStatsModalOpen,
+        isCreateRoomModalOpen, setIsCreateRoomModalOpen,
+        isJoinRoomModalOpen, setIsJoinRoomModalOpen,
+        isInvalidRoomModalOpen, setIsInvalidRoomModalOpen
     }
     
     return (
