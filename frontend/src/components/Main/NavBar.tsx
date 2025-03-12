@@ -2,7 +2,7 @@ import { IoMdRefresh } from "react-icons/io";
 import { IoHomeOutline } from "react-icons/io5";
 import { CiUser } from "react-icons/ci";
 import { useWordleContext } from "../../contexts/WordleContext";
-import { getRandomWord } from "../../apis/WordleApi";
+import { getRandomWord } from "../../apis/CoreGameApis";
 import { Letter } from "../../types/Letter";
 import { KeyboardColourState } from "../../types/ColourState";
 import { GiBattleGear } from "react-icons/gi";

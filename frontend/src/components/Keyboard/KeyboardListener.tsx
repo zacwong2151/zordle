@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { handleBackspace, handleEnter, handleLetter } from "../../utils/Util";
+import { handleBackspace, handleEnter, handleLetter } from "../../utils/CoreGameUtils";
 import { useWordleContext } from "../../contexts/WordleContext";
 
 /**

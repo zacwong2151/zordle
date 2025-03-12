@@ -1,12 +1,11 @@
 import React, { createContext, useState, ReactNode, useContext, useEffect } from "react"
-import { Words } from "../types/Words"
-import { getRandomWord } from "../apis/WordleApi"
+import { getRandomWord } from "../apis/CoreGameApis"
 import { GridColourState, KeyboardColourState } from "../types/ColourState"
 import { Letter } from "../types/Letter"
 
 type WordleStateType = {
-    words: Words,
-    setWords: React.Dispatch<React.SetStateAction<Words>>,
+    words: string[],
+    setWords: React.Dispatch<React.SetStateAction<string[]>>,
     wordIdx: number,
     setWordIdx: React.Dispatch<React.SetStateAction<number>>,
     selectedWord: string | null,
@@ -38,7 +37,7 @@ type WordleStateType = {
 const WordleContext = createContext<WordleStateType | null>(null)
 
 const WordleContextProvider = ({ children } : { children: ReactNode }) => {
-    const [words, setWords] = useState<Words>(["", "", "", "", "", ""]) 
+    const [words, setWords] = useState<string[]>(["", "", "", "", "", ""]) 
     const [wordIdx, setWordIdx] = useState<number>(0)
     const [selectedWord, setSelectedWord] = useState<string | null>(null)
     const [gridColourState, setGridColourState] = useState<GridColourState[][]>(

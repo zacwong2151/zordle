@@ -2,10 +2,14 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import NavBar from "../Main/NavBar"
-import { CreateRoomModal } from "./Modals/CreateRoomModal"
-import { JoinRoomModal } from "./Modals/JoinRoomModal"
-import { InvalidRoomModal } from "./Modals/InvalidRoomModal"
+import { CreateRoomModal } from "./FindingModals/CreateRoomModal"
+import { JoinRoomModal } from "./FindingModals/JoinRoomModal"
+import { InvalidRoomModal } from "./FindingModals/InvalidRoomModal"
 import { useWordleContext } from "@/contexts/WordleContext"
+import { isUserFindingGame, userIsFindingGame } from "@/apis/FindingApis"
+import { isUserInGame } from "@/apis/BattleApis"
+import { useUserContext } from "@/contexts/UserContext"
+import { generateUniqueRoomId } from "@/utils/BattleUtils"
 
 export default function FindBattle() {
     const {
@@ -14,31 +18,23 @@ export default function FindBattle() {
         setIsInvalidRoomModalOpen
     } = useWordleContext()
     const [roomCode, setRoomCode] = useState("")
+    const { email } = useUserContext()
 
     const handleCreateRoom = () => {
+        if (isUserFindingGame(email) || isUserInGame(email)) {
+            console.warn('this should not happen')
+            return
+        }
+        userIsFindingGame(email, generateUniqueRoomId()) // insert into db
         setIsCreateRoomModalOpen(true)
-        /*
-            TODO: 
-            1. generate a random 6-digit room ID
-            2. create a WebSocket connection between client and server
-            3. listen for event where another client connects to the same room
-        */
     }
 
     const handleJoinRoom = () => {
         setIsJoinRoomModalOpen(true)
-        /*
-            TODO:
-            1. check if this room ID belongs in the database
-              1.1 if yes, check if this room ID is full (has 2 persons)
-                1.1.1 if yes, open InvalidRoomModal
-                1.1.2 if no, open JoinRoomModal
-              1.2 if no, open InvalidRoomModal
-        */
     }
 
     return (
-        <>  
+        <>
             <CreateRoomModal />
             <JoinRoomModal />
             <InvalidRoomModal />
