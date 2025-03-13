@@ -1,5 +1,6 @@
 package com.example.demo.findingGame.userPOV;
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 /*
@@ -23,7 +24,7 @@ public class FindingGameUserController {
     }
 
     @PostMapping
-    public void createUser(@RequestBody FindingGameUser user) {
+    public void createUser(@Valid @RequestBody FindingGameUser user) {
         findingGameUserService.createUser(user);
     }
 

@@ -3,13 +3,18 @@ package com.example.demo.findingGame.roomPOV;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "finding-game-room")
 public class FindingGameRoom {
     @Id
+    @NotBlank(message = "field cannot be null or blank")
     private String roomId;
+
+    @NotBlank(message = "field cannot be null or blank")
     private String user1Email;
+
     private String user2Email;
 
     public FindingGameRoom() {

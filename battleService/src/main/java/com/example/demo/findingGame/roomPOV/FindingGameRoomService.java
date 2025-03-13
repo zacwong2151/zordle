@@ -27,6 +27,7 @@ public class FindingGameRoomService {
     public void createRoom(FindingGameRoom room) {
         String roomId = room.getRoomId();
         String user1Email = room.getUser1Email();
+        String user2Email = room.getUser2Email();
 
         if (getRoom(roomId) != null) {
             throw new ApiRequestException(String.format("Cannot create, room: %s already exists", roomId), HttpStatus.CONFLICT);
@@ -35,7 +36,7 @@ public class FindingGameRoomService {
         FindingGameRoom entry = new FindingGameRoom(
                 roomId,
                 user1Email,
-                null // should already be initialised as null in frontend
+                user2Email // should be initialised as null in frontend
         );
         findingGameRoomRepo.save(entry);
     }
@@ -50,10 +51,6 @@ public class FindingGameRoomService {
 
     @Transactional
     public void updateRoom(String roomId, String user2Email) {
-        if (user2Email == null || user2Email.isBlank()) {
-            throw new ApiRequestException("Cannot update, user2Email cannot be null or empty", HttpStatus.BAD_REQUEST);
-        }
-
         FindingGameRoom room = getRoom(roomId);
 
         if (room == null) {

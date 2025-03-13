@@ -1,9 +1,16 @@
 package com.example.demo.findingGame.roomPOV;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "battle/finding-game/room")
+@Validated /*
+    Spring Boot only applies method parameter validation (@RequestParam, @PathVariable, etc.) if @Validated is present at the class or method level.
+    Without it, Spring will not trigger MethodArgumentNotValidException, and validation will be silently ignored.
+*/
 public class FindingGameRoomController {
 
     private final FindingGameRoomService findingGameRoomService;
@@ -18,7 +25,7 @@ public class FindingGameRoomController {
     }
 
     @PostMapping
-    public void createRoom(@RequestBody FindingGameRoom room) {
+    public void createRoom(@Valid @RequestBody FindingGameRoom room) {
         findingGameRoomService.createRoom(room);
     }
 
@@ -30,7 +37,7 @@ public class FindingGameRoomController {
     @PutMapping(path = "{roomId}")
     public void updateRoom(
             @PathVariable("roomId") String roomId,
-            @RequestParam String user2Email
+            @RequestParam @NotBlank(message = "field cannot be null or blank") String user2Email
     ) {
         findingGameRoomService.updateRoom(roomId, user2Email);
     }
