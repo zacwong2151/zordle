@@ -1,7 +1,7 @@
 import axios from "axios"
 
 /*
-    2 schemas for Finding Game/Room:
+    2 schemas for matching user/room:
 
     finding_game_user:
      - email (primary key)

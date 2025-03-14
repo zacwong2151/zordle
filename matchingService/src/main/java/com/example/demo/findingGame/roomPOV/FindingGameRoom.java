@@ -6,7 +6,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
-@Table(name = "finding-game-room")
+@Table(name = "finding_game_room")
 public class FindingGameRoom {
     @Id
     @NotBlank(message = "field cannot be null or blank")

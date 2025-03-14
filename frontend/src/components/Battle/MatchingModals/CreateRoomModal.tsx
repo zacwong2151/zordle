@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 import ReactLoading from 'react-loading'
 import { useWordleContext } from "@/contexts/WordleContext"
 import { useUserContext } from "@/contexts/UserContext"
-import { getUserRoomId, foundMatch, removeUserFromFinding, isUserFindingGame } from "@/apis/FindingApis"
+import { getUserRoomId, foundMatch, removeUserFromFinding, isUserFindingGame } from "@/apis/MatchingApis"
 
 export function CreateRoomModal() {
     const navigate = useNavigate()
@@ -34,7 +34,7 @@ export function CreateRoomModal() {
 
     /*
         Poll finding_game_room every second to check if player2_email is initialised. Once it is, navigate to BattlePage.
-        Remove entries from finding_game_player and finding_game_room
+        Remove entries from finding_game_user and finding_game_room
     */
     useEffect(() => {
         if (isCreateRoomModalOpen) {
