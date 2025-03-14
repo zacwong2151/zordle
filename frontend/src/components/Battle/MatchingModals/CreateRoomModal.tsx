@@ -18,6 +18,9 @@ export function CreateRoomModal() {
     const { isCreateRoomModalOpen, setIsCreateRoomModalOpen } = useWordleContext()
     const [roomId, setRoomId] = useState<String | null>(null)
 
+    /*
+        Fetch user's room id
+    */
     useEffect(() => {
         const fetchRoomId = async () => {
             try {
@@ -29,11 +32,10 @@ export function CreateRoomModal() {
         }
         if (isCreateRoomModalOpen) fetchRoomId()
 
-    }, [email, isCreateRoomModalOpen])
+    }, [email, roomId, isCreateRoomModalOpen])
 
     /*
         Poll finding_game_room every second to check if player2_email is initialised. Once it is, navigate to BattlePage.
-        Remove entries from finding_game_user and finding_game_room
     */
     useEffect(() => {
         if (isCreateRoomModalOpen) {
@@ -59,6 +61,11 @@ export function CreateRoomModal() {
         }
     }, [email, navigate, isCreateRoomModalOpen])
 
+    const handleLeaveRoom = async () => {
+        await removeUserFromFinding(email)
+        setIsCreateRoomModalOpen(false)
+    }
+
     return (
         <Dialog open={isCreateRoomModalOpen}>
             <DialogContent className="gap-8" hideClose={true}>
@@ -73,7 +80,7 @@ export function CreateRoomModal() {
                 <DialogFooter>
                     <Button
                         className="bg-red-600 hover:bg-red-700"
-                        onClick={() => setIsCreateRoomModalOpen(false)}
+                        onClick={handleLeaveRoom}
                     >
                         Leave room
                     </Button>

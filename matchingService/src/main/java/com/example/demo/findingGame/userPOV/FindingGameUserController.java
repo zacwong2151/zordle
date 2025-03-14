@@ -1,6 +1,8 @@
 package com.example.demo.findingGame.userPOV;
 
+import com.example.demo.exception.ApiRequestException;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 /*
@@ -19,7 +21,10 @@ public class FindingGameUserController {
     }
 
     @GetMapping(path = "{email}")
-    public FindingGameUser getUser(@PathVariable("email") String email) {
+    public FindingGameUser getUser(@PathVariable(name = "email", required = true) String email) {
+        if (email == null || email.isBlank()) {
+            throw new ApiRequestException("User email cannot be empty", HttpStatus.BAD_REQUEST);
+        }
         return findingGameUserService.getUser(email);
     }
 

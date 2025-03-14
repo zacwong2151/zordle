@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import NavBar from "../Main/NavBar"
@@ -6,7 +6,7 @@ import { CreateRoomModal } from "./MatchingModals/CreateRoomModal"
 import { JoinRoomModal } from "./MatchingModals/JoinRoomModal"
 import { InvalidRoomModal } from "./MatchingModals/InvalidRoomModal"
 import { useWordleContext } from "@/contexts/WordleContext"
-import { isUserFindingGame, userIsFindingGame } from "@/apis/MatchingApis"
+import { isUserFindingGame, removeUserFromFinding, userIsFindingGame } from "@/apis/MatchingApis"
 import { isUserInGame } from "@/apis/BattleApis"
 import { useUserContext } from "@/contexts/UserContext"
 import { generateUniqueRoomId } from "@/utils/BattleUtils"
@@ -19,6 +19,22 @@ export default function FindBattle() {
     } = useWordleContext()
     const [roomId, setRoomId] = useState<string>("")
     const { email } = useUserContext()
+
+    /*
+        When component mounts, check if user is in finding. If yes, remove user from finding.
+    */
+    useEffect(() => {
+        const validation = async () => {
+            try {
+                if (await isUserFindingGame(email)) {
+                    await removeUserFromFinding(email)
+                }
+            } catch (error) {
+                console.error(error)                
+            }
+        }
+        if (email) validation()
+    }, [email])
 
     const handleCreateRoom = async () => {
         const bool = await isUserFindingGame(email) // || isUserInGame(email)

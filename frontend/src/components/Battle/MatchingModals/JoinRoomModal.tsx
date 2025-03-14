@@ -24,6 +24,9 @@ export function JoinRoomModal({ roomId }: { roomId: string }) {
     const navigate = useNavigate()
     const { email } = useUserContext()
 
+    /*
+        Either bring user to battle page, or show an invalid room.
+    */
     useEffect(() => {
         const fetchRoomId = async () => {
             try {
@@ -41,9 +44,7 @@ export function JoinRoomModal({ roomId }: { roomId: string }) {
             }
         }
         if (isJoinRoomModalOpen) fetchRoomId()
-    }, [roomId, isJoinRoomModalOpen])
-
-
+    }, [roomId, email, isJoinRoomModalOpen])
 
     return (
         <Dialog open={isJoinRoomModalOpen}>
