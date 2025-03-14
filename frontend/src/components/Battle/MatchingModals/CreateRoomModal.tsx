@@ -27,9 +27,8 @@ export function CreateRoomModal() {
                 console.warn(error)
             }
         }
-        if (isCreateRoomModalOpen) {
-            fetchRoomId()
-        }
+        if (isCreateRoomModalOpen) fetchRoomId()
+
     }, [email, isCreateRoomModalOpen])
 
     /*
@@ -41,9 +40,15 @@ export function CreateRoomModal() {
             const interval = setInterval(async () => {
                 console.log('Polling every second to check if user found match..')
 
-                if (await foundMatch(email)) {
+                const user2Email = await foundMatch(email)
+
+                if (user2Email) {
+                    /*
+                    TODO:
+                        Create 2 entries in 'playing-game' for both user emails
+                        Create an entry in 'game-details', with the basic info of both user emails
+                    */
                     clearInterval(interval)
-                    const roomId = await getUserRoomId(email)
                     await removeUserFromFinding(email)
                     navigate(`/battle/${roomId}`)
                 }

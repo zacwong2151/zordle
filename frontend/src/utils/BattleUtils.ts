@@ -7,5 +7,5 @@ export function generateUniqueRoomId() : string {
     /*
         TODO: ensure this uuid is unique
     */
-    return uuidv4().slice(0, 6)
+    return uuidv4().slice(0, 6).toUpperCase()
 }

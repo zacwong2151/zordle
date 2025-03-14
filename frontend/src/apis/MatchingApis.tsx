@@ -78,7 +78,7 @@ export async function getUserRoomId(email: string) {
 }
 
 /**
- * Checks if a 2nd user has joined the room (from finding_game_room)
+ * Returns the email of the 2nd player in the room (from finding_game_room)
 */
 export async function foundMatch(email: string) {
     const roomId = await getUserRoomId(email)
@@ -86,10 +86,7 @@ export async function foundMatch(email: string) {
     try {
         const res = await axios.get(DEV_BATTLE_SERVICE_URL + ROOM_POV_URL + `/${roomId}`)
         const room: finding_game_room = res.data
-        if (room.user2Email) {
-            return true
-        }
-        return false
+        return room.user2Email
     } catch (error) {
         console.error(error)
     }
@@ -104,6 +101,32 @@ export async function removeUserFromFinding(email: string) {
     try {
         await axios.delete(DEV_BATTLE_SERVICE_URL + USER_POV_URL + `/${email}`)
         await axios.delete(DEV_BATTLE_SERVICE_URL + ROOM_POV_URL + `/${roomId}`)
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+/**
+ * Checks if this roomId is a valid id in the finding queue
+ */
+export async function isRoomIdInFinding(roomId: string) {
+    try {
+        const res = await axios.get(DEV_BATTLE_SERVICE_URL + ROOM_POV_URL + `/${roomId}`)
+        if (res.data) {
+            return true
+        }
+        return false
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+/**
+ * Update user2Email in finding-game-room
+ */
+export async function updateUser2Email(roomId: string, user2Email: string) {
+    try {
+        await axios.put(DEV_BATTLE_SERVICE_URL + ROOM_POV_URL + `/${roomId}?user2Email=${user2Email}`)
     } catch (error) {
         console.error(error)
     }

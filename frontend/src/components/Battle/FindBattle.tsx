@@ -17,7 +17,7 @@ export default function FindBattle() {
         setIsJoinRoomModalOpen,
         setIsInvalidRoomModalOpen
     } = useWordleContext()
-    const [roomCode, setRoomCode] = useState("")
+    const [roomId, setRoomId] = useState<string>("")
     const { email } = useUserContext()
 
     const handleCreateRoom = async () => {
@@ -26,7 +26,7 @@ export default function FindBattle() {
             console.warn('this should not happen')
             return
         }
-        await userIsFindingGame(email, "qwerty") // insert into db
+        await userIsFindingGame(email, generateUniqueRoomId())
         setIsCreateRoomModalOpen(true)
     }
 
@@ -37,7 +37,7 @@ export default function FindBattle() {
     return (
         <>
             <CreateRoomModal />
-            <JoinRoomModal />
+            <JoinRoomModal roomId={roomId} />
             <InvalidRoomModal />
 
             <div className="flex flex-col min-h-screen">
@@ -58,8 +58,8 @@ export default function FindBattle() {
                         <div className="flex gap-4 items-center">
                             <Input
                                 placeholder="Room code"
-                                value={roomCode}
-                                onChange={(e) => setRoomCode(e.target.value)}
+                                value={roomId}
+                                onChange={(e) => setRoomId(e.target.value)}
                                 className="w-32 h-10"
                             />
                             <Button onClick={handleJoinRoom} className="rounded-full px-8 py-3 text-base h-auto">
