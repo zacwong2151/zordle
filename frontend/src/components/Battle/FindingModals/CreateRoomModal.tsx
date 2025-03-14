@@ -4,19 +4,33 @@ import {
     DialogFooter,
     DialogTitle,
 } from "@/components/ui/dialog"
-import { useEffect } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import ReactLoading from 'react-loading'
 import { useWordleContext } from "@/contexts/WordleContext"
 import { useUserContext } from "@/contexts/UserContext"
-import { getUserRoomId, foundMatch, removeUserFromFinding } from "@/apis/FindingApis"
+import { getUserRoomId, foundMatch, removeUserFromFinding, isUserFindingGame } from "@/apis/FindingApis"
 
 export function CreateRoomModal() {
     const navigate = useNavigate()
     const { email } = useUserContext()
     const { isCreateRoomModalOpen, setIsCreateRoomModalOpen } = useWordleContext()
-    const roomId: string = getUserRoomId(email)
+    const [roomId, setRoomId] = useState<String | null>(null)
+
+    useEffect(() => {
+        const fetchRoomId = async () => {
+            try {
+                const roomId = await getUserRoomId(email)
+                setRoomId(roomId ?? null)
+            } catch (error) {
+                console.warn(error)
+            }
+        }
+        if (isCreateRoomModalOpen) {
+            fetchRoomId()
+        }
+    }, [email, isCreateRoomModalOpen])
 
     /*
         Poll finding_game_room every second to check if player2_email is initialised. Once it is, navigate to BattlePage.
@@ -24,18 +38,19 @@ export function CreateRoomModal() {
     */
     useEffect(() => {
         if (isCreateRoomModalOpen) {
-            const interval = setInterval(() => {
+            const interval = setInterval(async () => {
                 console.log('Polling every second to check if user found match..')
-                if (foundMatch(email)) {
+
+                if (await foundMatch(email)) {
                     clearInterval(interval)
-                    removeUserFromFinding(email)
-                    const roomId = "123"
-                    // navigate(`/battle/${roomId}`)
+                    const roomId = await getUserRoomId(email)
+                    await removeUserFromFinding(email)
+                    navigate(`/battle/${roomId}`)
                 }
-            }, 1000) 
+            }, 1000)
             return () => {
                 if (interval) clearInterval(interval)
-            } 
+            }
         }
     }, [email, navigate, isCreateRoomModalOpen])
 

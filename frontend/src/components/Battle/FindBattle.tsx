@@ -20,12 +20,13 @@ export default function FindBattle() {
     const [roomCode, setRoomCode] = useState("")
     const { email } = useUserContext()
 
-    const handleCreateRoom = () => {
-        if (isUserFindingGame(email) || isUserInGame(email)) {
+    const handleCreateRoom = async () => {
+        const bool = await isUserFindingGame(email) // || isUserInGame(email)
+        if (bool) {
             console.warn('this should not happen')
             return
         }
-        userIsFindingGame(email, generateUniqueRoomId()) // insert into db
+        await userIsFindingGame(email, "qwerty") // insert into db
         setIsCreateRoomModalOpen(true)
     }
 
