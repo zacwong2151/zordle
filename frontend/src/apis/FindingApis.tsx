@@ -23,7 +23,7 @@ type finding_game_room = {
     user2Email: String | null
 }
 
-const DEV_BATTLE_SERVICE_URL = "http://localhost:8080/battle/finding-game"
+const DEV_BATTLE_SERVICE_URL = "http://localhost:8080/finding-game"
 const ROOM_POV_URL = "/room"
 const USER_POV_URL = "/user"
 

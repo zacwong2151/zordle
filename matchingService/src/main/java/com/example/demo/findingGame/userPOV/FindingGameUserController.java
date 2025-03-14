@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 */
 
 @RestController
-@RequestMapping(path = "battle/finding-game/user")
+@RequestMapping(path = "finding-game/user")
 public class FindingGameUserController {
     final FindingGameUserService findingGameUserService;
 

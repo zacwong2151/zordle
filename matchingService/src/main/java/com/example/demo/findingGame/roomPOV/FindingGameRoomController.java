@@ -6,7 +6,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "battle/finding-game/room")
+@RequestMapping(path = "finding-game/room")
 @Validated /*
     Spring Boot only applies method parameter validation (@RequestParam, @PathVariable, etc.) if @Validated is present at the class or method level.
     Without it, Spring will not trigger MethodArgumentNotValidException, and validation will be silently ignored.
