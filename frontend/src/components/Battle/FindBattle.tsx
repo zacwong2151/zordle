@@ -50,6 +50,13 @@ export default function FindBattle() {
         setIsJoinRoomModalOpen(true)
     }
 
+    const handleRoomIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const roomId = e.target.value.toUpperCase()
+        if (roomId.length <= 6) {
+            setRoomId(roomId)
+        }
+    }
+
     return (
         <>
             <CreateRoomModal />
@@ -75,8 +82,8 @@ export default function FindBattle() {
                             <Input
                                 placeholder="Room code"
                                 value={roomId}
-                                onChange={(e) => setRoomId(e.target.value)}
-                                className="w-32 h-10"
+                                onChange={(e) => handleRoomIdChange(e)}
+                                className="w-48 h-16 !text-2xl"
                             />
                             <Button onClick={handleJoinRoom} className="rounded-full px-8 py-3 text-base h-auto">
                                 Join room
