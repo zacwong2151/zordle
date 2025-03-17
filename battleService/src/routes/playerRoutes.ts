@@ -27,7 +27,7 @@ router.get("/:email", async (req: Request, res: Response) => {
             })
         } else {
             res.status(404).send({
-                data: null,
+                data: "Player not found",
             })
         }
     } catch (error) {

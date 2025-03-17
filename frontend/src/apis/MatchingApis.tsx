@@ -23,7 +23,7 @@ type finding_game_room = {
     user2Email: String | null
 }
 
-const DEV_BATTLE_SERVICE_URL = "http://localhost:8080/finding-game"
+const DEV_MATCHING_SERVICE_URL = "http://localhost:8080/finding-game"
 const ROOM_POV_URL = "/room"
 const USER_POV_URL = "/user"
 
@@ -32,7 +32,7 @@ const USER_POV_URL = "/user"
 */
 export async function isUserFindingGame(email: string) {
     try {
-        const res = await axios.get(DEV_BATTLE_SERVICE_URL + USER_POV_URL + `/${email}`)
+        const res = await axios.get(DEV_MATCHING_SERVICE_URL + USER_POV_URL + `/${email}`)
         if (res.data) {
             return true
         }
@@ -57,8 +57,8 @@ export async function userIsFindingGame(email: string, roomId: string) {
     }
 
     try {
-        await axios.post(DEV_BATTLE_SERVICE_URL + USER_POV_URL, user)
-        await axios.post(DEV_BATTLE_SERVICE_URL + ROOM_POV_URL, room)
+        await axios.post(DEV_MATCHING_SERVICE_URL + USER_POV_URL, user)
+        await axios.post(DEV_MATCHING_SERVICE_URL + ROOM_POV_URL, room)
     } catch (error) {
         console.error(error)
     }
@@ -69,7 +69,7 @@ export async function userIsFindingGame(email: string, roomId: string) {
 */
 export async function getUserRoomId(email: string) {
     try {
-        const res = await axios.get(DEV_BATTLE_SERVICE_URL + USER_POV_URL + `/${email}`)
+        const res = await axios.get(DEV_MATCHING_SERVICE_URL + USER_POV_URL + `/${email}`)
         const user: finding_game_user = res.data
         return user.roomId
     } catch (error) {
@@ -84,7 +84,7 @@ export async function foundMatch(email: string) {
     const roomId = await getUserRoomId(email)
 
     try {
-        const res = await axios.get(DEV_BATTLE_SERVICE_URL + ROOM_POV_URL + `/${roomId}`)
+        const res = await axios.get(DEV_MATCHING_SERVICE_URL + ROOM_POV_URL + `/${roomId}`)
         const room: finding_game_room = res.data
         return room.user2Email
     } catch (error) {
@@ -99,8 +99,8 @@ export async function removeUserFromFinding(email: string) {
     const roomId = await getUserRoomId(email)
 
     try {
-        await axios.delete(DEV_BATTLE_SERVICE_URL + USER_POV_URL + `/${email}`)
-        await axios.delete(DEV_BATTLE_SERVICE_URL + ROOM_POV_URL + `/${roomId}`)
+        await axios.delete(DEV_MATCHING_SERVICE_URL + USER_POV_URL + `/${email}`)
+        await axios.delete(DEV_MATCHING_SERVICE_URL + ROOM_POV_URL + `/${roomId}`)
     } catch (error) {
         console.error(error)
     }
@@ -111,7 +111,7 @@ export async function removeUserFromFinding(email: string) {
  */
 export async function isRoomIdInFinding(roomId: string) {
     try {
-        const res = await axios.get(DEV_BATTLE_SERVICE_URL + ROOM_POV_URL + `/${roomId}`)
+        const res = await axios.get(DEV_MATCHING_SERVICE_URL + ROOM_POV_URL + `/${roomId}`)
         if (res.data) {
             return true
         }
@@ -126,7 +126,7 @@ export async function isRoomIdInFinding(roomId: string) {
  */
 export async function updateUser2Email(roomId: string, user2Email: string) {
     try {
-        await axios.put(DEV_BATTLE_SERVICE_URL + ROOM_POV_URL + `/${roomId}?user2Email=${user2Email}`)
+        await axios.put(DEV_MATCHING_SERVICE_URL + ROOM_POV_URL + `/${roomId}?user2Email=${user2Email}`)
     } catch (error) {
         console.error(error)
     }

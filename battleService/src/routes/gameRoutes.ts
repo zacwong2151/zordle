@@ -27,7 +27,7 @@ router.get("/:roomId", async (req: Request, res: Response) => {
             })
         } else {
             res.status(404).send({
-                data: null,
+                data: "Game not found",
             })
         }
     } catch (error) {
@@ -58,10 +58,7 @@ router.post("/", async (req: Request, res: Response) => {
         isKeyboardDisabled
     } = req.body
 
-    if (!roomId || !player1Email || !player2Email || !selectedWord || timer === null || !words
-        || wordIdx === null || !gridColourState || !keyboardColourState || isGameOver === null || !popupMessage
-        || triggerWordShakeAnimation === null || triggerLettersFlipAnimation === null || isKeyboardDisabled === null
-    ) {
+    if (!roomId || !player1Email || !player2Email) {
         res.status(400).send({
             data: "Missing information"
         })

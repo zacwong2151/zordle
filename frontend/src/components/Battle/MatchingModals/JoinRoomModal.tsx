@@ -37,7 +37,7 @@ export function JoinRoomModal({ roomId }: { roomId: string }) {
                     return
                 }
                 setIsValidRoomId(true)
-                updateUser2Email(roomId, email)
+                await updateUser2Email(roomId, email)
                 navigate(`/battle/${roomId}`)
             } catch (error) {
                 console.error(error)

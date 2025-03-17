@@ -77,6 +77,7 @@ export default function NavBar() {
     const authenticatedUserProfile = isAuth && (
         <img
             src={picture}
+            alt="User Profile"
             className="rounded-full absolute right-8 w-10 cursor-pointer hover:brightness-90"
             onClick={() => setIsUserStatsModalOpen(true)}
         />

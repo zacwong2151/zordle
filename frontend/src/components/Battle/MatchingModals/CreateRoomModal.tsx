@@ -11,6 +11,7 @@ import ReactLoading from 'react-loading'
 import { useWordleContext } from "@/contexts/WordleContext"
 import { useUserContext } from "@/contexts/UserContext"
 import { getUserRoomId, foundMatch, removeUserFromFinding, isUserFindingGame } from "@/apis/MatchingApis"
+import { initialiseGame } from "@/apis/BattleApis"
 
 export function CreateRoomModal() {
     const navigate = useNavigate()
@@ -38,20 +39,17 @@ export function CreateRoomModal() {
         Poll finding_game_room every second to check if player2_email is initialised. Once it is, navigate to BattlePage.
     */
     useEffect(() => {
-        if (isCreateRoomModalOpen) {
+        if (isCreateRoomModalOpen && roomId) {
             const interval = setInterval(async () => {
                 console.log('Polling every second to check if user found match..')
 
                 const user2Email = await foundMatch(email)
 
                 if (user2Email) {
-                    /*
-                    TODO:
-                        Create 2 entries in 'playing-game' for both user emails
-                        Create an entry in 'game-details', with the basic info of both user emails
-                    */
-                    clearInterval(interval)
                     await removeUserFromFinding(email)
+                    await initialiseGame(roomId, email, user2Email)
+                    
+                    clearInterval(interval)
                     navigate(`/battle/${roomId}`)
                 }
             }, 1000)
@@ -59,7 +57,7 @@ export function CreateRoomModal() {
                 if (interval) clearInterval(interval)
             }
         }
-    }, [email, navigate, isCreateRoomModalOpen])
+    }, [email, roomId, navigate, isCreateRoomModalOpen])
 
     const handleLeaveRoom = async () => {
         await removeUserFromFinding(email)
