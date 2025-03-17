@@ -102,7 +102,6 @@ router.delete("/:email", async (req: Request, res: Response) => {
         res.status(500).send({
             data: "Internal server error "
         })
-        console.error(error)
     }
 })
 

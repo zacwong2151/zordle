@@ -2,7 +2,8 @@ import express, { Express, Request, Response, Application } from 'express';
 import cors from "cors"
 import mongoose from 'mongoose';
 import { MONGO_CONNECTION_URL } from "../config"
-import router from './routes/playerRoutes';
+import playerRouter from './routes/playerRoutes';
+import gameRouter from "./routes/gameRoutes"
 
 const app: Application = express();
 const corsOptions = {
@@ -14,7 +15,8 @@ const PORT = 7000;
 
 app.use(express.json());
 app.use(cors(corsOptions))
-app.use("/battle", router)
+app.use("/battle/player", playerRouter)
+app.use("/battle/game", gameRouter)
 
 app.listen(PORT, () => {
     console.log(`battleService is running on port ${PORT}`);
