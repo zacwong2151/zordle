@@ -1,18 +1,72 @@
+import { useState, useEffect } from "react"
 import { useParams } from "react-router"
 import Grid from "../Grid/Grid"
 import Keyboard from "../Keyboard/Keyboard"
 import { AreYouReadyModal } from "./PlayingModals/AreYouReadyModal"
 import { WaitingForOtherPlayerModal } from "./PlayingModals/WaitingForOtherPlayerModal"
 import { GameStartingModal } from "./PlayingModals/GameStartingModal"
+import { isRoomIdValid, getPlayerRoomId, getGameInfo } from "@/apis/BattleApis"
+import { useNavigate } from "react-router-dom"
+import LoadingPage from "../Misc/LoadingPage"
+import { useUserContext } from "@/contexts/UserContext"
+import { Game } from "@/types/Battle"
 
 export default function BattlePage() {
     const { roomId } = useParams()
+    const navigate = useNavigate()
+    const [isLoading, setIsLoading] = useState(true)
+    const { email } = useUserContext()
 
     /*
-        TODO:
-        1. upon page render, check if this roomId is in db. If its not, return to HomePage
-        2. If yes, check if this user belongs to this roomId, if not, return to HomePage
+        Verify if user can enter this room. Then, load game info.
     */
+    useEffect(() => {
+        const init = async () => {
+            /*
+                Verify user authentication
+            */
+
+            if (!email) {
+                return // wait for email to be initialised
+            }
+
+            if (!roomId) { // empty roomId
+                navigate("/battle")
+                return
+            }
+
+            const bool: boolean = await isRoomIdValid(roomId)
+            if (!bool) { // roomId does not exist in DB
+                navigate("/battle")
+                return
+            }
+
+            const playerRoomId: String | null = await getPlayerRoomId(email)
+            if (playerRoomId !== roomId) { // not authenticated to enter this room
+                navigate("/battle")
+                return
+            }
+
+            /*
+                Load game info
+            */
+
+            const game: Game | null = await getGameInfo(roomId)
+            if (!game) {
+                navigate("/battle")
+                return
+            }
+
+
+            setIsLoading(false)
+        }
+        init()
+    }, [email, roomId])
+
+
+    if (isLoading) {
+        return <LoadingPage />
+    }
 
     return (
         <>
@@ -41,8 +95,8 @@ export default function BattlePage() {
                 <div className="flex justify-between w-full max-w-6xl relative">
                     {/* Left Side with Player 1 */}
                     <div className="flex flex-col items-center w-full max-w-[45%] gap-y-4">
-                        <Grid />
-                        <Keyboard />
+                        {/* <Grid />
+                        <Keyboard /> */}
                     </div>
 
                     {/* Divider Line */}
@@ -50,7 +104,7 @@ export default function BattlePage() {
 
                     {/* Right Side with Player 2 */}
                     <div className="flex flex-col items-center w-full max-w-[45%]">
-                        <Grid />
+                        {/* <Grid /> */}
                     </div>
                 </div>
             </div>

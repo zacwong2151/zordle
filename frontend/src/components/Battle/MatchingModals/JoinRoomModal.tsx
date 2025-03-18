@@ -1,25 +1,15 @@
-import {
-    Dialog,
-    DialogPortal,
-    DialogOverlay,
-    DialogTrigger,
-    DialogClose,
-    DialogContent,
-    DialogHeader,
-    DialogFooter,
-    DialogTitle,
-    DialogDescription
-} from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { useState, useEffect } from "react"
 import ReactLoading from 'react-loading'
-import { useWordleContext } from "@/contexts/WordleContext"
-import { isRoomIdInFinding, updateUser2Email } from "@/apis/MatchingApis"
+import { isRoomIdInFinding, updateFinding, getUser1Email } from "@/apis/MatchingApis"
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 import { useNavigate } from "react-router"
 import { useUserContext } from "@/contexts/UserContext"
+import { useMatchingContext } from "@/contexts/MatchingContext"
+import { initialiseGame } from "@/apis/BattleApis"
 
 export function JoinRoomModal({ roomId }: { roomId: string }) {
-    const { isJoinRoomModalOpen, setIsJoinRoomModalOpen, setIsInvalidRoomModalOpen } = useWordleContext()
+    const { isJoinRoomModalOpen, setIsJoinRoomModalOpen, setIsInvalidRoomModalOpen } = useMatchingContext()
     const [isValidRoomId, setIsValidRoomId] = useState<boolean>(false)
     const navigate = useNavigate()
     const { email } = useUserContext()
@@ -37,7 +27,12 @@ export function JoinRoomModal({ roomId }: { roomId: string }) {
                     return
                 }
                 setIsValidRoomId(true)
-                await updateUser2Email(roomId, email)
+
+                const user1Email: String | null = await getUser1Email(roomId)
+                if (!user1Email) return
+
+                await initialiseGame(roomId, user1Email, email) // initialise game
+                await updateFinding(roomId, email) // tell user1 that game is ready to join
                 navigate(`/battle/${roomId}`)
             } catch (error) {
                 console.error(error)

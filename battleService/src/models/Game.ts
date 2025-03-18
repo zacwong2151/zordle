@@ -6,6 +6,8 @@ interface GameType extends Document {
     _id: string, // roomId
     player1Email: string,
     player2Email: string,
+    isPlayer1Ready: boolean,
+    isPlayer2Ready: boolean,
     selectedWord: string,
     timer: number,
     words: string[],
@@ -28,6 +30,12 @@ const gameSchema: Schema<GameType> = new Schema({
     },
     player2Email: {
         type: String,
+    },
+    isPlayer1Ready: {
+        type: Boolean,
+    },
+    isPlayer2Ready: {
+        type: Boolean,
     },
     selectedWord: {
         type: String,

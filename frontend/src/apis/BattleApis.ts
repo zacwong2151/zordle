@@ -1,17 +1,26 @@
 import axios from "axios";
+import { getRandomWord } from "./WordleApis";
 import { GridColourState, KeyboardColourState } from "@/types/ColourState";
 import { Letter } from "@/types/Letter";
-import { getRandomWord } from "./CoreGameApis";
+import { Player, Game } from "@/types/Battle";
 
-type Player = {
+const DEV_BATTLE_SERVICE_URL = "http://localhost:7000/battle"
+const PLAYER_POV_URL = "/player"
+const GAME_POV_URL = "/game"
+
+/*
+
+export type Player = {
     email: String, // primary key
     roomId: String
 }
 
-type Game = {
+export type Game = {
     roomId: String, // primary key
     player1Email: String,
     player2Email: String,
+    isPlayer1Ready: boolean,
+    isPlayer2Ready: boolean,
     selectedWord: String,
     timer: number,
     words: String[],
@@ -24,28 +33,78 @@ type Game = {
     triggerLettersFlipAnimation: boolean,
     isKeyboardDisabled: boolean
 }
-
-const DEV_BATTLE_SERVICE_URL = "http://localhost:7000/battle"
-const PLAYER_POV_URL = "/player"
-const GAME_POV_URL = "/game"
+*/
 
 /**
- * Checks if user is currently playing a game or not
+ * Util function for Player API calls
  */
-export async function isUserInGame(email: String) {
+async function getPlayer(email: String): Promise<Player | null> {
     try {
         const res = await axios.get(DEV_BATTLE_SERVICE_URL + PLAYER_POV_URL + `/${email}`, {
             validateStatus: (status) => status < 500
         })
 
         if (res.status === 404) {
-            return false
+            return null
         }
 
-        return true
+        const player: Player = res.data.data
+        return player
+
     } catch (error) {
         console.error(error)
+        return null
     }
+}
+
+/**
+ * Util function for Game API calls
+ */
+async function getGame(roomId: String): Promise<Game | null> {
+    try {
+        const res = await axios.get(DEV_BATTLE_SERVICE_URL + GAME_POV_URL + `/${roomId}`, {
+            validateStatus: (status) => status < 500
+        })
+
+        if (res.status === 404) {
+            return null
+        }
+
+        const game: Game = res.data.data
+        return game
+
+    } catch (error) {
+        console.error(error)
+        return null
+    }
+}
+
+
+/**
+ * Checks if user is currently playing a game or not
+ */
+export async function isUserInGame(email: String): Promise<boolean> {
+    const player: Player | null = await getPlayer(email)
+
+    return player ? true : false
+}
+
+/**
+ * Get a player's room id
+ */
+export async function getPlayerRoomId(email: String): Promise<String | null> {
+    const player: Player | null = await getPlayer(email)
+
+    return player ? player.roomId : null
+}
+
+/**
+ * Checks if this room id is valid
+ */
+export async function isRoomIdValid(roomId: String): Promise<boolean> {
+    const game: Game | null = await getGame(roomId)
+
+    return game ? true : false
 }
 
 /**
@@ -55,7 +114,7 @@ export async function initialiseGame(
     roomId: String, // primary key
     player1Email: String,
     player2Email: String,
-) {
+): Promise<void> {
     const player1ReqBody: Player = {
         email: player1Email,
         roomId: roomId
@@ -65,11 +124,11 @@ export async function initialiseGame(
         roomId: roomId
     }
 
-    let selectedWord = "PLACE" // placeholder word in case wordService fails
+    let selectedWord: String | null = null
     try {
         selectedWord = await getRandomWord()
     } catch (error) {
-        console.error(error)    
+        console.error(error)
     }
 
     const gridColourState: GridColourState[][] = [
@@ -89,7 +148,9 @@ export async function initialiseGame(
         roomId: roomId,
         player1Email: player1Email,
         player2Email: player2Email,
-        selectedWord: selectedWord,
+        isPlayer1Ready: false,
+        isPlayer2Ready: false,
+        selectedWord: selectedWord ?? "PLACE", // placeholder word
         timer: 0,
         words: ["", "", "", "", "", ""],
         wordIdx: 0,
@@ -111,4 +172,10 @@ export async function initialiseGame(
         console.error(error)
     }
 
+}
+
+export async function getGameInfo(roomId: String): Promise<Game | null> {
+    const game: Game | null = await getGame(roomId)
+
+    return game
 }

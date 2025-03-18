@@ -8,7 +8,7 @@ const IS_WORD_IN_DB_URL = '/is-word-in-DB'
 /**
  * Gets a random 5-letter word from the dataset.
  */
-export async function getRandomWord() {
+export async function getRandomWord(): Promise<String | null> {
     try {
         const response = await axios.get(DEV_WORD_SERVICE_URL + GET_RANDOM_WORD_URL)
         return response.data.word
@@ -21,20 +21,15 @@ export async function getRandomWord() {
 /**
  * Checks if a word exists in the dataset.
  */
-export async function isWordInDB(word: string) {
+export async function isWordInDB(word: String): Promise<boolean> {
     try {
         const response = await axios.get(DEV_WORD_SERVICE_URL + IS_WORD_IN_DB_URL + `/${word}`, {
-            validateStatus: (status) => {
-                // Accept all HTTP status codes, so 404 doesn't trigger the catch block
-                return status >= 200 && status < 500;
-            }
-        }); 
-        if (response.status === 200) {
-            return true
-        }
+            validateStatus: (status) => status < 500
+        })
         if (response.status === 404) {
             return false
         }
+        return true
     } catch (error) {
         console.error(error)
         return false

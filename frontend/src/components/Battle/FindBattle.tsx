@@ -1,22 +1,18 @@
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import NavBar from "../Main/NavBar"
+import FindbattleNavbar from "../Main/FindbattleNavbar"
 import { CreateRoomModal } from "./MatchingModals/CreateRoomModal"
 import { JoinRoomModal } from "./MatchingModals/JoinRoomModal"
 import { InvalidRoomModal } from "./MatchingModals/InvalidRoomModal"
-import { useWordleContext } from "@/contexts/WordleContext"
 import { isUserFindingGame, removeUserFromFinding, userIsFindingGame } from "@/apis/MatchingApis"
 import { isUserInGame } from "@/apis/BattleApis"
 import { useUserContext } from "@/contexts/UserContext"
 import { generateUniqueRoomId } from "@/utils/BattleUtils"
+import { useMatchingContext } from "@/contexts/MatchingContext"
 
 export default function FindBattle() {
-    const {
-        setIsCreateRoomModalOpen,
-        setIsJoinRoomModalOpen,
-        setIsInvalidRoomModalOpen
-    } = useWordleContext()
+    const {setIsCreateRoomModalOpen, setIsJoinRoomModalOpen, setIsInvalidRoomModalOpen} = useMatchingContext()
     const [roomId, setRoomId] = useState<string>("")
     const { email } = useUserContext()
 
@@ -64,7 +60,7 @@ export default function FindBattle() {
             <InvalidRoomModal />
 
             <div className="flex flex-col min-h-screen">
-                <NavBar />
+                <FindbattleNavbar />
                 <div className="grid grid-cols-2 items-center w-full max-w-6xl mx-auto flex-grow relative">
                     <div className="flex flex-col items-center gap-6">
                         <div className="text-2xl font-medium">Create a room and ask a friend to join!</div>

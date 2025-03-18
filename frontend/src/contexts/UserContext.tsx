@@ -6,11 +6,13 @@ type UserStateType = {
     name: string,
     email: string,
     picture: string,
+    isUserStatsModalOpen: boolean,
+    setIsUserStatsModalOpen: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 const UserContext = createContext<UserStateType | null>(null)
 
-const UserContextProvider = ({ children } : { children: React.ReactNode }) => {
+const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     const { user, isAuthenticated } = useAuth0()
 
     useEffect(() => {
@@ -29,12 +31,14 @@ const UserContextProvider = ({ children } : { children: React.ReactNode }) => {
     const [email, setEmail] = useState<string>("")
     const [picture, setPicture] = useState<string>("")
     const [isAuth, setIsAuth] = useState<boolean>(false)
+    const [isUserStatsModalOpen, setIsUserStatsModalOpen] = useState<boolean>(false)
 
     const userState: UserStateType = {
-        isAuth: isAuth,
-        name: name,
-        email: email,
-        picture: picture
+        isAuth,
+        name,
+        email,
+        picture,
+        isUserStatsModalOpen, setIsUserStatsModalOpen,
     }
 
     return (

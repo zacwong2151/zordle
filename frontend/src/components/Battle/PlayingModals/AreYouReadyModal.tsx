@@ -6,7 +6,7 @@ import { useWordleContext } from "@/contexts/WordleContext"
 import { Button } from "@/components/ui/button"
 
 export function AreYouReadyModal() {
-    const { isJoinRoomModalOpen, setIsJoinRoomModalOpen } = useWordleContext()
+    // const { isJoinRoomModalOpen, setIsJoinRoomModalOpen } = useWordleContext()
 
     return (
         <Dialog open={false}>

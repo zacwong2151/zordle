@@ -2,7 +2,7 @@ import { IoMdRefresh } from "react-icons/io";
 import { IoHomeOutline } from "react-icons/io5";
 import { CiUser } from "react-icons/ci";
 import { useWordleContext } from "../../contexts/WordleContext";
-import { getRandomWord } from "../../apis/CoreGameApis";
+import { getRandomWord } from "../../apis/WordleApis";
 import { Letter } from "../../types/Letter";
 import { KeyboardColourState } from "../../types/ColourState";
 import { GiBattleGear } from "react-icons/gi";
@@ -10,7 +10,7 @@ import { Link } from "react-router-dom"
 import { useUserContext } from "@/contexts/UserContext";
 import UserStats from "./UserStats";
 
-export default function NavBar() {
+export default function HomepageNavbar() {
     const {
         isKeyboardDisabled,
         setWords,
@@ -23,9 +23,8 @@ export default function NavBar() {
         setTriggerWordShakeAnimation,
         setTriggerLettersFlipAnimation,
         setIsKeyboardDisabled,
-        setIsUserStatsModalOpen,
     } = useWordleContext()
-    const { isAuth, picture } = useUserContext()
+    const { isAuth, picture, setIsUserStatsModalOpen } = useUserContext()
 
     /**
      * Resets all state to default state.
@@ -88,16 +87,13 @@ export default function NavBar() {
             <UserStats />
             <nav className="bg-slate-200 text-gray-800 p-4 border-b border-gray-200 shadow-sm">
                 <div className="max-w-7xl mx-auto flex items-center justify-center h-8 gap-x-24">
-                    <Link 
+                    <Link
                         to="/"
                         className="hover:text-blue-800 cursor-pointer text-2xl"
                     >
                         <IoHomeOutline />
                     </Link>
-                    {
-                        window.location.pathname === "/" && 
-                        <IoMdRefresh className="hover:text-blue-800 cursor-pointer text-2xl" onClick={handleRefresh} />
-                    }
+                    <IoMdRefresh className="hover:text-blue-800 cursor-pointer text-2xl" onClick={handleRefresh} />
                     <Link
                         to="/battle"
                         className="hover:text-blue-800 cursor-pointer text-2xl"

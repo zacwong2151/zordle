@@ -1,5 +1,5 @@
 import { GridColourState } from "../types/ColourState"
-import { isWordInDB } from "../apis/CoreGameApis"
+import { isWordInDB } from "../apis/WordleApis"
 import { Letter } from "../types/Letter"
 import { KeyboardColourState } from "../types/ColourState"
 

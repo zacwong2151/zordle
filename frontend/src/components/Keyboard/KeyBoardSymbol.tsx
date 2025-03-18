@@ -1,6 +1,6 @@
 import { IoBackspaceOutline } from "react-icons/io5";
 import { useWordleContext } from "../../contexts/WordleContext";
-import { handleBackspace, handleEnter, handleLetter } from "../../utils/CoreGameUtils";
+import { handleBackspace, handleEnter, handleLetter } from "../../utils/WordleUtils";
 
 export default function KeyboardSymbol({ symbol } : { symbol: string }) {
     const { 

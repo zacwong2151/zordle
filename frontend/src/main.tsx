@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from "react-router-dom";
 import { Auth0ContextProvider } from './contexts/Auth0Context';
 import { UserContextProvider } from './contexts/UserContext';
-import { WordleContextProvider } from './contexts/WordleContext';
 import './index.css'
 import App from './App'
 
@@ -25,9 +24,7 @@ createRoot(rootElement).render(
         <BrowserRouter>
             <Auth0ContextProvider>
                 <UserContextProvider>
-                    <WordleContextProvider>
-                        <App />
-                    </WordleContextProvider>
+                    <App />
                 </UserContextProvider>
             </Auth0ContextProvider>
         </BrowserRouter>

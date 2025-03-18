@@ -1,16 +1,13 @@
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog"
-import { useWordleContext } from "@/contexts/WordleContext"
 import { useAuth0 } from "@auth0/auth0-react"
 import { useUserContext } from "@/contexts/UserContext"
 
 export default function UserStats() {
-    const { isUserStatsModalOpen, setIsUserStatsModalOpen } = useWordleContext()
-    const { loginWithPopup, loginWithRedirect, logout } = useAuth0()
-    const { isAuth, name } = useUserContext()
+    const { isAuth, name, isUserStatsModalOpen, setIsUserStatsModalOpen } = useUserContext()
+    const { loginWithRedirect, logout } = useAuth0()
 
     async function handleLogin() {
-        // await loginWithPopup()
         await loginWithRedirect({ // performs a redirect to the Auth0 /authorize endpoint
             appState: {
                 returnTo: "/", 
@@ -70,7 +67,7 @@ export default function UserStats() {
 
     return (
         <Dialog open={isUserStatsModalOpen} onOpenChange={() => setIsUserStatsModalOpen(false)}>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className="sm:max-w-md" hideClose={false}>
                 <DialogTitle>{isAuth ? `Hello ${name}` : ""}</DialogTitle>
                 <DialogDescription></DialogDescription>
                 <div className="flex flex-col items-center space-y-6 text-center">

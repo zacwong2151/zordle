@@ -5,7 +5,7 @@ import {
 import { useWordleContext } from "@/contexts/WordleContext"
 
 export function WaitingForOtherPlayerModal() {
-    const { isJoinRoomModalOpen, setIsJoinRoomModalOpen } = useWordleContext()
+    // const { isJoinRoomModalOpen, setIsJoinRoomModalOpen } = useWordleContext()
 
     return (
         <Dialog open={false}>

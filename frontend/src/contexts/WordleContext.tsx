@@ -1,45 +1,37 @@
 import React, { createContext, useState, ReactNode, useContext, useEffect } from "react"
-import { getRandomWord } from "../apis/CoreGameApis"
+import { getRandomWord } from "../apis/WordleApis"
 import { GridColourState, KeyboardColourState } from "../types/ColourState"
 import { Letter } from "../types/Letter"
 
 type WordleStateType = {
-    words: string[],
-    setWords: React.Dispatch<React.SetStateAction<string[]>>,
+    words: String[],
+    setWords: React.Dispatch<React.SetStateAction<String[]>>,
     wordIdx: number,
     setWordIdx: React.Dispatch<React.SetStateAction<number>>,
-    selectedWord: string | null,
-    setSelectedWord: React.Dispatch<React.SetStateAction<string | null>>,
+    selectedWord: String | null,
+    setSelectedWord: React.Dispatch<React.SetStateAction<String | null>>,
     gridColourState: GridColourState[][],
     setGridColourState: React.Dispatch<React.SetStateAction<GridColourState[][]>>,
     keyboardColourState: Record<Letter, KeyboardColourState>,
     setKeyboardColourState: React.Dispatch<React.SetStateAction<Record<Letter, KeyboardColourState>>>,
     isGameOver: boolean,
     setIsGameOver: React.Dispatch<React.SetStateAction<boolean>>,
-    popupMessage: string | null,
-    setPopupMessage: React.Dispatch<React.SetStateAction<string | null>>,
+    popupMessage: String | null,
+    setPopupMessage: React.Dispatch<React.SetStateAction<String | null>>,
     triggerWordShakeAnimation: boolean,
     setTriggerWordShakeAnimation: React.Dispatch<React.SetStateAction<boolean>>,
     triggerLettersFlipAnimation: boolean,
     setTriggerLettersFlipAnimation: React.Dispatch<React.SetStateAction<boolean>>,
     isKeyboardDisabled: boolean,
     setIsKeyboardDisabled: React.Dispatch<React.SetStateAction<boolean>>,
-    isUserStatsModalOpen: boolean,
-    setIsUserStatsModalOpen: React.Dispatch<React.SetStateAction<boolean>>,
-    isCreateRoomModalOpen: boolean,
-    setIsCreateRoomModalOpen: React.Dispatch<React.SetStateAction<boolean>>,
-    isJoinRoomModalOpen: boolean,
-    setIsJoinRoomModalOpen: React.Dispatch<React.SetStateAction<boolean>>,
-    isInvalidRoomModalOpen: boolean,
-    setIsInvalidRoomModalOpen: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 const WordleContext = createContext<WordleStateType | null>(null)
 
 const WordleContextProvider = ({ children } : { children: ReactNode }) => {
-    const [words, setWords] = useState<string[]>(["", "", "", "", "", ""]) 
+    const [words, setWords] = useState<String[]>(["", "", "", "", "", ""]) 
     const [wordIdx, setWordIdx] = useState<number>(0)
-    const [selectedWord, setSelectedWord] = useState<string | null>(null)
+    const [selectedWord, setSelectedWord] = useState<String | null>(null)
     const [gridColourState, setGridColourState] = useState<GridColourState[][]>(
         [
             ['white', 'white', 'white', 'white', 'white'],
@@ -54,16 +46,11 @@ const WordleContextProvider = ({ children } : { children: ReactNode }) => {
         {} as Record<Letter, KeyboardColourState>
     )
     const [isGameOver, setIsGameOver] = useState<boolean>(false)
-    const [popupMessage, setPopupMessage] = useState<string | null>(null)
+    const [popupMessage, setPopupMessage] = useState<String | null>(null)
     const [triggerWordShakeAnimation, setTriggerWordShakeAnimation] = useState<boolean>(false)
     const [triggerLettersFlipAnimation, setTriggerLettersFlipAnimation] = useState<boolean>(false)
     const [isKeyboardDisabled, setIsKeyboardDisabled] = useState<boolean>(false)
 
-    const [isUserStatsModalOpen, setIsUserStatsModalOpen] = useState<boolean>(false)
-    const [isCreateRoomModalOpen, setIsCreateRoomModalOpen] = useState<boolean>(false)
-    const [isJoinRoomModalOpen, setIsJoinRoomModalOpen] = useState<boolean>(false)
-    const [isInvalidRoomModalOpen, setIsInvalidRoomModalOpen] = useState<boolean>(false)
-    
     /**
      * Initialize keyboardColourState with all letters set to "gray"
      */
@@ -79,10 +66,15 @@ const WordleContextProvider = ({ children } : { children: ReactNode }) => {
      * Fetches a random word from DB upon page render
      */
     useEffect(() => {
-        async function fetchRandomWord() {
-            const word = await getRandomWord()
-            console.log(`The selected word is ${word}`)
+        const fetchRandomWord = async () => {
+            let word: String | null = null
+            try {
+                word = await getRandomWord()
+            } catch (error) {
+                console.error(error)
+            }
             setSelectedWord(word)
+            console.log(`The selected word is ${word}`)
         }
         fetchRandomWord()
     }, [])
@@ -98,10 +90,6 @@ const WordleContextProvider = ({ children } : { children: ReactNode }) => {
         triggerWordShakeAnimation, setTriggerWordShakeAnimation,
         triggerLettersFlipAnimation, setTriggerLettersFlipAnimation,
         isKeyboardDisabled, setIsKeyboardDisabled,
-        isUserStatsModalOpen, setIsUserStatsModalOpen,
-        isCreateRoomModalOpen, setIsCreateRoomModalOpen,
-        isJoinRoomModalOpen, setIsJoinRoomModalOpen,
-        isInvalidRoomModalOpen, setIsInvalidRoomModalOpen
     }
     
     return (

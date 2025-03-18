@@ -8,15 +8,14 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import ReactLoading from 'react-loading'
-import { useWordleContext } from "@/contexts/WordleContext"
 import { useUserContext } from "@/contexts/UserContext"
 import { getUserRoomId, foundMatch, removeUserFromFinding, isUserFindingGame } from "@/apis/MatchingApis"
-import { initialiseGame } from "@/apis/BattleApis"
+import { useMatchingContext } from "@/contexts/MatchingContext"
 
 export function CreateRoomModal() {
     const navigate = useNavigate()
     const { email } = useUserContext()
-    const { isCreateRoomModalOpen, setIsCreateRoomModalOpen } = useWordleContext()
+    const { isCreateRoomModalOpen, setIsCreateRoomModalOpen } = useMatchingContext()
     const [roomId, setRoomId] = useState<String | null>(null)
 
     /*
@@ -47,7 +46,6 @@ export function CreateRoomModal() {
 
                 if (user2Email) {
                     await removeUserFromFinding(email)
-                    await initialiseGame(roomId, email, user2Email)
                     
                     clearInterval(interval)
                     navigate(`/battle/${roomId}`)

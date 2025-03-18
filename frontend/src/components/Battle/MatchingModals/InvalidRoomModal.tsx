@@ -11,10 +11,10 @@ import {
     DialogDescription
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { useWordleContext } from "@/contexts/WordleContext"
+import { useMatchingContext } from "@/contexts/MatchingContext"
 
 export function InvalidRoomModal() {
-    const { isInvalidRoomModalOpen, setIsInvalidRoomModalOpen } = useWordleContext()
+    const { isInvalidRoomModalOpen, setIsInvalidRoomModalOpen } = useMatchingContext()
 
     return (
         <Dialog open={isInvalidRoomModalOpen}>
