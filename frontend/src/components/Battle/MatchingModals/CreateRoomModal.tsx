@@ -1,6 +1,7 @@
 import {
     Dialog,
     DialogContent,
+    DialogDescription,
     DialogFooter,
     DialogTitle,
 } from "@/components/ui/dialog"
@@ -13,6 +14,7 @@ import { getUserRoomId, foundMatch, removeUserFromFinding, isUserFindingGame } f
 import { useMatchingContext } from "@/contexts/MatchingContext"
 
 export function CreateRoomModal() {
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
     const navigate = useNavigate()
     const { email } = useUserContext()
     const { isCreateRoomModalOpen, setIsCreateRoomModalOpen } = useMatchingContext()
@@ -48,6 +50,7 @@ export function CreateRoomModal() {
                     await removeUserFromFinding(email)
                     
                     clearInterval(interval)
+                    setIsCreateRoomModalOpen(false)
                     navigate(`/battle/${roomId}`)
                 }
             }, 1000)
@@ -58,6 +61,9 @@ export function CreateRoomModal() {
     }, [email, roomId, navigate, isCreateRoomModalOpen])
 
     const handleLeaveRoom = async () => {
+        if (isButtonDisabled) return
+
+        setIsButtonDisabled(true)
         await removeUserFromFinding(email)
         setIsCreateRoomModalOpen(false)
     }
@@ -66,6 +72,7 @@ export function CreateRoomModal() {
         <Dialog open={isCreateRoomModalOpen}>
             <DialogContent className="gap-8" hideClose={true}>
                 <DialogTitle>Waiting for friend to join room..</DialogTitle>
+                <DialogDescription></DialogDescription>
 
                 <div className="text-6xl font-bold mx-auto">
                     {roomId}
@@ -76,6 +83,7 @@ export function CreateRoomModal() {
                 <DialogFooter>
                     <Button
                         className="bg-red-600 hover:bg-red-700"
+                        disabled={isButtonDisabled}
                         onClick={handleLeaveRoom}
                     >
                         Leave room

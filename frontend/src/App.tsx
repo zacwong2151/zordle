@@ -8,6 +8,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import LoadingPage from "./components/Misc/LoadingPage";
 import { WordleContextProvider } from "./contexts/WordleContext";
 import { MatchingContextProvider } from "./contexts/MatchingContext";
+import { BattleContextProvider } from "./contexts/BattleContext";
 
 export default function App() {
     const { isLoading } = useAuth0()
@@ -31,7 +32,11 @@ export default function App() {
                         <ProtectedRoute component={FindBattle} />
                     </MatchingContextProvider>
                 } />
-                <Route path="/battle/:roomId" element={<ProtectedRoute component={BattlePage} />} />
+                <Route path="/battle/:id" element={
+                    <BattleContextProvider>
+                        <ProtectedRoute component={BattlePage} />
+                    </BattleContextProvider>
+                } />
                 <Route path="/callback" element={<CallBackPage />} />
             </Routes>
         </>

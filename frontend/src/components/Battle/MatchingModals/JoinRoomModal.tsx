@@ -1,7 +1,7 @@
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog"
 import { useState, useEffect } from "react"
 import ReactLoading from 'react-loading'
-import { isRoomIdInFinding, updateFinding, getUser1Email } from "@/apis/MatchingApis"
+import { isRoomIdInFinding, updateFinding, getOtherUserEmail } from "@/apis/MatchingApis"
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 import { useNavigate } from "react-router"
 import { useUserContext } from "@/contexts/UserContext"
@@ -28,11 +28,15 @@ export function JoinRoomModal({ roomId }: { roomId: string }) {
                 }
                 setIsValidRoomId(true)
 
-                const user1Email: String | null = await getUser1Email(roomId)
-                if (!user1Email) return
+                const otherUserEmail: String | null = await getOtherUserEmail(roomId)
+                if (!otherUserEmail) {
+                    console.error("should not happen")
+                    return
+                }
 
-                await initialiseGame(roomId, user1Email, email) // initialise game
-                await updateFinding(roomId, email) // tell user1 that game is ready to join
+                await initialiseGame(roomId, otherUserEmail, email) // initialise game
+                await updateFinding(roomId, email) // tell other user that game is ready to join
+                setIsJoinRoomModalOpen(false)
                 navigate(`/battle/${roomId}`)
             } catch (error) {
                 console.error(error)
@@ -44,6 +48,7 @@ export function JoinRoomModal({ roomId }: { roomId: string }) {
     return (
         <Dialog open={isJoinRoomModalOpen}>
             <DialogContent className="gap-8" hideClose={true}>
+                <DialogDescription></DialogDescription>
                 {
                     isValidRoomId ? (
                         <DialogTitle>Joining room..</DialogTitle>

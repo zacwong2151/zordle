@@ -7,6 +7,8 @@ type MatchingStateType = {
     setIsJoinRoomModalOpen: React.Dispatch<React.SetStateAction<boolean>>,
     isInvalidRoomModalOpen: boolean,
     setIsInvalidRoomModalOpen: React.Dispatch<React.SetStateAction<boolean>>,
+    isCurrentlyInGameModalOpen: boolean,
+    setIsCurrentlyInGameModalOpen: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 const MatchingContext = createContext<MatchingStateType | null>(null)
@@ -15,8 +17,10 @@ const MatchingContextProvider = ({ children } : { children: ReactNode }) => {
     const [isCreateRoomModalOpen, setIsCreateRoomModalOpen] = useState<boolean>(false)
     const [isJoinRoomModalOpen, setIsJoinRoomModalOpen] = useState<boolean>(false)
     const [isInvalidRoomModalOpen, setIsInvalidRoomModalOpen] = useState<boolean>(false)
+    const [isCurrentlyInGameModalOpen, setIsCurrentlyInGameModalOpen] = useState<boolean>(false)
     
     const matchingState: MatchingStateType = {
+        isCurrentlyInGameModalOpen, setIsCurrentlyInGameModalOpen,
         isCreateRoomModalOpen, setIsCreateRoomModalOpen,
         isJoinRoomModalOpen, setIsJoinRoomModalOpen,
         isInvalidRoomModalOpen, setIsInvalidRoomModalOpen

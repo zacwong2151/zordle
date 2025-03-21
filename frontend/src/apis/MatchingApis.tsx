@@ -25,10 +25,12 @@ export type finding_game_room = {
  */
 async function getFindingGameUser(email: String): Promise<finding_game_user | null> {
     try {
-        const res = await axios.get(DEV_MATCHING_SERVICE_URL + USER_POV_URL + `/${email}`)
-        const user: finding_game_user = res.data
+        const res = await axios.get(DEV_MATCHING_SERVICE_URL + USER_POV_URL + `/${email}`, {
+            validateStatus: (status) => status < 500
+        })
+        const user: finding_game_user | null = res.data
 
-        return user ?? null
+        return user
     } catch (error) {
         console.error(error)
         return null
@@ -40,17 +42,17 @@ async function getFindingGameUser(email: String): Promise<finding_game_user | nu
  */
 async function getFindingGameRoom(roomId: String): Promise<finding_game_room | null> {
     try {
-        const res = await axios.get(DEV_MATCHING_SERVICE_URL + ROOM_POV_URL + `/${roomId}`)
-        const room: finding_game_room = res.data
+        const res = await axios.get(DEV_MATCHING_SERVICE_URL + ROOM_POV_URL + `/${roomId}`, {
+            validateStatus: (status) => status < 500
+        })
+        const room: finding_game_room | null = res.data
 
-        return room ?? null
+        return room
     } catch (error) {
         console.error(error)
         return null
     }
 }
-
-
 
 /**
  * Checks if user is finding a game or not (from finding_game_user)
@@ -64,7 +66,7 @@ export async function isUserFindingGame(email: String): Promise<boolean> {
 /**
  * The user is finding a game. Insert entries into finding_game_user and finding_game_room
  */
-export async function userIsFindingGame(email: String, roomId: String): Promise<void> {
+export async function initialiseFinding(email: String, roomId: String): Promise<void> {
     const user: finding_game_user = {
         email: email,
         roomId: roomId
@@ -107,7 +109,7 @@ export async function foundMatch(email: String): Promise<String | null> {
 /**
  * From finding_game_room
  */
-export async function getUser1Email(roomId: String): Promise<String | null> {
+export async function getOtherUserEmail(roomId: String): Promise<String | null> {
     const room: finding_game_room | null = await getFindingGameRoom(roomId)
 
     return room ? room.user1Email : null

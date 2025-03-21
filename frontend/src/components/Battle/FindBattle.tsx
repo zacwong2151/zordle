@@ -5,19 +5,28 @@ import FindbattleNavbar from "../Main/FindbattleNavbar"
 import { CreateRoomModal } from "./MatchingModals/CreateRoomModal"
 import { JoinRoomModal } from "./MatchingModals/JoinRoomModal"
 import { InvalidRoomModal } from "./MatchingModals/InvalidRoomModal"
-import { isUserFindingGame, removeUserFromFinding, userIsFindingGame } from "@/apis/MatchingApis"
+import { CurrentlyInGameModal } from "./MatchingModals/CurrentlyInGameModal"
+import { isUserFindingGame, removeUserFromFinding, initialiseFinding } from "@/apis/MatchingApis"
 import { isUserInGame } from "@/apis/BattleApis"
 import { useUserContext } from "@/contexts/UserContext"
 import { generateUniqueRoomId } from "@/utils/BattleUtils"
 import { useMatchingContext } from "@/contexts/MatchingContext"
+import LoadingPage from "../Misc/LoadingPage"
 
 export default function FindBattle() {
-    const {setIsCreateRoomModalOpen, setIsJoinRoomModalOpen, setIsInvalidRoomModalOpen} = useMatchingContext()
+    const {
+        setIsCreateRoomModalOpen, 
+        setIsJoinRoomModalOpen, 
+        setIsInvalidRoomModalOpen, 
+        setIsCurrentlyInGameModalOpen,
+        isCurrentlyInGameModalOpen
+    } = useMatchingContext()
     const [roomId, setRoomId] = useState<string>("")
+    const [isLoading, setIsLoading] = useState<boolean>(true)
     const { email } = useUserContext()
 
     /*
-        When component mounts, check if user is in finding. If yes, remove user from finding.
+        Check if user is currently finding game or playing game
     */
     useEffect(() => {
         const validation = async () => {
@@ -25,6 +34,10 @@ export default function FindBattle() {
                 if (await isUserFindingGame(email)) {
                     await removeUserFromFinding(email)
                 }
+                if (await isUserInGame(email)) {
+                    setIsCurrentlyInGameModalOpen(true)
+                }
+                setIsLoading(false)
             } catch (error) {
                 console.error(error)                
             }
@@ -33,12 +46,12 @@ export default function FindBattle() {
     }, [email])
 
     const handleCreateRoom = async () => {
-        const bool = await isUserFindingGame(email) // || isUserInGame(email)
+        const bool = await isUserFindingGame(email) || await isUserInGame(email)
         if (bool) {
             console.warn('this should not happen')
             return
         }
-        await userIsFindingGame(email, generateUniqueRoomId())
+        await initialiseFinding(email, generateUniqueRoomId())
         setIsCreateRoomModalOpen(true)
     }
 
@@ -53,11 +66,16 @@ export default function FindBattle() {
         }
     }
 
+    if (isLoading) {
+        return <LoadingPage />
+    }
+
     return (
         <>
             <CreateRoomModal />
             <JoinRoomModal roomId={roomId} />
             <InvalidRoomModal />
+            <CurrentlyInGameModal />
 
             <div className="flex flex-col min-h-screen">
                 <FindbattleNavbar />

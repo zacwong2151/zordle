@@ -35,47 +35,47 @@ export type Game = {
 }
 */
 
+type JSONResponse = {
+    data: any, // Player | Game | null
+    message: String,
+    success: boolean
+}
+
+const INTERNAL_SERVER_ERROR_RESPONSE: JSONResponse = {
+    data: null,
+    message: "Internal Server Error",
+    success: false
+}
+
 /**
  * Util function for Player API calls
  */
-async function getPlayer(email: String): Promise<Player | null> {
+async function getPlayer(email: String): Promise<JSONResponse> {
     try {
-        const res = await axios.get(DEV_BATTLE_SERVICE_URL + PLAYER_POV_URL + `/${email}`, {
+        const response = await axios.get(DEV_BATTLE_SERVICE_URL + PLAYER_POV_URL + `/${email}`, {
             validateStatus: (status) => status < 500
         })
 
-        if (res.status === 404) {
-            return null
-        }
-
-        const player: Player = res.data.data
-        return player
-
+        return response.data
     } catch (error) {
         console.error(error)
-        return null
+        return INTERNAL_SERVER_ERROR_RESPONSE
     }
 }
 
 /**
  * Util function for Game API calls
  */
-async function getGame(roomId: String): Promise<Game | null> {
+async function getGame(roomId: String): Promise<JSONResponse> {
     try {
-        const res = await axios.get(DEV_BATTLE_SERVICE_URL + GAME_POV_URL + `/${roomId}`, {
+        const response = await axios.get(DEV_BATTLE_SERVICE_URL + GAME_POV_URL + `/${roomId}`, {
             validateStatus: (status) => status < 500
         })
 
-        if (res.status === 404) {
-            return null
-        }
-
-        const game: Game = res.data.data
-        return game
-
+        return response.data
     } catch (error) {
         console.error(error)
-        return null
+        return INTERNAL_SERVER_ERROR_RESPONSE
     }
 }
 
@@ -84,27 +84,39 @@ async function getGame(roomId: String): Promise<Game | null> {
  * Checks if user is currently playing a game or not
  */
 export async function isUserInGame(email: String): Promise<boolean> {
-    const player: Player | null = await getPlayer(email)
+    const res: JSONResponse = await getPlayer(email)
 
-    return player ? true : false
+    if (!res.success) {
+        return false // console logs 404 anyway
+    }
+    return true
 }
 
 /**
  * Get a player's room id
  */
 export async function getPlayerRoomId(email: String): Promise<String | null> {
-    const player: Player | null = await getPlayer(email)
+    const res: JSONResponse = await getPlayer(email)
 
-    return player ? player.roomId : null
+    if (!res.success) {
+        console.error(res.message)
+        return null
+    }
+    const player: Player = res.data
+    return player.roomId
 }
 
 /**
  * Checks if this room id is valid
  */
 export async function isRoomIdValid(roomId: String): Promise<boolean> {
-    const game: Game | null = await getGame(roomId)
+    const res: JSONResponse = await getGame(roomId)
 
-    return game ? true : false
+    if (!res.success) {
+        console.error(res.message)
+        return false
+    }
+    return true
 }
 
 /**
@@ -164,6 +176,7 @@ export async function initialiseGame(
     }
 
     try {
+        // TODO: batch this into a single api call
         await axios.post(DEV_BATTLE_SERVICE_URL + PLAYER_POV_URL, player1ReqBody)
         await axios.post(DEV_BATTLE_SERVICE_URL + PLAYER_POV_URL, player2ReqBody)
 
@@ -174,8 +187,34 @@ export async function initialiseGame(
 
 }
 
+/**
+ * Get game info
+ */
 export async function getGameInfo(roomId: String): Promise<Game | null> {
-    const game: Game | null = await getGame(roomId)
+    const res: JSONResponse = await getGame(roomId)
 
-    return game
+    if (!res.success) {
+        return null // console logs 404 anyway
+    }
+
+    return res.data
+}
+
+/**
+ * Remove player from game, and modify the corresponding game document
+ */
+export async function removePlayerFromGame(email: String): Promise<boolean> {
+    try {
+        const response = await axios.delete(DEV_BATTLE_SERVICE_URL + PLAYER_POV_URL + `/${email}`, {
+            validateStatus: (status) => status < 500
+        });
+        const res: JSONResponse = response.data
+
+        console.log(res.message)
+
+        return res.success
+    } catch (error) {
+        console.error(error);
+        return false
+    }
 }

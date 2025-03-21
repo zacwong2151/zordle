@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-interface PlayerType extends Document {
+export interface PlayerType extends Document {
     _id: string,
     roomId: string
 }

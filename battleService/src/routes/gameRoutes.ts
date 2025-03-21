@@ -13,26 +13,34 @@ router.get("/:roomId", async (req: Request, res: Response) => {
 
     if (!roomId) {
         res.status(400).send({
-            data: "Missing information"
+            data: null,
+            message: "roomId cannot be null or blank",
+            success: false
         })
         return
     }
-
+    
     try {
         const game = await Game.findOne({ _id: roomId })
-
+        
         if (game) {
             res.status(200).send({
                 data: game,
+                message: `Successfully retrieved game: ${roomId}`,
+                success: true
             })
         } else {
             res.status(404).send({
-                data: "Game not found",
+                data: null,
+                message: `Game: ${roomId} not found`,
+                success: false
             })
         }
     } catch (error) {
         res.status(500).send({
-            data: "Internal server error"
+            data: null,
+            message: "Internal server error",
+            success: false
         })
     }
 })
@@ -62,7 +70,8 @@ router.post("/", async (req: Request, res: Response) => {
 
     if (!roomId || !player1Email || !player2Email) {
         res.status(400).send({
-            data: "Missing information"
+            message: `roomId, player1Id, player2Id cannot be null or blank`,
+            success: false
         })
         return
     }
@@ -89,16 +98,19 @@ router.post("/", async (req: Request, res: Response) => {
     try {
         await game.save()
         res.status(201).send({
-            data: game
+            message: `Successfully created game: ${roomId}`,
+            success: true
         })
     } catch (error: any) {
         if (error.code === DUPLICATE_KEY_CODE) {
             res.status(409).send({
-                data: `Game with roomId: ${roomId} already exists`
+                message: `Game: ${roomId} already exists`,
+                success: false
             })
         } else {
             res.status(500).send({
-                data: "Internal server error "
+                message: "Internal server error",
+                success: false
             })
         }
     }
@@ -112,26 +124,30 @@ router.delete("/:roomId", async (req: Request, res: Response) => {
 
     if (!roomId) {
         res.status(400).send({
-            data: "Missing information"
+            message: "roomId cannot be null or blank",
+            success: false
         })
         return
     }
-
+    
     try {
         const game = await Game.findOneAndDelete({ _id: roomId })
-
+        
         if (game) {
             res.status(200).send({
-                data: `Successfully delete game: ${roomId}`,
+                message: `Successfully delete game: ${roomId}`,
+                success: true
             })
         } else {
             res.status(404).send({
-                data: `Game with roomId: ${roomId} does not exist`,
+                message: `Game: ${roomId} does not exist`,
+                success: false
             })
         }
     } catch (error) {
         res.status(500).send({
-            data: "Internal server error "
+            message: "Internal server error",
+            success: false
         })
     }
 })
@@ -141,35 +157,37 @@ router.delete("/:roomId", async (req: Request, res: Response) => {
  */
 router.put("/:roomId", async (req: Request, res: Response) => {
     const roomId = req.params.roomId
-    const data = req.body
+    const message = req.body
 
-    if (!roomId || Object.keys(data).length === 0) {
+    if (!roomId || Object.keys(message).length === 0) {
         res.status(400).send({
-            data: "Missing information"
+            message: "roomId and request body cannot be blank",
+            success: false
         })
         return
     }
-
+    
     try {
         const result = await Game.updateOne(
             { _id: roomId }, 
-            { $set: data } // Updates only provided fields
+            { $set: message } // Updates only provided fields
         )
-
+        
         if (result.modifiedCount === 0) {
             res.status(404).send({
-                data: "Room not found or no changes made"
+                message: "Room not found or no changes made",
+                success: false
             })
-            return
+        } else {
+            res.status(200).send({
+                message: `Game: ${roomId} updated successfully`,
+                success: true
+            })
         }
-
-        res.status(200).send({
-            data: "Game updated successfully"
-        })
-
     } catch (error) {
         res.status(500).send({
-            data: "Internal server error "
+            message: "Internal server error",
+            success: false
         })
     }
 })

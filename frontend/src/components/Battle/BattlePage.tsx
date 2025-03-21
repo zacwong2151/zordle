@@ -6,16 +6,20 @@ import { AreYouReadyModal } from "./PlayingModals/AreYouReadyModal"
 import { WaitingForOtherPlayerModal } from "./PlayingModals/WaitingForOtherPlayerModal"
 import { GameStartingModal } from "./PlayingModals/GameStartingModal"
 import { isRoomIdValid, getPlayerRoomId, getGameInfo } from "@/apis/BattleApis"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
 import LoadingPage from "../Misc/LoadingPage"
 import { useUserContext } from "@/contexts/UserContext"
 import { Game } from "@/types/Battle"
+import { Button } from "../ui/button"
+import { ExitGameModal } from "./PlayingModals/ExitGameModal"
+import { useBattleContext } from "@/contexts/BattleContext"
 
 export default function BattlePage() {
-    const { roomId } = useParams()
+    const { id } = useParams()
     const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(true)
     const { email } = useUserContext()
+    const { setIsExitGameModalOpen, setRoomId } = useBattleContext()
 
     /*
         Verify if user can enter this room. Then, load game info.
@@ -30,19 +34,20 @@ export default function BattlePage() {
                 return // wait for email to be initialised
             }
 
-            if (!roomId) { // empty roomId
+            if (!id) { // empty id
                 navigate("/battle")
                 return
             }
+            setRoomId(id)
 
-            const bool: boolean = await isRoomIdValid(roomId)
+            const bool: boolean = await isRoomIdValid(id)
             if (!bool) { // roomId does not exist in DB
                 navigate("/battle")
                 return
             }
 
             const playerRoomId: String | null = await getPlayerRoomId(email)
-            if (playerRoomId !== roomId) { // not authenticated to enter this room
+            if (playerRoomId !== id) { // not authenticated to enter this room
                 navigate("/battle")
                 return
             }
@@ -51,18 +56,18 @@ export default function BattlePage() {
                 Load game info
             */
 
-            const game: Game | null = await getGameInfo(roomId)
+            const game: Game | null = await getGameInfo(id)
             if (!game) {
                 navigate("/battle")
                 return
             }
 
+            console.log(game)
 
             setIsLoading(false)
         }
         init()
-    }, [email, roomId])
-
+    }, [email, id])
 
     if (isLoading) {
         return <LoadingPage />
@@ -70,41 +75,68 @@ export default function BattlePage() {
 
     return (
         <>
+            <ExitGameModal />
             <AreYouReadyModal />
             <WaitingForOtherPlayerModal />
             <GameStartingModal />
 
             <div className="min-h-screen flex flex-col items-center">
-                <div className="w-full max-w-6xl flex items-center mb-6 px-4">
-                    {/* Left Player Name */}
-                    <div className="w-[45%] flex justify-center mt-4">
-                        <div className="bg-gray-200 px-6 py-2 text-lg font-medium">You</div>
+                {/* Top Bar with Exit Game Button, Player Names and Timer */}
+                <div className="w-full relative">
+                    {/* Exit Game Button - Positioned at top left */}
+                    <div className="absolute left-4 top-4">
+                        <Button 
+                            className="bg-red-600 text-white px-4 py-2"
+                            onClick={() => setIsExitGameModalOpen(true)}
+                        >
+                            Exit Game
+                        </Button>
                     </div>
 
-                    {/* Timer */}
-                    <div className="border border-gray-400 px-8 py-4">
-                        <span className="text-4xl font-bold">0:00</span>
-                    </div>
+                    {/* Content Row with Player Names and Timer */}
+                    <div className="flex justify-center items-center mt-4">
+                        {/* Left Player Name */}
+                        <div className="flex-1 flex justify-center">
+                            <div className="bg-gray-200 px-6 py-2 text-lg font-medium">
+                                Player 1
+                            </div>
+                        </div>
 
-                    {/* Right Player Name */}
-                    <div className="w-[45%] flex justify-center mt-4">
-                        <div className="bg-gray-200 px-6 py-2 text-lg font-medium">Other player</div>
+                        {/* Timer - Centered */}
+                        <div className="mx-12">
+                            <div className="border border-gray-400 px-10 py-4 text-center">
+                                <span className="text-4xl font-bold">0:00</span>
+                            </div>
+                        </div>
+
+                        {/* Right Player Name */}
+                        <div className="flex-1 flex justify-center">
+                            <div className="bg-gray-200 px-6 py-2 text-lg font-medium">
+                                Player 2
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div className="flex justify-between w-full max-w-6xl relative">
-                    {/* Left Side with Player 1 */}
-                    <div className="flex flex-col items-center w-full max-w-[45%] gap-y-4">
-                        {/* <Grid />
-                        <Keyboard /> */}
+                {/* Main Game Area */}
+                <div className="flex justify-between w-full max-w-6xl relative mt-4">
+                    {/* Left Side with Player 1 Grid */}
+                    <div className="flex flex-col items-center w-[45%]">
+                        {/* Grid will go here */}
+                        <div className="w-full aspect-square">
+                            {/* <Grid /> */}
+                        </div>
                     </div>
 
                     {/* Divider Line */}
-                    <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-px bg-gray-300" />
+                    <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-px bg-gray-400" />
 
-                    {/* Right Side with Player 2 */}
-                    <div className="flex flex-col items-center w-full max-w-[45%]">
-                        {/* <Grid /> */}
+                    {/* Right Side with Player 2 Grid */}
+                    <div className="flex flex-col items-center w-[45%]">
+                        {/* Grid will go here */}
+                        <div className="w-full aspect-square">
+                            {/* <Grid /> */}
+                        </div>
                     </div>
                 </div>
             </div>

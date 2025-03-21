@@ -1,20 +1,29 @@
 import {
     Dialog,
     DialogContent,
+    DialogDescription
 } from "@/components/ui/dialog"
-import { useWordleContext } from "@/contexts/WordleContext"
 import { Button } from "@/components/ui/button"
+import { useBattleContext } from "@/contexts/BattleContext"
 
 export function AreYouReadyModal() {
-    // const { isJoinRoomModalOpen, setIsJoinRoomModalOpen } = useWordleContext()
+    const { isAreYouReadyModalOpen, setIsAreYouReadyModalOpen } = useBattleContext()
+
+    function handleReady() {
+
+    }
 
     return (
-        <Dialog open={false}>
+        <Dialog open={isAreYouReadyModalOpen}>
             <DialogContent className="" hideClose={true}>
-                <div className="text-3xl font-bold flex justify-center mt-8 mb-16">
+                <DialogDescription></DialogDescription>
+                <div className="text-3xl font-bold flex justify-center mt-6 mb-16">
                     Are you ready?
                 </div>
-                <Button className="mx-auto">
+                <Button 
+                    className="mx-auto"
+                    onClick={handleReady}
+                >
                     Ready
                 </Button>
             </DialogContent>

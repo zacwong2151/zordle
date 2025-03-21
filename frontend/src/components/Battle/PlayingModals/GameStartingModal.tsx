@@ -1,15 +1,17 @@
 import {
     Dialog,
     DialogContent,
+    DialogDescription
 } from "@/components/ui/dialog"
-import { useWordleContext } from "@/contexts/WordleContext"
+import { useBattleContext } from "@/contexts/BattleContext"
 
 export function GameStartingModal() {
-    // const { isJoinRoomModalOpen, setIsJoinRoomModalOpen } = useWordleContext()
+    const { isGameStartingModalOpen, setIsGameStartingModalOpen } = useBattleContext()
 
     return (
-        <Dialog open={false}>
+        <Dialog open={isGameStartingModalOpen}>
             <DialogContent className="py-16 max-w-md " hideClose={true}>
+                <DialogDescription></DialogDescription>
                 <div className="text-xl text-center">
                     Starting in..
                 </div>

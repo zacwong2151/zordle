@@ -2,10 +2,10 @@ import mongoose, { Document, Schema } from "mongoose";
 import { GridColourState, KeyboardColourState } from "../types/ColourStates";
 import { Letter } from "../types/Letter";
 
-interface GameType extends Document {
+export interface GameType extends Document {
     _id: string, // roomId
-    player1Email: string,
-    player2Email: string,
+    player1Email: string | null,
+    player2Email: string | null,
     isPlayer1Ready: boolean,
     isPlayer2Ready: boolean,
     selectedWord: string,
