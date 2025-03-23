@@ -4,20 +4,20 @@ import { GridColourState, KeyboardColourState } from "../types/ColourState"
 import { Letter } from "../types/Letter"
 
 type WordleStateType = {
-    words: String[],
-    setWords: React.Dispatch<React.SetStateAction<String[]>>,
+    words: string[],
+    setWords: React.Dispatch<React.SetStateAction<string[]>>,
     wordIdx: number,
     setWordIdx: React.Dispatch<React.SetStateAction<number>>,
-    selectedWord: String | null,
-    setSelectedWord: React.Dispatch<React.SetStateAction<String | null>>,
+    selectedWord: string | null,
+    setSelectedWord: React.Dispatch<React.SetStateAction<string | null>>,
     gridColourState: GridColourState[][],
     setGridColourState: React.Dispatch<React.SetStateAction<GridColourState[][]>>,
     keyboardColourState: Record<Letter, KeyboardColourState>,
     setKeyboardColourState: React.Dispatch<React.SetStateAction<Record<Letter, KeyboardColourState>>>,
     isGameOver: boolean,
     setIsGameOver: React.Dispatch<React.SetStateAction<boolean>>,
-    popupMessage: String | null,
-    setPopupMessage: React.Dispatch<React.SetStateAction<String | null>>,
+    popupMessage: string | null,
+    setPopupMessage: React.Dispatch<React.SetStateAction<string | null>>,
     triggerWordShakeAnimation: boolean,
     setTriggerWordShakeAnimation: React.Dispatch<React.SetStateAction<boolean>>,
     triggerLettersFlipAnimation: boolean,
@@ -29,9 +29,9 @@ type WordleStateType = {
 const WordleContext = createContext<WordleStateType | null>(null)
 
 const WordleContextProvider = ({ children } : { children: ReactNode }) => {
-    const [words, setWords] = useState<String[]>(["", "", "", "", "", ""]) 
+    const [words, setWords] = useState<string[]>(["", "", "", "", "", ""]) 
     const [wordIdx, setWordIdx] = useState<number>(0)
-    const [selectedWord, setSelectedWord] = useState<String | null>(null)
+    const [selectedWord, setSelectedWord] = useState<string | null>(null)
     const [gridColourState, setGridColourState] = useState<GridColourState[][]>(
         [
             ['white', 'white', 'white', 'white', 'white'],
@@ -46,7 +46,7 @@ const WordleContextProvider = ({ children } : { children: ReactNode }) => {
         {} as Record<Letter, KeyboardColourState>
     )
     const [isGameOver, setIsGameOver] = useState<boolean>(false)
-    const [popupMessage, setPopupMessage] = useState<String | null>(null)
+    const [popupMessage, setPopupMessage] = useState<string | null>(null)
     const [triggerWordShakeAnimation, setTriggerWordShakeAnimation] = useState<boolean>(false)
     const [triggerLettersFlipAnimation, setTriggerLettersFlipAnimation] = useState<boolean>(false)
     const [isKeyboardDisabled, setIsKeyboardDisabled] = useState<boolean>(false)
@@ -67,7 +67,7 @@ const WordleContextProvider = ({ children } : { children: ReactNode }) => {
      */
     useEffect(() => {
         const fetchRandomWord = async () => {
-            let word: String | null = null
+            let word: string | null = null
             try {
                 word = await getRandomWord()
             } catch (error) {

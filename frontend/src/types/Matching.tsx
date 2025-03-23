@@ -1,10 +1,10 @@
 export type finding_game_user = {
-    email: String,
-    roomId: String
+    email: string,
+    roomId: string
 }
 
 export type finding_game_room = {
-    roomId: String,
-    user1Email: String,
-    user2Email: String | null
+    roomId: string,
+    user1Email: string,
+    user2Email: string | null
 }

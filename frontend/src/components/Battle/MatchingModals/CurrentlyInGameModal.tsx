@@ -18,8 +18,8 @@ export function CurrentlyInGameModal() {
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
     const { isCurrentlyInGameModalOpen, setIsCurrentlyInGameModalOpen } = useMatchingContext()
     const [game, setGame] = useState<Game | null>(null)
-    const [roomId, setRoomId] = useState<String>("")
-    const [opponentName, setOpponentName] = useState<String>("")
+    const [roomId, setRoomId] = useState<string>("")
+    const [opponentName, setOpponentName] = useState<string>("")
     const { email } = useUserContext()
     const navigate = useNavigate()
 
@@ -28,7 +28,7 @@ export function CurrentlyInGameModal() {
     */
     useEffect(() => {
         const init = async () => {
-            const id: String | null = await getPlayerRoomId(email)
+            const id: string | null = await getPlayerRoomId(email)
             if (!id) {
                 throw new Error("This should not happen")
             }

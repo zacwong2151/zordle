@@ -44,7 +44,7 @@ const gameSchema: Schema<GameType> = new Schema({
         type: Number,
     },
     words: [{
-        type: String, // array of Strings
+        type: String, // array of strings
     }],
     wordIdx: {
         type: Number,

@@ -1,8 +1,8 @@
 import React, { createContext, useState, ReactNode, useContext } from "react"
 
 type BattleStateType = {
-    roomId: String,
-    setRoomId: React.Dispatch<React.SetStateAction<String>>,
+    roomId: string,
+    setRoomId: React.Dispatch<React.SetStateAction<string>>,
     isAreYouReadyModalOpen: boolean,
     setIsAreYouReadyModalOpen: React.Dispatch<React.SetStateAction<boolean>>,
     isExitGameModalOpen: boolean,
@@ -16,7 +16,7 @@ type BattleStateType = {
 const BattleContext = createContext<BattleStateType | null>(null)
 
 const BattleContextProvider = ({ children } : { children: ReactNode }) => {
-    const [roomId, setRoomId] = useState<String>("")
+    const [roomId, setRoomId] = useState<string>("")
     const [isAreYouReadyModalOpen, setIsAreYouReadyModalOpen] = useState<boolean>(false)
     const [isExitGameModalOpen, setIsExitGameModalOpen] = useState<boolean>(false)
     const [isGameStartingModalOpen, setIsGameStartingModalOpen] = useState<boolean>(false)

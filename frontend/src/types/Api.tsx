@@ -1,6 +1,6 @@
 export type JSONResponse = {
     data: any
-    message: String,
+    message: string,
     success: boolean
 }
 

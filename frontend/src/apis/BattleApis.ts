@@ -12,24 +12,24 @@ const GAME_POV_URL = "/game"
 /*
 
 export type Player = {
-    email: String, // primary key
-    roomId: String
+    email: string, // primary key
+    roomId: string
 }
 
 export type Game = {
-    roomId: String, // primary key
-    player1Email: String,
-    player2Email: String,
+    roomId: string, // primary key
+    player1Email: string,
+    player2Email: string,
     isPlayer1Ready: boolean,
     isPlayer2Ready: boolean,
-    selectedWord: String,
+    selectedWord: string,
     timer: number,
-    words: String[],
+    words: string[],
     wordIdx: number,
     gridColourState: GridColourState[][],
     keyboardColourState: Record<Letter, KeyboardColourState>,
     isGameOver: boolean,
-    popupMessage: String | null,
+    popupMessage: string | null,
     triggerWordShakeAnimation: boolean,
     triggerLettersFlipAnimation: boolean,
     isKeyboardDisabled: boolean
@@ -39,7 +39,7 @@ export type Game = {
 /**
  * Util function for Player API calls
  */
-async function getPlayer(email: String): Promise<JSONResponse> {
+async function getPlayer(email: string): Promise<JSONResponse> {
     try {
         const response = await axios.get(DEV_BATTLE_SERVICE_URL + PLAYER_POV_URL + `/${email}`, {
             validateStatus: (status) => status < 500
@@ -55,7 +55,7 @@ async function getPlayer(email: String): Promise<JSONResponse> {
 /**
  * Util function for Game API calls
  */
-async function getGame(roomId: String): Promise<JSONResponse> {
+async function getGame(roomId: string): Promise<JSONResponse> {
     try {
         const response = await axios.get(DEV_BATTLE_SERVICE_URL + GAME_POV_URL + `/${roomId}`, {
             validateStatus: (status) => status < 500
@@ -72,7 +72,7 @@ async function getGame(roomId: String): Promise<JSONResponse> {
 /**
  * Checks if user is currently playing a game or not
  */
-export async function isUserInGame(email: String): Promise<boolean> {
+export async function isUserInGame(email: string): Promise<boolean> {
     const res: JSONResponse = await getPlayer(email)
 
     return res.success
@@ -81,7 +81,7 @@ export async function isUserInGame(email: String): Promise<boolean> {
 /**
  * Get a player's room id
  */
-export async function getPlayerRoomId(email: String): Promise<String | null> {
+export async function getPlayerRoomId(email: string): Promise<string | null> {
     const res: JSONResponse = await getPlayer(email)
 
     if (!res.success) {
@@ -95,7 +95,7 @@ export async function getPlayerRoomId(email: String): Promise<String | null> {
 /**
  * Checks if this room id is valid
  */
-export async function isRoomIdValid(roomId: String): Promise<boolean> {
+export async function isRoomIdValid(roomId: string): Promise<boolean> {
     const res: JSONResponse = await getGame(roomId)
 
     if (!res.success) {
@@ -109,9 +109,9 @@ export async function isRoomIdValid(roomId: String): Promise<boolean> {
  * Initialise game for Player and Game
  */
 export async function initialiseGame(
-    roomId: String, // primary key
-    player1Email: String,
-    player2Email: String,
+    roomId: string, // primary key
+    player1Email: string,
+    player2Email: string,
 ): Promise<void> {
     const player1ReqBody: Player = {
         email: player1Email,
@@ -122,7 +122,7 @@ export async function initialiseGame(
         roomId: roomId
     }
 
-    let selectedWord: String | null = null
+    let selectedWord: string | null = null
     try {
         selectedWord = await getRandomWord()
     } catch (error) {
@@ -176,7 +176,7 @@ export async function initialiseGame(
 /**
  * Get game info
  */
-export async function getGameInfo(roomId: String): Promise<Game | null> {
+export async function getGameInfo(roomId: string): Promise<Game | null> {
     const res: JSONResponse = await getGame(roomId)
 
     if (!res.success) {
@@ -189,7 +189,7 @@ export async function getGameInfo(roomId: String): Promise<Game | null> {
 /**
  * Remove player from game, and modify the corresponding game document
  */
-export async function removePlayerFromGame(email: String): Promise<boolean> {
+export async function removePlayerFromGame(email: string): Promise<boolean> {
     try {
         const response = await axios.delete(DEV_BATTLE_SERVICE_URL + PLAYER_POV_URL + `/${email}`, {
             validateStatus: (status) => status < 500

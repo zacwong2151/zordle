@@ -19,7 +19,7 @@ export function CreateRoomModal() {
     const navigate = useNavigate()
     const { email } = useUserContext()
     const { isCreateRoomModalOpen, setIsCreateRoomModalOpen } = useMatchingContext()
-    const [roomId, setRoomId] = useState<String | null>(null)
+    const [roomId, setRoomId] = useState<string | null>(null)
 
     /*
         Fetch user's room id

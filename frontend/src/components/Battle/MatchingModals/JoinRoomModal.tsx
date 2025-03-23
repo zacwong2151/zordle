@@ -28,7 +28,7 @@ export function JoinRoomModal({ roomId }: { roomId: string }) {
                 }
                 setIsValidRoomId(true)
 
-                const otherUserEmail: String | null = await getOtherUserEmail(roomId)
+                const otherUserEmail: string | null = await getOtherUserEmail(roomId)
                 if (!otherUserEmail) {
                     console.error("should not happen")
                     return

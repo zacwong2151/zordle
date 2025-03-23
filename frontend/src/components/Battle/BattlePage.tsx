@@ -46,7 +46,7 @@ export default function BattlePage() {
                 return
             }
 
-            const playerRoomId: String | null = await getPlayerRoomId(email)
+            const playerRoomId: string | null = await getPlayerRoomId(email)
             if (playerRoomId !== id) { // not authenticated to enter this room
                 navigate("/battle")
                 return
