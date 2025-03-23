@@ -7,17 +7,20 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { useMatchingContext } from "@/contexts/MatchingContext"
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 
 export function InvalidRoomModal() {
     const { isInvalidRoomModalOpen, setIsInvalidRoomModalOpen } = useMatchingContext()
 
     return (
         <Dialog open={isInvalidRoomModalOpen}>
-            <DialogContent className="gap-16" hideClose={true}>
+            <DialogContent className="gap-8" hideClose={true}>
+                <VisuallyHidden>
+                    <DialogDescription></DialogDescription>
+                </VisuallyHidden>
                 <DialogTitle>
                     This room ID does not exist!
                 </DialogTitle>
-                <DialogDescription></DialogDescription>
 
                 <DialogFooter>
                     <Button 

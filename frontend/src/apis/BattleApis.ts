@@ -3,6 +3,7 @@ import { getRandomWord } from "./WordleApis";
 import { GridColourState, KeyboardColourState } from "@/types/ColourState";
 import { Letter } from "@/types/Letter";
 import { Player, Game } from "@/types/Battle";
+import { JSONResponse, INTERNAL_SERVER_ERROR_RESPONSE } from "@/types/Api";
 
 const DEV_BATTLE_SERVICE_URL = "http://localhost:7000/battle"
 const PLAYER_POV_URL = "/player"
@@ -34,18 +35,6 @@ export type Game = {
     isKeyboardDisabled: boolean
 }
 */
-
-type JSONResponse = {
-    data: any, // Player | Game | null
-    message: String,
-    success: boolean
-}
-
-const INTERNAL_SERVER_ERROR_RESPONSE: JSONResponse = {
-    data: null,
-    message: "Internal Server Error",
-    success: false
-}
 
 /**
  * Util function for Player API calls
@@ -86,10 +75,7 @@ async function getGame(roomId: String): Promise<JSONResponse> {
 export async function isUserInGame(email: String): Promise<boolean> {
     const res: JSONResponse = await getPlayer(email)
 
-    if (!res.success) {
-        return false // console logs 404 anyway
-    }
-    return true
+    return res.success
 }
 
 /**

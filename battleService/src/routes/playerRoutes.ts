@@ -145,10 +145,14 @@ router.delete("/:email", async (req: Request, res: Response) => {
             console.error("should not reach here")
         }
 
+        let message = ""
+
         if (!game.player1Email && !game.player2Email) {
             await Game.findOneAndDelete({ _id: roomId }).session(session)
+            message = `Player ${email} removed successfully. Game: ${roomId} deleted successfully`
         } else {
             await game.save({ session });
+            message = `Player ${email} removed successfully. Game: ${roomId} modified successfully`
         }
 
         await session.commitTransaction()
@@ -156,7 +160,7 @@ router.delete("/:email", async (req: Request, res: Response) => {
 
         res.status(200).send({
             success: true,
-            message: `Player ${email} removed successfully. Game: ${roomId} modified/deleted successfully`,
+            message: message,
         })
 
     } catch (error) {

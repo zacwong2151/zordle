@@ -12,6 +12,7 @@ import ReactLoading from 'react-loading'
 import { useUserContext } from "@/contexts/UserContext"
 import { getUserRoomId, foundMatch, removeUserFromFinding, isUserFindingGame } from "@/apis/MatchingApis"
 import { useMatchingContext } from "@/contexts/MatchingContext"
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 
 export function CreateRoomModal() {
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
@@ -71,8 +72,10 @@ export function CreateRoomModal() {
     return (
         <Dialog open={isCreateRoomModalOpen}>
             <DialogContent className="gap-8" hideClose={true}>
+                <VisuallyHidden>
+                    <DialogDescription></DialogDescription>
+                </VisuallyHidden>
                 <DialogTitle>Waiting for friend to join room..</DialogTitle>
-                <DialogDescription></DialogDescription>
 
                 <div className="text-6xl font-bold mx-auto">
                     {roomId}

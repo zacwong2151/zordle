@@ -43,7 +43,10 @@ export async function handleEnter(
         console.warn('Selected word should not be null')
         return 
     }
+    
     if (isKeyboardDisabled) return
+    setIsKeyboardDisabled(true)
+
     if (isGameOver) {
         showPopupMessage('Game is over!', setPopupMessage, SHORT_POPUP_DURATION)
         return
@@ -61,7 +64,6 @@ export async function handleEnter(
         return
     }
     
-    setIsKeyboardDisabled(true)
 
     changeGridColour(currentWord, selectedWord, wordIdx, gridColourState, setGridColourState)
     triggerLettersFlipAnimation(setTriggerLettersFlipAnimation)

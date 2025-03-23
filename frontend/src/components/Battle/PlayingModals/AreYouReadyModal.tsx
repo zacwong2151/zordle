@@ -5,6 +5,7 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { useBattleContext } from "@/contexts/BattleContext"
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 
 export function AreYouReadyModal() {
     const { isAreYouReadyModalOpen, setIsAreYouReadyModalOpen } = useBattleContext()
@@ -12,12 +13,14 @@ export function AreYouReadyModal() {
     function handleReady() {
 
     }
-
+    
     return (
         <Dialog open={isAreYouReadyModalOpen}>
-            <DialogContent className="" hideClose={true}>
-                <DialogDescription></DialogDescription>
-                <div className="text-3xl font-bold flex justify-center mt-6 mb-16">
+            <DialogContent className="gap-8" hideClose={true}>
+                <VisuallyHidden>
+                    <DialogDescription></DialogDescription>
+                </VisuallyHidden>
+                <div className="text-3xl font-bold flex justify-center">
                     Are you ready?
                 </div>
                 <Button 

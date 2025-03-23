@@ -12,6 +12,7 @@ import { useBattleContext } from "@/contexts/BattleContext"
 import { useUserContext } from "@/contexts/UserContext"
 import { removePlayerFromGame } from "@/apis/BattleApis"
 import { useNavigate } from "react-router-dom"
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 
 export function ExitGameModal() {
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
@@ -36,8 +37,10 @@ export function ExitGameModal() {
 
     return (
         <Dialog open={isExitGameModalOpen}>
-            <DialogContent className="gap-16" hideClose={true}>
-                <DialogDescription></DialogDescription>
+            <DialogContent className="gap-8" hideClose={true}>
+                <VisuallyHidden>
+                    <DialogDescription></DialogDescription>
+                </VisuallyHidden>
                 <DialogTitle>
                     Are you sure?
                 </DialogTitle>

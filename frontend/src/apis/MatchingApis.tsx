@@ -1,5 +1,6 @@
 import axios from "axios"
 import { finding_game_room, finding_game_user } from "@/types/Matching"
+import { JSONResponse, INTERNAL_SERVER_ERROR_RESPONSE } from "@/types/Api";
 
 const DEV_MATCHING_SERVICE_URL = "http://localhost:8080/finding-game"
 const ROOM_POV_URL = "/room"
@@ -23,34 +24,32 @@ export type finding_game_room = {
 /**
  * Util function for finding_game_user API calls
  */
-async function getFindingGameUser(email: String): Promise<finding_game_user | null> {
+async function getFindingGameUser(email: String): Promise<JSONResponse> {
     try {
-        const res = await axios.get(DEV_MATCHING_SERVICE_URL + USER_POV_URL + `/${email}`, {
+        const response = await axios.get(DEV_MATCHING_SERVICE_URL + USER_POV_URL + `/${email}`, {
             validateStatus: (status) => status < 500
         })
-        const user: finding_game_user | null = res.data
 
-        return user
+        return response.data
     } catch (error) {
         console.error(error)
-        return null
+        return INTERNAL_SERVER_ERROR_RESPONSE
     }
 }
 
 /**
  * Util function for finding_game_room API calls
  */
-async function getFindingGameRoom(roomId: String): Promise<finding_game_room | null> {
+async function getFindingGameRoom(roomId: String): Promise<JSONResponse> {
     try {
-        const res = await axios.get(DEV_MATCHING_SERVICE_URL + ROOM_POV_URL + `/${roomId}`, {
+        const response = await axios.get(DEV_MATCHING_SERVICE_URL + ROOM_POV_URL + `/${roomId}`, {
             validateStatus: (status) => status < 500
         })
-        const room: finding_game_room | null = res.data
 
-        return room
+        return response.data
     } catch (error) {
         console.error(error)
-        return null
+        return INTERNAL_SERVER_ERROR_RESPONSE
     }
 }
 
@@ -58,9 +57,9 @@ async function getFindingGameRoom(roomId: String): Promise<finding_game_room | n
  * Checks if user is finding a game or not (from finding_game_user)
 */
 export async function isUserFindingGame(email: String): Promise<boolean> {
-    const user: finding_game_user | null = await getFindingGameUser(email)
+    const res: JSONResponse = await getFindingGameUser(email)
 
-    return user ? true : false
+    return res.success
 }
 
 /**
@@ -89,9 +88,14 @@ export async function initialiseFinding(email: String, roomId: String): Promise<
  * Get user's room id (from finding_game_user)
 */
 export async function getUserRoomId(email: String): Promise<String | null> {
-    const user: finding_game_user | null = await getFindingGameUser(email)
+    const res: JSONResponse = await getFindingGameUser(email)
 
-    return user ? user.roomId : null
+    if (!res.success) {
+        console.error(res.message)
+        return null
+    }
+    const user: finding_game_user = res.data
+    return user.roomId
 }
 
 /**
@@ -100,19 +104,29 @@ export async function getUserRoomId(email: String): Promise<String | null> {
 export async function foundMatch(email: String): Promise<String | null> {
     const roomId: String | null = await getUserRoomId(email)
     if (!roomId) return null
-
-    const room: finding_game_room | null = await getFindingGameRoom(roomId)
     
-    return room ? room.user2Email : null
+    const res: JSONResponse = await getFindingGameRoom(roomId)
+    if (!res.success) {
+        console.error(res.message)
+        return null
+    }
+
+    const room: finding_game_room = res.data
+    return room.user2Email
 }
 
 /**
  * From finding_game_room
  */
 export async function getOtherUserEmail(roomId: String): Promise<String | null> {
-    const room: finding_game_room | null = await getFindingGameRoom(roomId)
+    const res: JSONResponse = await getFindingGameRoom(roomId)
+    if (!res.success) {
+        console.error(res.message)
+        return null
+    }
 
-    return room ? room.user1Email : null
+    const room: finding_game_room = res.data
+    return room.user1Email
 }
 
 /**
@@ -133,9 +147,8 @@ export async function removeUserFromFinding(email: String): Promise<void> {
  * Checks if this roomId is a valid id in the finding queue
  */
 export async function isRoomIdInFinding(roomId: String): Promise<boolean> {
-    const room: finding_game_room | null = await getFindingGameRoom(roomId)
-
-    return room ? true : false
+    const res: JSONResponse = await getFindingGameRoom(roomId)
+    return res.success
 }
 
 /**

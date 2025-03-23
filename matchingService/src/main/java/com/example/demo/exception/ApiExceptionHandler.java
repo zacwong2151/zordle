@@ -10,15 +10,17 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ApiExceptionHandler {
 
-    @ExceptionHandler(value = {ApiRequestException.class})
-    public ResponseEntity<Object> handleApiRequestException(ApiRequestException e) {
-        HttpStatus httpStatus = e.getHttpStatus();
-        ApiException exception = new ApiException(
-                e.getMessage(),
-                httpStatus
-        );
-        return new ResponseEntity<>(exception, httpStatus);
-    }
+//    @ExceptionHandler(value = {ApiRequestException.class})
+//    public ResponseEntity<Object> handleApiRequestException(ApiRequestException e) {
+//        HttpStatus httpStatus = e.getHttpStatus();
+//        ApiException exception = new ApiException(
+//                e.getMessage(),
+//                httpStatus
+//        );
+//        return new ResponseEntity<>(exception, httpStatus);
+//    }
+
+    // TODO: make the below exception handlers return ResponseEntity<ApiResponse<Object>>
 
     /**
      * Handles exceptions thrown when controller validates method parameters.

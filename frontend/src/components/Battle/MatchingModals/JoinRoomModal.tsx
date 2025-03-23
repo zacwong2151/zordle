@@ -48,7 +48,9 @@ export function JoinRoomModal({ roomId }: { roomId: string }) {
     return (
         <Dialog open={isJoinRoomModalOpen}>
             <DialogContent className="gap-8" hideClose={true}>
-                <DialogDescription></DialogDescription>
+                <VisuallyHidden>
+                    <DialogDescription></DialogDescription>
+                </VisuallyHidden>
                 {
                     isValidRoomId ? (
                         <DialogTitle>Joining room..</DialogTitle>
