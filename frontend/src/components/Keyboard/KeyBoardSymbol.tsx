@@ -19,7 +19,7 @@ export default function KeyboardSymbol({ symbol } : { symbol: string }) {
     if (symbol === "BACKSPACE") {
         return (
             <div 
-                className="w-12 h-14 bg-slate-300 border-white text-black font-bold rounded-md text-xl flex items-center justify-center cursor-pointer"
+                className="w-[10%] min-w-[40px] h-auto aspect-[6/7] bg-slate-300 border-white text-black font-bold rounded-md text-xl flex items-center justify-center cursor-pointer"
                 onClick={() => handleBackspace(words, wordIdx, setWords, isGameOver)}
             >
                 <IoBackspaceOutline />
@@ -29,7 +29,7 @@ export default function KeyboardSymbol({ symbol } : { symbol: string }) {
     if (symbol === "ENTER") {
         return (
             <div
-                className="w-20 h-14 bg-slate-300 border-white text-black font-bold rounded-md text-base flex items-center justify-center cursor-pointer"
+                className="w-[15%] min-w-[60px] h-auto aspect-[10/7] bg-slate-300 border-white text-black font-bold rounded-md text-base flex items-center justify-center cursor-pointer select-none"
                 onClick={() => handleEnter(words, wordIdx, setWordIdx, setWords, selectedWord, gridColourState, setGridColourState, keyboardColourState, setKeyboardColourState, isGameOver, setIsGameOver, setPopupMessage, setTriggerWordShakeAnimation, setTriggerLettersFlipAnimation, isKeyboardDisabled, setIsKeyboardDisabled)}
             >
                 {symbol}
@@ -58,7 +58,7 @@ export default function KeyboardSymbol({ symbol } : { symbol: string }) {
 
     return (
         <div 
-            className={`w-12 h-14 ${backgroundColour} ${textColour} border-white font-bold rounded-md text-lg flex items-center justify-center cursor-pointer`}
+            className={`w-[10%] min-w-[30px] max-w-[50px] h-auto aspect-[6/7] ${backgroundColour} ${textColour} border-white font-bold rounded-md text-lg flex items-center justify-center cursor-pointer select-none`}
             onClick={() => handleLetter(symbol, words, wordIdx, setWords, isGameOver, isKeyboardDisabled)}
         >
             {symbol}

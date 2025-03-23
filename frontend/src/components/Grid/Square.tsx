@@ -51,7 +51,7 @@ export default function Square({ squarePos, rowPos, isFlipping, delay } : { squa
     return (
         <div className="relative w-16 h-16 perspective-500">
           <div // the 'duration' attribute determines how slow a flip is
-            className={`w-full h-full transition-transform duration-700 transform-style-3d ${isFlipped ? "rotate-x-180" : ""}`}
+            className={`w-full h-full select-none transition-transform duration-700 transform-style-3d ${isFlipped ? "rotate-x-180" : ""}`}
           >
             <div // back face
               className={`absolute w-full h-full backface-hidden border-gray-500 border-2 flex items-center justify-center font-bold text-3xl ${showBackFace ? backFace_bgColour + " " + backFace_textColour : "bg-white text-black"} ${isFlipped ? "rotate-x-180" : ""}`}

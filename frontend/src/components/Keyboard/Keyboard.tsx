@@ -4,7 +4,7 @@ import KeyboardListener from "./KeyboardListener";
 
 export default function Keyboard() {
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center w-full max-w-[600px] px-2">
             <KeyboardListener />
             <KeyboardRow>
                 <KeyboardSymbol symbol={"Q"} />
