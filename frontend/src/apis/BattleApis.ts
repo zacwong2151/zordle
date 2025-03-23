@@ -122,12 +122,7 @@ export async function initialiseGame(
         roomId: roomId
     }
 
-    let selectedWord: string | null = null
-    try {
-        selectedWord = await getRandomWord()
-    } catch (error) {
-        console.error(error)
-    }
+    const selectedWord: string = getRandomWord()
 
     const gridColourState: GridColourState[][] = [
         ['white', 'white', 'white', 'white', 'white'],
@@ -148,7 +143,7 @@ export async function initialiseGame(
         player2Email: player2Email,
         isPlayer1Ready: false,
         isPlayer2Ready: false,
-        selectedWord: selectedWord ?? "PLACE", // placeholder word
+        selectedWord: selectedWord,
         timer: 0,
         words: ["", "", "", "", "", ""],
         wordIdx: 0,

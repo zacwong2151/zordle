@@ -35,7 +35,7 @@ export default function HomepageNavbar() {
         if (isKeyboardDisabled) return
         setIsKeyboardDisabled(true)
 
-        const word = await getRandomWord()
+        const word = getRandomWord()
         console.log(`The selected word is ${word}`)
         setSelectedWord(word)
         

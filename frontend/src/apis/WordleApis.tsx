@@ -1,37 +1,23 @@
-import axios from "axios";
+import { words_to_accept } from "@/components/WordsDataSet/words-to-accept"
+import { words_to_guess } from "@/components/WordsDataSet/words-to-guess"
 
-const DEV_WORD_SERVICE_URL = 'http://localhost:8000'
-const PROD_WORD_SERVICE_URL = "https://wordservice.fly.dev"
-const GET_RANDOM_WORD_URL = '/random-word'
-const IS_WORD_IN_DB_URL = '/is-word-in-DB'
+/*
+    Not considered API anymore but will just leave it here for convenience
+*/
 
 /**
  * Gets a random 5-letter word from the dataset.
  */
-export async function getRandomWord(): Promise<string | null> {
-    try {
-        const response = await axios.get(DEV_WORD_SERVICE_URL + GET_RANDOM_WORD_URL)
-        return response.data.word
-    } catch (error) {
-        console.error(error)
-        return null
-    }
+export function getRandomWord(): string {
+    const randomPos = Math.floor(Math.random() * words_to_guess.length)
+    const randomWord = words_to_guess[randomPos]
+
+    return randomWord
 }
 
 /**
  * Checks if a word exists in the dataset.
  */
-export async function isWordInDB(word: string): Promise<boolean> {
-    try {
-        const response = await axios.get(DEV_WORD_SERVICE_URL + IS_WORD_IN_DB_URL + `/${word}`, {
-            validateStatus: (status) => status < 500
-        })
-        if (response.status === 404) {
-            return false
-        }
-        return true
-    } catch (error) {
-        console.error(error)
-        return false
-    }
+export function isWordInDB(word: string): boolean {
+    return words_to_accept.includes(word)
 }

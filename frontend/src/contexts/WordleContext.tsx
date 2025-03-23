@@ -67,12 +67,7 @@ const WordleContextProvider = ({ children } : { children: ReactNode }) => {
      */
     useEffect(() => {
         const fetchRandomWord = async () => {
-            let word: string | null = null
-            try {
-                word = await getRandomWord()
-            } catch (error) {
-                console.error(error)
-            }
+            const word = getRandomWord()
             setSelectedWord(word)
             console.log(`The selected word is ${word}`)
         }

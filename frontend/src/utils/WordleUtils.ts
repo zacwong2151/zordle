@@ -46,21 +46,24 @@ export async function handleEnter(
     
     if (isKeyboardDisabled) return
     setIsKeyboardDisabled(true)
-
+    
     if (isGameOver) {
         showPopupMessage('Game is over!', setPopupMessage, SHORT_POPUP_DURATION)
+        setIsKeyboardDisabled(false)
         return
     }
     if (!isCurrentWordFull(words, wordIdx)) {
         triggerWordShakeAnimation(setTriggerWordShakeAnimation)
         showPopupMessage('Not enough letters', setPopupMessage, SHORT_POPUP_DURATION)
+        setIsKeyboardDisabled(false)
         return
     }
     const currentWord = words[wordIdx]
-    const bool_isWordInDb = await isWordInDB(currentWord)
+    const bool_isWordInDb = isWordInDB(currentWord)
     if (!bool_isWordInDb) {
         triggerWordShakeAnimation(setTriggerWordShakeAnimation)
         showPopupMessage('This word does not exist dumbo', setPopupMessage, SHORT_POPUP_DURATION)
+        setIsKeyboardDisabled(false)
         return
     }
     
