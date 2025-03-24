@@ -1,4 +1,4 @@
-package com.example.demo.findingGame.roomPOV;
+package com.example.demo.matching.room;
 
 import com.example.demo.exception.ApiRequestException;
 import com.example.demo.response.ApiResponse;
@@ -9,26 +9,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 @RestController
-@RequestMapping(path = "finding-game/room")
+@RequestMapping(path = "matching/room")
 @Validated /*
     Spring Boot only applies method parameter validation (@RequestParam, @PathVariable, etc.) if @Validated is present at the class or method level.
     Without it, Spring will not trigger MethodArgumentNotValidException, and validation will be silently ignored.
 */
-public class FindingGameRoomController {
+public class RoomController {
 
-    private final FindingGameRoomService findingGameRoomService;
+    private final RoomService roomService;
 
-    public FindingGameRoomController(FindingGameRoomService findingGameRoomService) {
-        this.findingGameRoomService = findingGameRoomService;
+    public RoomController(RoomService roomService) {
+        this.roomService = roomService;
     }
 
     @GetMapping(path = "{roomId}")
-    public ResponseEntity<ApiResponse<FindingGameRoom>> getRoom(@PathVariable("roomId") String roomId) {
+    public ResponseEntity<ApiResponse<Room>> getRoom(@PathVariable("roomId") String roomId) {
         try {
-            FindingGameRoom room = findingGameRoomService.getRoom(roomId);
+            Room room = roomService.getRoom(roomId);
             return new ResponseEntity<>(new ApiResponse<>(
                     room,
-                    String.format("Successfully retrieve finding_game_room: %s", roomId),
+                    String.format("Successfully retrieve room: %s", roomId),
                     true
             ), HttpStatus.OK);
 
@@ -42,11 +42,11 @@ public class FindingGameRoomController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<FindingGameRoom>> createRoom(@Valid @RequestBody FindingGameRoom room) {
+    public ResponseEntity<ApiResponse<Room>> createRoom(@Valid @RequestBody Room room) {
         try {
-            findingGameRoomService.createRoom(room);
+            roomService.createRoom(room);
             return new ResponseEntity<>(new ApiResponse<>(
-                    String.format("Successfully created finding_game_room: %s", room.getRoomId()),
+                    String.format("Successfully created room: %s", room.getRoomId()),
                     true
             ), HttpStatus.CREATED);
 
@@ -59,11 +59,11 @@ public class FindingGameRoomController {
     }
 
     @DeleteMapping(path = "{roomId}")
-    public ResponseEntity<ApiResponse<FindingGameRoom>> deleteRoom(@PathVariable("roomId") String roomId) {
+    public ResponseEntity<ApiResponse<Room>> deleteRoom(@PathVariable("roomId") String roomId) {
         try {
-            findingGameRoomService.deleteRoom(roomId);
+            roomService.deleteRoom(roomId);
             return new ResponseEntity<>(new ApiResponse<>(
-                    String.format("Successfully delete finding_game_room: %s", roomId),
+                    String.format("Successfully delete room: %s", roomId),
                     true
             ), HttpStatus.OK);
 
@@ -76,14 +76,14 @@ public class FindingGameRoomController {
     }
 
     @PutMapping(path = "{roomId}")
-    public ResponseEntity<ApiResponse<FindingGameRoom>> updateRoom(
+    public ResponseEntity<ApiResponse<Room>> updateRoom(
             @PathVariable("roomId") String roomId,
             @RequestParam @NotBlank(message = "field cannot be null or blank") String user2Email
     ) {
         try {
-            findingGameRoomService.updateRoom(roomId, user2Email);
+            roomService.updateRoom(roomId, user2Email);
             return new ResponseEntity<>(new ApiResponse<>(
-                    String.format("Successfully update finding_game_room: %s", roomId),
+                    String.format("Successfully update room: %s", roomId),
                     true
             ), HttpStatus.OK);
 

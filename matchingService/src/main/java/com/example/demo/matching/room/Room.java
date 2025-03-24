@@ -1,4 +1,4 @@
-package com.example.demo.findingGame.roomPOV;
+package com.example.demo.matching.room;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -6,8 +6,8 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
-@Table(name = "finding_game_room")
-public class FindingGameRoom {
+@Table(name = "finding-game-room")
+public class Room {
     @Id
     @NotBlank(message = "field cannot be null or blank")
     private String roomId;
@@ -17,10 +17,10 @@ public class FindingGameRoom {
 
     private String user2Email;
 
-    public FindingGameRoom() {
+    public Room() {
     }
 
-    public FindingGameRoom(String roomId, String user1Email, String user2Email) {
+    public Room(String roomId, String user1Email, String user2Email) {
         this.roomId = roomId;
         this.user1Email = user1Email;
         this.user2Email = user2Email;
@@ -52,7 +52,7 @@ public class FindingGameRoom {
 
     @Override
     public String toString() {
-        return "FindingGameRoom{" +
+        return "Room{" +
                 "roomId='" + roomId + '\'' +
                 ", user1Email='" + user1Email + '\'' +
                 ", user2Email='" + user2Email + '\'' +

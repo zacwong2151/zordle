@@ -1,7 +1,6 @@
-package com.example.demo.findingGame.userPOV;
+package com.example.demo.matching.user;
 
 import com.example.demo.exception.ApiRequestException;
-import com.example.demo.findingGame.roomPOV.FindingGameRoom;
 import com.example.demo.response.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -9,27 +8,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /*
-    finding_game_user:
+    user:
          - userEmail (primary key)
          - roomId
 */
 
 @RestController
-@RequestMapping(path = "finding-game/user")
-public class FindingGameUserController {
-    final FindingGameUserService findingGameUserService;
+@RequestMapping(path = "matching/user")
+public class UserController {
+    final UserService userService;
 
-    public FindingGameUserController(FindingGameUserService findingGameUserService) {
-        this.findingGameUserService = findingGameUserService;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping(path = "{email}")
-    public ResponseEntity<ApiResponse<FindingGameUser>> getUser(@PathVariable(name = "email", required = true) String email) {
+    public ResponseEntity<ApiResponse<User>> getUser(@PathVariable(name = "email", required = true) String email) {
         try {
-            FindingGameUser user = findingGameUserService.getUser(email);
+            User user = userService.getUser(email);
             return new ResponseEntity<>(new ApiResponse<>(
                     user,
-                    String.format("Successfully created finding_game_user: %s", email),
+                    String.format("Successfully created user: %s", email),
                     true
             ), HttpStatus.CREATED);
 
@@ -43,11 +42,11 @@ public class FindingGameUserController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<FindingGameUser>> createUser(@Valid @RequestBody FindingGameUser user) {
+    public ResponseEntity<ApiResponse<User>> createUser(@Valid @RequestBody User user) {
         try {
-            findingGameUserService.createUser(user);
+            userService.createUser(user);
             return new ResponseEntity<>(new ApiResponse<>(
-                    String.format("Successfully create finding_game_user: %s", user.getEmail()),
+                    String.format("Successfully create user: %s", user.getEmail()),
                     true
             ), HttpStatus.CREATED);
 
@@ -60,11 +59,11 @@ public class FindingGameUserController {
     }
 
     @DeleteMapping(path = "{email}")
-    public ResponseEntity<ApiResponse<FindingGameUser>> deleteUser(@PathVariable("email") String email) {
+    public ResponseEntity<ApiResponse<User>> deleteUser(@PathVariable("email") String email) {
         try {
-            findingGameUserService.deleteUser(email);
+            userService.deleteUser(email);
             return new ResponseEntity<>(new ApiResponse<>(
-                    String.format("Successfully delete finding_game_user: %s", email),
+                    String.format("Successfully delete user: %s", email),
                     true
             ), HttpStatus.OK);
 

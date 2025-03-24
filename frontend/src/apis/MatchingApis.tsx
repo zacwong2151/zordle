@@ -2,18 +2,18 @@ import axios from "axios"
 import { finding_game_room, finding_game_user } from "@/types/Matching"
 import { JSONResponse, INTERNAL_SERVER_ERROR_RESPONSE } from "@/types/Api";
 
-const DEV_MATCHING_SERVICE_URL = "http://localhost:8080/finding-game"
+const DEV_MATCHING_SERVICE_URL = "http://localhost:8080/matching"
 const ROOM_POV_URL = "/room"
 const USER_POV_URL = "/user"
 
 /*
 
-export type finding_game_user = {
+export type user = {
     email: string, // primary key
     roomId: string
 }
 
-export type finding_game_room = {
+export type room = {
     roomId: string, // // primary key
     user1Email: string,
     user2Email: string | null

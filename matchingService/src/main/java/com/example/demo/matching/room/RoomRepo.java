@@ -1,8 +1,8 @@
-package com.example.demo.findingGame.userPOV;
+package com.example.demo.matching.room;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FindingGameUserRepo extends JpaRepository<FindingGameUser, String> {
+public interface RoomRepo extends JpaRepository<Room, String> {
 }
