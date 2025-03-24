@@ -51,7 +51,7 @@ export default function FindBattle() {
             console.warn('this should not happen')
             return
         }
-        await initialiseFinding(email, generateUniqueRoomId())
+        await initialiseFinding(email, await generateUniqueRoomId())
         setIsCreateRoomModalOpen(true)
     }
 

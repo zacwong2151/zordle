@@ -38,7 +38,7 @@ export default function HomepageNavbar() {
         const word = getRandomWord()
         console.log(`The selected word is ${word}`)
         setSelectedWord(word)
-        
+
         setWords(["", "", "", "", "", ""])
         setWordIdx(0)
 
@@ -68,11 +68,13 @@ export default function HomepageNavbar() {
     }
 
     const unauthenticatedUserProfile = !isAuth && (
-        <div className="absolute right-8 rounded-full bg-slate-300 hover:brightness-90 w-10 h-10 flex items-center justify-center hidden md:block select-none" >
-            <CiUser
-                className="text-2xl cursor-pointer"
-                onClick={() => setIsUserStatsModalOpen(true)}
-            />
+        <div className="absolute right-8 rounded-full bg-slate-300 hover:brightness-90 w-10 h-10 hidden md:block select-none" >
+            <div className="flex items-center justify-center h-full"> 
+                <CiUser
+                    className="text-2xl cursor-pointer"
+                    onClick={() => setIsUserStatsModalOpen(true)}
+                />
+            </div>
         </div>
     )
 
@@ -90,12 +92,6 @@ export default function HomepageNavbar() {
             <UserStats />
             <nav className="bg-slate-200 text-gray-800 p-4 border-b border-gray-200 shadow-sm">
                 <div className="max-w-7xl mx-auto flex items-center justify-center h-5 md:h-8 gap-x-24">
-                    <Link
-                        to="/"
-                        className={`${ICON_STYLE}`}
-                    >
-                        <IoHomeOutline />
-                    </Link>
                     <IoMdRefresh className={`${ICON_STYLE}`} onClick={handleRefresh} />
                     <Link
                         to="/battle"
