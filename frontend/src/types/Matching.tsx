@@ -1,9 +1,9 @@
-export type finding_game_user = {
+export type User = {
     email: string,
     roomId: string
 }
 
-export type finding_game_room = {
+export type Room = {
     roomId: string,
     user1Email: string,
     user2Email: string | null

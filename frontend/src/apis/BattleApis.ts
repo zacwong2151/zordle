@@ -95,7 +95,7 @@ export async function getPlayerRoomId(email: string): Promise<string | null> {
 /**
  * Checks if this room id is valid
  */
-export async function isRoomIdValid(roomId: string): Promise<boolean> {
+export async function isGameIdValid(roomId: string): Promise<boolean> {
     const res: JSONResponse = await getGame(roomId)
 
     if (!res.success) {

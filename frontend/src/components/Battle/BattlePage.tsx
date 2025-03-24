@@ -5,7 +5,7 @@ import Keyboard from "../Keyboard/Keyboard"
 import { AreYouReadyModal } from "./PlayingModals/AreYouReadyModal"
 import { WaitingForOtherPlayerModal } from "./PlayingModals/WaitingForOtherPlayerModal"
 import { GameStartingModal } from "./PlayingModals/GameStartingModal"
-import { isRoomIdValid, getPlayerRoomId, getGameInfo } from "@/apis/BattleApis"
+import { isGameIdValid, getPlayerRoomId, getGameInfo } from "@/apis/BattleApis"
 import { useNavigate, Link } from "react-router-dom"
 import LoadingPage from "../Misc/LoadingPage"
 import { useUserContext } from "@/contexts/UserContext"
@@ -40,8 +40,8 @@ export default function BattlePage() {
             }
             setRoomId(id)
 
-            const bool: boolean = await isRoomIdValid(id)
-            if (!bool) { // roomId does not exist in DB
+            const bool: boolean = await isGameIdValid(id)
+            if (!bool) { // gameId does not exist in DB
                 navigate("/battle")
                 return
             }

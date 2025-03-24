@@ -1,5 +1,5 @@
 import axios from "axios"
-import { finding_game_room, finding_game_user } from "@/types/Matching"
+import { Room, User } from "@/types/Matching"
 import { JSONResponse, INTERNAL_SERVER_ERROR_RESPONSE } from "@/types/Api";
 
 const DEV_MATCHING_SERVICE_URL = "http://localhost:8080/matching"
@@ -8,12 +8,12 @@ const USER_POV_URL = "/user"
 
 /*
 
-export type user = {
+export type User = {
     email: string, // primary key
     roomId: string
 }
 
-export type room = {
+export type Room = {
     roomId: string, // // primary key
     user1Email: string,
     user2Email: string | null
@@ -22,9 +22,9 @@ export type room = {
 */
 
 /**
- * Util function for finding_game_user API calls
+ * Util function for User API calls
  */
-async function getFindingGameUser(email: string): Promise<JSONResponse> {
+async function getUser(email: string): Promise<JSONResponse> {
     try {
         const response = await axios.get(DEV_MATCHING_SERVICE_URL + USER_POV_URL + `/${email}`, {
             validateStatus: (status) => status < 500
@@ -38,9 +38,9 @@ async function getFindingGameUser(email: string): Promise<JSONResponse> {
 }
 
 /**
- * Util function for finding_game_room API calls
+ * Util function for Room API calls
  */
-async function getFindingGameRoom(roomId: string): Promise<JSONResponse> {
+async function getRoom(roomId: string): Promise<JSONResponse> {
     try {
         const response = await axios.get(DEV_MATCHING_SERVICE_URL + ROOM_POV_URL + `/${roomId}`, {
             validateStatus: (status) => status < 500
@@ -54,83 +54,83 @@ async function getFindingGameRoom(roomId: string): Promise<JSONResponse> {
 }
 
 /**
- * Checks if user is finding a game or not (from finding_game_user)
+ * Checks if User is finding a game or not (from User)
 */
 export async function isUserFindingGame(email: string): Promise<boolean> {
-    const res: JSONResponse = await getFindingGameUser(email)
+    const res: JSONResponse = await getUser(email)
 
     return res.success
 }
 
 /**
- * The user is finding a game. Insert entries into finding_game_user and finding_game_room
+ * The User is finding a game. Insert entries into User and Room
  */
 export async function initialiseFinding(email: string, roomId: string): Promise<void> {
-    const user: finding_game_user = {
+    const User: User = {
         email: email,
         roomId: roomId
     }
-    const room: finding_game_room = {
+    const Room: Room = {
         roomId: roomId,
         user1Email: email,
         user2Email: null
     }
 
     try {
-        await axios.post(DEV_MATCHING_SERVICE_URL + USER_POV_URL, user)
-        await axios.post(DEV_MATCHING_SERVICE_URL + ROOM_POV_URL, room)
+        await axios.post(DEV_MATCHING_SERVICE_URL + USER_POV_URL, User)
+        await axios.post(DEV_MATCHING_SERVICE_URL + ROOM_POV_URL, Room)
     } catch (error) {
         console.error(error)
     }
 }
 
 /**
- * Get user's room id (from finding_game_user)
+ * Get User's Room id (from User)
 */
 export async function getUserRoomId(email: string): Promise<string | null> {
-    const res: JSONResponse = await getFindingGameUser(email)
+    const res: JSONResponse = await getUser(email)
 
     if (!res.success) {
         console.error(res.message)
         return null
     }
-    const user: finding_game_user = res.data
-    return user.roomId
+    const User: User = res.data
+    return User.roomId
 }
 
 /**
- * Returns the email of the 2nd player in the room (from finding_game_room)
+ * Returns the email of the 2nd player in the Room (from Room)
 */
 export async function foundMatch(email: string): Promise<string | null> {
     const roomId: string | null = await getUserRoomId(email)
     if (!roomId) return null
     
-    const res: JSONResponse = await getFindingGameRoom(roomId)
+    const res: JSONResponse = await getRoom(roomId)
     if (!res.success) {
         console.error(res.message)
         return null
     }
 
-    const room: finding_game_room = res.data
-    return room.user2Email
+    const Room: Room = res.data
+    return Room.user2Email
 }
 
 /**
- * From finding_game_room
+ * From Room
  */
 export async function getOtherUserEmail(roomId: string): Promise<string | null> {
-    const res: JSONResponse = await getFindingGameRoom(roomId)
+    const res: JSONResponse = await getRoom(roomId)
     if (!res.success) {
         console.error(res.message)
         return null
     }
 
-    const room: finding_game_room = res.data
-    return room.user1Email
+    const Room: Room = res.data
+    return Room.user1Email
 }
 
 /**
- * Remove user's entries from both finding_game_user and finding_game_room
+ * Remove User's entries from both User and Room
  */
 export async function removeUserFromFinding(email: string): Promise<void> {
     const roomId = await getUserRoomId(email)
@@ -147,12 +147,12 @@ export async function removeUserFromFinding(email: string): Promise<void> {
  * Checks if this roomId is a valid id in the finding queue
  */
 export async function isRoomIdInFinding(roomId: string): Promise<boolean> {
-    const res: JSONResponse = await getFindingGameRoom(roomId)
+    const res: JSONResponse = await getRoom(roomId)
     return res.success
 }
 
 /**
- * Update user2Email in finding-game-room
+ * Update user2Email in Room
  */
 export async function updateFinding(roomId: string, user2Email: string): Promise<void> {
     try {
