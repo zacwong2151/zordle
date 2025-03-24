@@ -1,9 +1,8 @@
 import axios from "axios";
 import { getRandomWord } from "./WordleApis";
-import { GridColourState, KeyboardColourState } from "@/types/ColourState";
-import { Letter } from "@/types/Letter";
-import { Player, Game } from "@/types/Battle";
-import { JSONResponse, INTERNAL_SERVER_ERROR_RESPONSE } from "@/types/Api";
+import { GridColourState, KeyboardColourState, Letter } from "@/types/WordleTypes";
+import { Player, Game } from "@/types/BattleTypes";
+import { JSONResponse, INTERNAL_SERVER_ERROR_RESPONSE } from "@/types/ApiTypes";
 
 const DEV_BATTLE_SERVICE_URL = "http://localhost:7000/battle"
 const PLAYER_POV_URL = "/player"

@@ -1,7 +1,6 @@
 import React, { createContext, useState, ReactNode, useContext, useEffect } from "react"
 import { getRandomWord } from "../apis/WordleApis"
-import { GridColourState, KeyboardColourState } from "../types/ColourState"
-import { Letter } from "../types/Letter"
+import { GridColourState, KeyboardColourState, Letter } from "../types/WordleTypes"
 
 type WordleStateType = {
     words: string[],

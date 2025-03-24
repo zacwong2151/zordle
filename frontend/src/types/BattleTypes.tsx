@@ -1,5 +1,4 @@
-import { GridColourState, KeyboardColourState } from "@/types/ColourState";
-import { Letter } from "@/types/Letter";
+import { GridColourState, KeyboardColourState, Letter } from "@/types/WordleTypes";
 
 export type Player = {
     email: string, // primary key

@@ -1,7 +1,6 @@
-import { GridColourState } from "../types/ColourState"
+import { GridColourState } from "../types/WordleTypes"
 import { isWordInDB } from "../apis/WordleApis"
-import { Letter } from "../types/Letter"
-import { KeyboardColourState } from "../types/ColourState"
+import { KeyboardColourState, Letter } from "../types/WordleTypes"
 
 const MAX_WORD_LENGTH = 5
 const MAX_NO_OF_WORDS = 6

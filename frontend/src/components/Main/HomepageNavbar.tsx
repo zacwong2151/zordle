@@ -3,8 +3,7 @@ import { IoHomeOutline } from "react-icons/io5";
 import { CiUser } from "react-icons/ci";
 import { useWordleContext } from "../../contexts/WordleContext";
 import { getRandomWord } from "../../apis/WordleApis";
-import { Letter } from "../../types/Letter";
-import { KeyboardColourState } from "../../types/ColourState";
+import { KeyboardColourState, Letter } from "../../types/WordleTypes";
 import { GiBattleGear } from "react-icons/gi";
 import { Link } from "react-router-dom"
 import { useUserContext } from "@/contexts/UserContext";

@@ -1,6 +1,6 @@
 import axios from "axios"
-import { Room, User } from "@/types/Matching"
-import { JSONResponse, INTERNAL_SERVER_ERROR_RESPONSE } from "@/types/Api";
+import { Room, User } from "@/types/MatchingTypes"
+import { JSONResponse, INTERNAL_SERVER_ERROR_RESPONSE } from "@/types/ApiTypes";
 
 const DEV_MATCHING_SERVICE_URL = "http://localhost:8080/matching"
 const ROOM_POV_URL = "/room"
