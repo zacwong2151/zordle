@@ -1,8 +1,8 @@
 import axios from "axios";
 import { getRandomWord } from "./WordleApis";
-import { GridColourState, KeyboardColourState, Letter } from "@/types/WordleTypes";
 import { Player, Game } from "@/types/BattleTypes";
 import { JSONResponse, INTERNAL_SERVER_ERROR_RESPONSE } from "@/types/ApiTypes";
+import { DEFAULT_WORDS, DEFAULT_GRID_COLOUR_STATE, DEFAULT_KEYBOARD_COLOUR_STATE } from "@/contexts/DefaultStates";
 
 const DEV_BATTLE_SERVICE_URL = "http://localhost:7000/battle"
 const PLAYER_POV_URL = "/player"
@@ -123,36 +123,32 @@ export async function initialiseGame(
 
     const selectedWord: string = getRandomWord()
 
-    const gridColourState: GridColourState[][] = [
-        ['white', 'white', 'white', 'white', 'white'],
-        ['white', 'white', 'white', 'white', 'white'],
-        ['white', 'white', 'white', 'white', 'white'],
-        ['white', 'white', 'white', 'white', 'white'],
-        ['white', 'white', 'white', 'white', 'white'],
-        ['white', 'white', 'white', 'white', 'white']
-    ]
-    const keyboardColourState: Record<Letter, KeyboardColourState> = {} as Record<Letter, KeyboardColourState>
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letter => {
-        keyboardColourState[letter as Letter] = "gray"
-    })
-
     const gameReqBody: Game = {
         roomId: roomId,
         player1Email: player1Email,
         player2Email: player2Email,
         isPlayer1Ready: false,
         isPlayer2Ready: false,
+        atReadyPage: true,
+
         selectedWord: selectedWord,
         timer: 0,
-        words: ["", "", "", "", "", ""],
-        wordIdx: 0,
-        gridColourState: gridColourState,
-        keyboardColourState: keyboardColourState,
-        isGameOver: false,
-        popupMessage: null,
-        triggerWordShakeAnimation: false,
-        triggerLettersFlipAnimation: false,
-        isKeyboardDisabled: false
+
+        your_words: DEFAULT_WORDS,
+        your_wordIdx: 0,
+        your_gridColourState: DEFAULT_GRID_COLOUR_STATE,
+        your_keyboardColourState: DEFAULT_KEYBOARD_COLOUR_STATE,
+        your_isGameOver: false,
+        your_popupMessage: null,
+        your_triggerWordShakeAnimation: false,
+        your_triggerLettersFlipAnimation: false,
+        your_isKeyboardDisabled: false,
+
+        opponent_words: DEFAULT_WORDS,
+        opponent_wordIdx: 0,
+        opponent_gridColourState: DEFAULT_GRID_COLOUR_STATE,
+        opponent_keyboardColourState: DEFAULT_KEYBOARD_COLOUR_STATE,
+        opponent_triggerLettersFlipAnimation: false,
     }
 
     try {

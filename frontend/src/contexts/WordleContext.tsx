@@ -1,14 +1,15 @@
 import React, { createContext, useState, ReactNode, useContext, useEffect } from "react"
 import { getRandomWord } from "../apis/WordleApis"
 import { GridColourState, KeyboardColourState, Letter } from "../types/WordleTypes"
+import { DEFAULT_WORDS, DEFAULT_GRID_COLOUR_STATE, DEFAULT_KEYBOARD_COLOUR_STATE } from "./DefaultStates"
 
 type WordleStateType = {
     words: string[],
     setWords: React.Dispatch<React.SetStateAction<string[]>>,
     wordIdx: number,
     setWordIdx: React.Dispatch<React.SetStateAction<number>>,
-    selectedWord: string | null,
-    setSelectedWord: React.Dispatch<React.SetStateAction<string | null>>,
+    selectedWord: string,
+    setSelectedWord: React.Dispatch<React.SetStateAction<string>>,
     gridColourState: GridColourState[][],
     setGridColourState: React.Dispatch<React.SetStateAction<GridColourState[][]>>,
     keyboardColourState: Record<Letter, KeyboardColourState>,
@@ -28,49 +29,21 @@ type WordleStateType = {
 const WordleContext = createContext<WordleStateType | null>(null)
 
 const WordleContextProvider = ({ children } : { children: ReactNode }) => {
-    const [words, setWords] = useState<string[]>(["", "", "", "", "", ""]) 
+    const [words, setWords] = useState<string[]>(DEFAULT_WORDS) 
     const [wordIdx, setWordIdx] = useState<number>(0)
-    const [selectedWord, setSelectedWord] = useState<string | null>(null)
-    const [gridColourState, setGridColourState] = useState<GridColourState[][]>(
-        [
-            ['white', 'white', 'white', 'white', 'white'],
-            ['white', 'white', 'white', 'white', 'white'],
-            ['white', 'white', 'white', 'white', 'white'],
-            ['white', 'white', 'white', 'white', 'white'],
-            ['white', 'white', 'white', 'white', 'white'],
-            ['white', 'white', 'white', 'white', 'white']
-        ]
-    )
-    const [keyboardColourState, setKeyboardColourState] = useState<Record<Letter, KeyboardColourState>>(
-        {} as Record<Letter, KeyboardColourState>
-    )
+    const [selectedWord, setSelectedWord] = useState<string>("")
+    const [gridColourState, setGridColourState] = useState<GridColourState[][]>(DEFAULT_GRID_COLOUR_STATE)
+    const [keyboardColourState, setKeyboardColourState] = useState<Record<Letter, KeyboardColourState>>(DEFAULT_KEYBOARD_COLOUR_STATE)
     const [isGameOver, setIsGameOver] = useState<boolean>(false)
     const [popupMessage, setPopupMessage] = useState<string | null>(null)
     const [triggerWordShakeAnimation, setTriggerWordShakeAnimation] = useState<boolean>(false)
     const [triggerLettersFlipAnimation, setTriggerLettersFlipAnimation] = useState<boolean>(false)
     const [isKeyboardDisabled, setIsKeyboardDisabled] = useState<boolean>(false)
 
-    /**
-     * Initialize keyboardColourState with all letters set to "gray"
-     */
     useEffect(() => {
-        const initialKeyboardColourState: Record<Letter, KeyboardColourState> = {} as Record<Letter, KeyboardColourState>
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letter => {
-            initialKeyboardColourState[letter as Letter] = "gray"
-        })
-        setKeyboardColourState(initialKeyboardColourState)
-    }, [])
-
-    /**
-     * Fetches a random word from DB upon page render
-     */
-    useEffect(() => {
-        const fetchRandomWord = async () => {
-            const word = getRandomWord()
-            setSelectedWord(word)
-            console.log(`The selected word is ${word}`)
-        }
-        fetchRandomWord()
+        const randomWord = getRandomWord()
+        setSelectedWord(randomWord)
+        console.log(`selected word is ${randomWord}`)
     }, [])
 
     const wordleState: WordleStateType = {

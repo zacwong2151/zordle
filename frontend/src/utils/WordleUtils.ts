@@ -61,7 +61,7 @@ export async function handleEnter(
     const bool_isWordInDb = isWordInDB(currentWord)
     if (!bool_isWordInDb) {
         triggerWordShakeAnimation(setTriggerWordShakeAnimation)
-        showPopupMessage('This word does not exist dumbo', setPopupMessage, SHORT_POPUP_DURATION)
+        showPopupMessage('Not in word list', setPopupMessage, SHORT_POPUP_DURATION)
         setIsKeyboardDisabled(false)
         return
     }
@@ -75,7 +75,7 @@ export async function handleEnter(
         setIsKeyboardDisabled(false)
         changeKeyboardColour(currentWord, selectedWord, keyboardColourState, setKeyboardColourState)
         if (currentWord === selectedWord) {
-            showPopupMessage('Good job kiddo you got the answer', setPopupMessage, SHORT_POPUP_DURATION)
+            showPopupMessage('Good job you got the answer', setPopupMessage, SHORT_POPUP_DURATION)
             setIsGameOver(true)
             return
         }

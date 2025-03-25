@@ -1,11 +1,41 @@
 import { useState, useEffect } from "react";
 import { useWordleContext } from "../../contexts/WordleContext";
+import { useWhichPlayerContext } from "@/contexts/WhichPlayerContext";
+import { WhichPlayer } from "@/types/BattleTypes";
+import { DEFAULT_GRID_COLOUR_STATE } from "@/contexts/DefaultStates";
+import { useBattleContext } from "@/contexts/BattleContext";
+import { GridColourState } from "@/types/WordleTypes";
 
 export default function Square({ squarePos, rowPos, isFlipping, delay } : { squarePos: number, rowPos: number, isFlipping: boolean, delay: number }) {
-    const { words, wordIdx, gridColourState } = useWordleContext()
+    const whichPlayer: WhichPlayer = useWhichPlayerContext()
+    const wordleContext = useWordleContext()
+    const battleContext = useBattleContext()
+
+    const [words, setWords] = useState<string[]>(["", "", "", "", "", ""])
+    const [wordIdx, setWordIdx] = useState<number>(0)
+    const [gridColourState, setGridColourState] = useState<GridColourState[][]>(DEFAULT_GRID_COLOUR_STATE)
+
+    useEffect(() => {
+        if (whichPlayer === WhichPlayer.SOLO) {
+            setWords(wordleContext.words)
+            setWordIdx(wordleContext.wordIdx)
+            setGridColourState(wordleContext.gridColourState)
+        } else if (whichPlayer === WhichPlayer.YOU) {
+            setWords(battleContext.your_words)
+            setWordIdx(battleContext.your_wordIdx)
+            setGridColourState(battleContext.your_gridColourState)
+        } else if (whichPlayer === WhichPlayer.OPP) {
+            setWords(battleContext.opponent_words)
+            setWordIdx(battleContext.opponent_wordIdx)
+            setGridColourState(battleContext.opponent_gridColourState)
+        } else {
+            throw new Error("should not reach here")
+        }
+    }, [whichPlayer, wordleContext, battleContext])
+
     const [isFlipped, setIsFlipped] = useState<boolean>(false) // when set to true, letters do their flipping animation
     const [showBackFace, setShowBackFace] = useState<boolean>(false) // when set to true, show letters' back face
-
+    
     // Fixed bug: grid colour disappearing when you navigate to '/login' and back
     useEffect(() => {
       if (rowPos < wordIdx) {

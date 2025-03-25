@@ -58,7 +58,7 @@ export default function KeyboardSymbol({ symbol } : { symbol: string }) {
 
     return (
         <div 
-            className={`w-[10%] min-w-[30px] max-w-[50px] h-auto aspect-[6/7] ${backgroundColour} ${textColour} border-white font-bold rounded-md text-lg flex items-center justify-center cursor-pointer select-none`}
+            className={`w-[10%] min-w-[30px] max-w-[50px] aspect-[5/7] ${backgroundColour} ${textColour} border-white font-bold rounded-md text-lg flex items-center justify-center cursor-pointer select-none`}
             onClick={() => handleLetter(symbol, words, wordIdx, setWords, isGameOver, isKeyboardDisabled)}
         >
             {symbol}
