@@ -33,10 +33,10 @@ export default function BattlePage() {
         your_triggerWordShakeAnimation, setyour_triggerWordShakeAnimation,
         your_triggerLettersFlipAnimation, setyour_triggerLettersFlipAnimation,
         your_isKeyboardDisabled, setyour_isKeyboardDisabled,
-        opponent_words, 
-        opponent_wordIdx, 
-        opponent_gridColourState, 
-        opponent_triggerLettersFlipAnimation, 
+        opponent_words,
+        opponent_wordIdx,
+        opponent_gridColourState,
+        opponent_triggerLettersFlipAnimation,
     } = useBattleContext()
 
     /*
@@ -98,10 +98,10 @@ export default function BattlePage() {
             <WaitingForOtherPlayerModal />
             <GameStartingModal />
 
-            <div className="min-h-screen flex flex-col items-center">
-                {/* Top Bar with Exit Game Button, Player Names and Timer */}
-                <div className="w-full relative">
-                    {/* Exit Game Button - Positioned at top left */}
+            <div className="flex flex-col">
+                {/* Top Bar */}
+                <div className="relative">
+                    {/* position absolute - Exit Game Button */}
                     <div className="absolute left-4 top-4">
                         <Button
                             className="bg-red-600 text-white px-4 py-2"
@@ -111,24 +111,24 @@ export default function BattlePage() {
                         </Button>
                     </div>
 
-                    {/* Content Row with Player Names and Timer */}
-                    <div className="flex justify-center items-center mt-4">
+                    {/* position absolute - Timer */}
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 mt-4">
+                        <div className="border border-gray-400 px-10 py-4 text-center">
+                            <span className="text-4xl font-bold">0:00</span>
+                        </div>
+                    </div>
+
+                    {/* Player Names */}
+                    <div className="grid grid-cols-2 items-center mt-4">
                         {/* Left Player Name */}
-                        <div className="flex-1 flex justify-center">
+                        <div className="flex justify-center">
                             <div className="bg-gray-200 px-6 py-2 text-lg font-medium">
                                 You
                             </div>
                         </div>
 
-                        {/* Timer - Centered */}
-                        <div className="mx-12">
-                            <div className="border border-gray-400 px-10 py-4 text-center">
-                                <span className="text-4xl font-bold">0:00</span>
-                            </div>
-                        </div>
-
                         {/* Right Player Name */}
-                        <div className="flex-1 flex justify-center">
+                        <div className="flex justify-center">
                             <div className="bg-gray-200 px-6 py-2 text-lg font-medium">
                                 Opponent
                             </div>
@@ -136,12 +136,14 @@ export default function BattlePage() {
                     </div>
                 </div>
 
-                {/* Main Game Area */}
-                <div className="flex justify-between w-full max-w-6xl relative mt-4">
-                    {/* Left Side with Your Grid */}
-                    <div className="flex flex-col items-center w-[45%]">
-                        {/* Grid will go here */}
-                        <div className="w-full aspect-square">
+                <div className="relative">
+                    {/* position absolute - Divider Line */}
+                    <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-px bg-gray-400 mt-8" />
+
+                    {/* Left and Right sides */}
+                    <div className="grid grid-cols-2 mt-6">
+                        {/* Left side */}
+                        <div className="flex flex-col items-center justify-center gap-4">
                             <Grid
                                 words={your_words}
                                 wordIdx={your_wordIdx}
@@ -173,15 +175,9 @@ export default function BattlePage() {
                                 setIsKeyboardDisabled={setyour_isKeyboardDisabled}
                             />
                         </div>
-                    </div>
 
-                    {/* Divider Line */}
-                    <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-px bg-gray-400" />
-
-                    {/* Right Side with Player 2 Grid */}
-                    <div className="flex flex-col items-center w-[45%]">
-                        {/* Grid will go here */}
-                        <div className="w-full aspect-square">
+                        {/* Right Side */}
+                        <div className="flex flex-col items-center">
                             <Grid
                                 words={opponent_words}
                                 wordIdx={opponent_wordIdx}
