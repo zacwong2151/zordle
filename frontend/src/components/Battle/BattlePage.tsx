@@ -9,7 +9,7 @@ import { isGameIdValid, getPlayerRoomId, getGameInfo } from "@/apis/BattleApis"
 import { useNavigate, Link } from "react-router-dom"
 import LoadingPage from "../Misc/LoadingPage"
 import { useUserContext } from "@/contexts/UserContext"
-import { Game } from "@/types/BattleTypes"
+import { Game, WhichPlayer } from "@/types/BattleTypes"
 import { Button } from "../ui/button"
 import { ExitGameModal } from "./PlayingModals/ExitGameModal"
 import { useBattleContext } from "@/contexts/BattleContext"
@@ -19,7 +19,25 @@ export default function BattlePage() {
     const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(true)
     const { email } = useUserContext()
-    const { setIsExitGameModalOpen, setRoomId } = useBattleContext()
+    const {
+        setIsExitGameModalOpen,
+        setRoomId,
+        selectedWord,
+
+        your_words, setyour_words,
+        your_wordIdx, setyour_wordIdx,
+        your_gridColourState, setyour_gridColourState,
+        your_keyboardColourState, setyour_keyboardColourState,
+        your_isGameOver, setyour_isGameOver,
+        your_popupMessage, setyour_popupMessage,
+        your_triggerWordShakeAnimation, setyour_triggerWordShakeAnimation,
+        your_triggerLettersFlipAnimation, setyour_triggerLettersFlipAnimation,
+        your_isKeyboardDisabled, setyour_isKeyboardDisabled,
+        opponent_words, 
+        opponent_wordIdx, 
+        opponent_gridColourState, 
+        opponent_triggerLettersFlipAnimation, 
+    } = useBattleContext()
 
     /*
         Verify if user can enter this room. Then, load game info.
@@ -85,7 +103,7 @@ export default function BattlePage() {
                 <div className="w-full relative">
                     {/* Exit Game Button - Positioned at top left */}
                     <div className="absolute left-4 top-4">
-                        <Button 
+                        <Button
                             className="bg-red-600 text-white px-4 py-2"
                             onClick={() => setIsExitGameModalOpen(true)}
                         >
@@ -98,7 +116,7 @@ export default function BattlePage() {
                         {/* Left Player Name */}
                         <div className="flex-1 flex justify-center">
                             <div className="bg-gray-200 px-6 py-2 text-lg font-medium">
-                                Player 1
+                                You
                             </div>
                         </div>
 
@@ -112,7 +130,7 @@ export default function BattlePage() {
                         {/* Right Player Name */}
                         <div className="flex-1 flex justify-center">
                             <div className="bg-gray-200 px-6 py-2 text-lg font-medium">
-                                Player 2
+                                Opponent
                             </div>
                         </div>
                     </div>
@@ -120,11 +138,40 @@ export default function BattlePage() {
 
                 {/* Main Game Area */}
                 <div className="flex justify-between w-full max-w-6xl relative mt-4">
-                    {/* Left Side with Player 1 Grid */}
+                    {/* Left Side with Your Grid */}
                     <div className="flex flex-col items-center w-[45%]">
                         {/* Grid will go here */}
                         <div className="w-full aspect-square">
-                            {/* <Grid /> */}
+                            <Grid
+                                words={your_words}
+                                wordIdx={your_wordIdx}
+                                selectedWord={selectedWord}
+                                gridColourState={your_gridColourState}
+                                triggerWordShakeAnimation={your_triggerWordShakeAnimation}
+                                triggerLettersFlipAnimation={your_triggerLettersFlipAnimation}
+                                popupMessage={your_popupMessage}
+                            />
+                            <Keyboard
+                                words={your_words}
+                                setWords={setyour_words}
+                                wordIdx={your_wordIdx}
+                                setWordIdx={setyour_wordIdx}
+                                selectedWord={selectedWord}
+                                gridColourState={your_gridColourState}
+                                setGridColourState={setyour_gridColourState}
+                                keyboardColourState={your_keyboardColourState}
+                                setKeyboardColourState={setyour_keyboardColourState}
+                                isGameOver={your_isGameOver}
+                                setIsGameOver={setyour_isGameOver}
+                                popupMessage={your_popupMessage}
+                                setPopupMessage={setyour_popupMessage}
+                                triggerWordShakeAnimation={your_triggerWordShakeAnimation}
+                                setTriggerWordShakeAnimation={setyour_triggerWordShakeAnimation}
+                                triggerLettersFlipAnimation={your_triggerLettersFlipAnimation}
+                                setTriggerLettersFlipAnimation={setyour_triggerLettersFlipAnimation}
+                                isKeyboardDisabled={your_isKeyboardDisabled}
+                                setIsKeyboardDisabled={setyour_isKeyboardDisabled}
+                            />
                         </div>
                     </div>
 
@@ -135,7 +182,15 @@ export default function BattlePage() {
                     <div className="flex flex-col items-center w-[45%]">
                         {/* Grid will go here */}
                         <div className="w-full aspect-square">
-                            {/* <Grid /> */}
+                            <Grid
+                                words={opponent_words}
+                                wordIdx={opponent_wordIdx}
+                                selectedWord={selectedWord}
+                                gridColourState={opponent_gridColourState}
+                                triggerWordShakeAnimation={false}
+                                triggerLettersFlipAnimation={opponent_triggerLettersFlipAnimation}
+                                popupMessage={null}
+                            />
                         </div>
                     </div>
                 </div>

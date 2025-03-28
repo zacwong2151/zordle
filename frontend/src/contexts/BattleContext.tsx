@@ -1,8 +1,9 @@
-import React, { createContext, useState, ReactNode, useContext } from "react"
+import React, { createContext, useState, ReactNode, useContext, useEffect } from "react"
 import { GridColourState, KeyboardColourState, Letter } from "@/types/WordleTypes"
-import { DEFAULT_GRID_COLOUR_STATE, DEFAULT_KEYBOARD_COLOUR_STATE } from "./DefaultStates";
+import { DEFAULT_GRID_COLOUR_STATE, DEFAULT_KEYBOARD_COLOUR_STATE, DEFAULT_WORDS } from "./DefaultStates";
+import { getRandomWord } from "@/apis/WordleApis";
 
-type BattleStateType = {
+export type BattleStateType = {
     // Modals
     roomId: string;
     setRoomId: React.Dispatch<React.SetStateAction<string>>;
@@ -82,7 +83,7 @@ const BattleContextProvider = ({ children }: { children: ReactNode }) => {
     const [selectedWord, setSelectedWord] = useState<string>("");
     const [timer, setTimer] = useState<number>(0);
 
-    const [your_words, setyour_words] = useState<string[]>(["", "", "", "", "", ""]);
+    const [your_words, setyour_words] = useState<string[]>(DEFAULT_WORDS);
     const [your_wordIdx, setyour_wordIdx] = useState<number>(0);
     const [your_gridColourState, setyour_gridColourState] = useState<GridColourState[][]>(DEFAULT_GRID_COLOUR_STATE);
     const [your_keyboardColourState, setyour_keyboardColourState] = useState<Record<Letter, KeyboardColourState>>(DEFAULT_KEYBOARD_COLOUR_STATE);
@@ -92,12 +93,20 @@ const BattleContextProvider = ({ children }: { children: ReactNode }) => {
     const [your_triggerLettersFlipAnimation, setyour_triggerLettersFlipAnimation] = useState<boolean>(false);
     const [your_isKeyboardDisabled, setyour_isKeyboardDisabled] = useState<boolean>(false);
 
-    const [opponent_words, setopponent_words] = useState<string[]>(["", "", "", "", "", ""]);
+    const [opponent_words, setopponent_words] = useState<string[]>(DEFAULT_WORDS);
     const [opponent_wordIdx, setopponent_wordIdx] = useState<number>(0);
     const [opponent_gridColourState, setopponent_gridColourState] = useState<GridColourState[][]>(DEFAULT_GRID_COLOUR_STATE);
     const [opponent_keyboardColourState, setopponent_keyboardColourState] = useState<Record<Letter, KeyboardColourState>>(DEFAULT_KEYBOARD_COLOUR_STATE);
     const [opponent_triggerLettersFlipAnimation, setopponent_triggerLettersFlipAnimation] = useState<boolean>(false);
-    
+
+    useEffect(() => {
+        // TODO: remove this
+        const randomWord = getRandomWord()
+        setSelectedWord(randomWord)
+        console.log(`selected word in battle is ${randomWord}`)
+    }, [])
+
+
     const battleState: BattleStateType = {
         roomId, setRoomId,
         isAreYouReadyModalOpen, setIsAreYouReadyModalOpen,
@@ -129,7 +138,7 @@ const BattleContextProvider = ({ children }: { children: ReactNode }) => {
         opponent_keyboardColourState, setopponent_keyboardColourState,
         opponent_triggerLettersFlipAnimation, setopponent_triggerLettersFlipAnimation,
     }
-    
+
     return (
         <BattleContext.Provider value={battleState}>
             {children}

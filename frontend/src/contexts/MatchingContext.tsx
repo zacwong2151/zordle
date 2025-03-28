@@ -36,7 +36,7 @@ const MatchingContextProvider = ({ children } : { children: ReactNode }) => {
 function useMatchingContext() {
     const context = useContext(MatchingContext)
     if (!context) {
-        throw new Error("useWordleContext must be used within a WordleContextProvider")
+        throw new Error("useMatchingContext must be used within a MatchingContextProvider")
     }
     return context
 }

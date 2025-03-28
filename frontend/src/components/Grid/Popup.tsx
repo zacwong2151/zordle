@@ -1,7 +1,4 @@
-import { useWordleContext } from "@/contexts/WordleContext";
-
-export default function Popup() {
-    const { popupMessage } = useWordleContext()
+export default function Popup({ popupMessage }: { popupMessage: string | null }) {
     if (!popupMessage) return null
 
     return (

@@ -77,7 +77,7 @@ export function CreateRoomModal() {
                 </VisuallyHidden>
                 <DialogTitle>Waiting for friend to join room..</DialogTitle>
 
-                <div className="text-6xl font-bold mx-auto">
+                <div className="text-6xl font-bold mx-auto select-all">
                     {roomId}
                 </div>
 

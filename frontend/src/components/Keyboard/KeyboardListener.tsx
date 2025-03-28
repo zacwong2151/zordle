@@ -1,24 +1,41 @@
 import { useEffect } from "react";
 import { handleBackspace, handleEnter, handleLetter } from "../../utils/WordleUtils";
-import { useWordleContext } from "../../contexts/WordleContext";
-
+import { GridColourState, KeyboardColourState, Letter } from "@/types/WordleTypes";
 /**
  * Listens to keyboard presses from user.
  */
-export default function KeyboardListener() {
-    const { 
-        words, setWords, 
-        wordIdx, setWordIdx, 
-        selectedWord, 
-        gridColourState, setGridColourState, 
-        keyboardColourState, setKeyboardColourState, 
-        isGameOver, setIsGameOver, 
-        setPopupMessage, 
-        setTriggerWordShakeAnimation,
-        setTriggerLettersFlipAnimation,
-        isKeyboardDisabled, setIsKeyboardDisabled
-    } = useWordleContext()
-
+export default function KeyboardListener({
+    words, setWords,
+    wordIdx, setWordIdx,
+    selectedWord,
+    gridColourState, setGridColourState,
+    keyboardColourState, setKeyboardColourState,
+    isGameOver, setIsGameOver,
+    setPopupMessage,
+    setTriggerWordShakeAnimation,
+    setTriggerLettersFlipAnimation,
+    isKeyboardDisabled, setIsKeyboardDisabled
+}: {
+    words: string[],
+    setWords: React.Dispatch<React.SetStateAction<string[]>>,
+    wordIdx: number,
+    setWordIdx: React.Dispatch<React.SetStateAction<number>>,
+    selectedWord: string,
+    gridColourState: GridColourState[][],
+    setGridColourState: React.Dispatch<React.SetStateAction<GridColourState[][]>>,
+    keyboardColourState: Record<Letter, KeyboardColourState>,
+    setKeyboardColourState: React.Dispatch<React.SetStateAction<Record<Letter, KeyboardColourState>>>,
+    isGameOver: boolean,
+    setIsGameOver: React.Dispatch<React.SetStateAction<boolean>>,
+    popupMessage: string | null,
+    setPopupMessage: React.Dispatch<React.SetStateAction<string | null>>,
+    triggerWordShakeAnimation: boolean,
+    setTriggerWordShakeAnimation: React.Dispatch<React.SetStateAction<boolean>>,
+    triggerLettersFlipAnimation: boolean,
+    setTriggerLettersFlipAnimation: React.Dispatch<React.SetStateAction<boolean>>,
+    isKeyboardDisabled: boolean,
+    setIsKeyboardDisabled: React.Dispatch<React.SetStateAction<boolean>>,
+}) {
     useEffect(() => {
         function handleKeyDown(event: KeyboardEvent) {
             const key: string = event.key.toLowerCase()
@@ -107,7 +124,7 @@ export default function KeyboardListener() {
                 case "z":
                     handleLetter("Z", words, wordIdx, setWords, isGameOver, isKeyboardDisabled)
                     break
-                
+
             }
         }
 
