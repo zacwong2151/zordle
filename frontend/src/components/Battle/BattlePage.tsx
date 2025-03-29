@@ -6,13 +6,14 @@ import { AreYouReadyModal } from "./PlayingModals/AreYouReadyModal"
 import { WaitingForOtherPlayerModal } from "./PlayingModals/WaitingForOtherPlayerModal"
 import { GameStartingModal } from "./PlayingModals/GameStartingModal"
 import { isGameIdValid, getPlayerRoomId, getGameInfo } from "@/apis/BattleApis"
-import { useNavigate, Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import LoadingPage from "../Misc/LoadingPage"
 import { useUserContext } from "@/contexts/UserContext"
-import { Game, WhichPlayer } from "@/types/BattleTypes"
+import { Game } from "@/types/BattleTypes"
 import { Button } from "../ui/button"
 import { ExitGameModal } from "./PlayingModals/ExitGameModal"
 import { useBattleContext } from "@/contexts/BattleContext"
+import { DEFAULT_WORDS } from "@/contexts/DefaultStates"
 
 export default function BattlePage() {
     const { id } = useParams()
@@ -22,7 +23,8 @@ export default function BattlePage() {
     const {
         setIsExitGameModalOpen,
         setRoomId,
-        selectedWord,
+
+        selectedWord, setSelectedWord,
 
         your_words, setyour_words,
         your_wordIdx, setyour_wordIdx,
@@ -33,10 +35,10 @@ export default function BattlePage() {
         your_triggerWordShakeAnimation, setyour_triggerWordShakeAnimation,
         your_triggerLettersFlipAnimation, setyour_triggerLettersFlipAnimation,
         your_isKeyboardDisabled, setyour_isKeyboardDisabled,
-        opponent_words,
-        opponent_wordIdx,
-        opponent_gridColourState,
-        opponent_triggerLettersFlipAnimation,
+        // opponent_words, setopponent_words,
+        opponent_wordIdx, setopponent_wordIdx,
+        opponent_gridColourState, setopponent_gridColourState,
+        opponent_triggerLettersFlipAnimation, setopponent_triggerLettersFlipAnimation
     } = useBattleContext()
 
     /*
@@ -81,6 +83,39 @@ export default function BattlePage() {
             }
 
             console.log(game)
+
+            setSelectedWord(game.selectedWord)
+
+            if (game.player1Email === email) {
+                setyour_words(game.player1_words)
+                setyour_wordIdx(game.player1_wordIdx)
+                setyour_gridColourState(game.player1_gridColourState)
+                setyour_keyboardColourState(game.player1_keyboardColourState)
+                setyour_isGameOver(game.player1_isGameOver)
+                
+                setopponent_wordIdx(game.player2_wordIdx)
+                setopponent_gridColourState(game.player2_gridColourState)
+
+                if (game.player1_isGameOver) {
+                    setyour_isKeyboardDisabled(true)
+                }
+            }
+            else if (game.player2Email === email) {
+                setyour_words(game.player2_words)
+                setyour_wordIdx(game.player2_wordIdx)
+                setyour_gridColourState(game.player2_gridColourState)
+                setyour_keyboardColourState(game.player2_keyboardColourState)
+                setyour_isGameOver(game.player2_isGameOver)
+    
+                setopponent_wordIdx(game.player1_wordIdx)
+                setopponent_gridColourState(game.player1_gridColourState)
+
+                if (game.player2_isGameOver) {
+                    setyour_isKeyboardDisabled(true)
+                }
+            } else {
+                throw new Error("should not reach here")
+            }
 
             setIsLoading(false)
         }
@@ -179,7 +214,7 @@ export default function BattlePage() {
                         {/* Right Side */}
                         <div className="flex flex-col items-center">
                             <Grid
-                                words={opponent_words}
+                                words={DEFAULT_WORDS}
                                 wordIdx={opponent_wordIdx}
                                 selectedWord={selectedWord}
                                 gridColourState={opponent_gridColourState}

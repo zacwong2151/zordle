@@ -5,32 +5,32 @@ export type Player = {
     roomId: string
 }
 
+/*
+    The Game type here **MUST** sync with /models/Game in BattleService
+*/
 export type Game = {
-    roomId: string, // primary key
-    player1Email: string,
-    player2Email: string,
-    isPlayer1Ready: boolean,
-    isPlayer2Ready: boolean,
+    // Generic fields
+    roomId: string, // roomId primary key
     atReadyPage: boolean,
-
     selectedWord: string,
     timer: number,
     
-    your_words: string[],
-    your_wordIdx: number,
-    your_gridColourState: GridColourState[][],
-    your_keyboardColourState: Record<Letter, KeyboardColourState>,
-    your_isGameOver: boolean,
-    your_popupMessage: string | null,
-    your_triggerWordShakeAnimation: boolean,
-    your_triggerLettersFlipAnimation: boolean,
-    your_isKeyboardDisabled: boolean
+    // Player specific fields
+    player1Email: string | null,
+    isPlayer1Ready: boolean,
+    player1_words: string[],
+    player1_wordIdx: number,
+    player1_gridColourState: GridColourState[][],
+    player1_keyboardColourState: Record<Letter, KeyboardColourState>,
+    player1_isGameOver: boolean,
     
-    opponent_words: string[],
-    opponent_wordIdx: number,
-    opponent_gridColourState: GridColourState[][],
-    opponent_keyboardColourState: Record<Letter, KeyboardColourState>,
-    opponent_triggerLettersFlipAnimation: boolean,
+    player2Email: string | null,
+    isPlayer2Ready: boolean,
+    player2_words: string[],
+    player2_wordIdx: number,
+    player2_gridColourState: GridColourState[][],
+    player2_keyboardColourState: Record<Letter, KeyboardColourState>,
+    player2_isGameOver: boolean,
 }
 
 export enum WhichPlayer {

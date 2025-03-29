@@ -125,30 +125,25 @@ export async function initialiseGame(
 
     const gameReqBody: Game = {
         roomId: roomId,
-        player1Email: player1Email,
-        player2Email: player2Email,
-        isPlayer1Ready: false,
-        isPlayer2Ready: false,
         atReadyPage: true,
-
         selectedWord: selectedWord,
         timer: 0,
-
-        your_words: DEFAULT_WORDS,
-        your_wordIdx: 0,
-        your_gridColourState: DEFAULT_GRID_COLOUR_STATE,
-        your_keyboardColourState: DEFAULT_KEYBOARD_COLOUR_STATE,
-        your_isGameOver: false,
-        your_popupMessage: null,
-        your_triggerWordShakeAnimation: false,
-        your_triggerLettersFlipAnimation: false,
-        your_isKeyboardDisabled: false,
-
-        opponent_words: DEFAULT_WORDS,
-        opponent_wordIdx: 0,
-        opponent_gridColourState: DEFAULT_GRID_COLOUR_STATE,
-        opponent_keyboardColourState: DEFAULT_KEYBOARD_COLOUR_STATE,
-        opponent_triggerLettersFlipAnimation: false,
+        
+        player1Email: player1Email,
+        isPlayer1Ready: false,
+        player1_words: DEFAULT_WORDS,
+        player1_wordIdx: 0,
+        player1_gridColourState: DEFAULT_GRID_COLOUR_STATE,
+        player1_keyboardColourState: DEFAULT_KEYBOARD_COLOUR_STATE,
+        player1_isGameOver: false,
+        
+        player2Email: player2Email,
+        isPlayer2Ready: false,
+        player2_words: DEFAULT_WORDS,
+        player2_wordIdx: 0,
+        player2_gridColourState: DEFAULT_GRID_COLOUR_STATE,
+        player2_keyboardColourState: DEFAULT_KEYBOARD_COLOUR_STATE,
+        player2_isGameOver: false,
     }
 
     try {

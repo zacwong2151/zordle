@@ -19,10 +19,10 @@ router.get("/:roomId", async (req: Request, res: Response) => {
         })
         return
     }
-    
+
     try {
         const game = await Game.findOne({ _id: roomId })
-        
+
         if (game) {
             res.status(200).send({
                 data: game,
@@ -51,21 +51,25 @@ router.get("/:roomId", async (req: Request, res: Response) => {
 router.post("/", async (req: Request, res: Response) => {
     const {
         roomId,
-        player1Email,
-        player2Email,
-        isPlayer1Ready,
-        isPlayer2Ready,
+        atReadyPage,
         selectedWord,
         timer,
-        words,
-        wordIdx,
-        gridColourState,
-        keyboardColourState,
-        isGameOver,
-        popupMessage,
-        triggerWordShakeAnimation,
-        triggerLettersFlipAnimation,
-        isKeyboardDisabled
+
+        player1Email,
+        isPlayer1Ready,
+        player1_words,
+        player1_wordIdx,
+        player1_gridColourState,
+        player1_keyboardColourState,
+        player1_isGameOver,
+
+        player2Email,
+        isPlayer2Ready,
+        player2_words,
+        player2_wordIdx,
+        player2_gridColourState,
+        player2_keyboardColourState,
+        player2_isGameOver,
     } = req.body
 
     if (!roomId || !player1Email || !player2Email) {
@@ -78,21 +82,25 @@ router.post("/", async (req: Request, res: Response) => {
 
     const game = new Game({
         _id: roomId,
-        player1Email: player1Email,
-        player2Email: player2Email,
-        isPlayer1Ready: isPlayer1Ready,
-        isPlayer2Ready: isPlayer2Ready,
+        atReadyPage: atReadyPage,
         selectedWord: selectedWord,
         timer: timer,
-        words: words,
-        wordIdx: wordIdx,
-        gridColourState: gridColourState,
-        keyboardColourState: keyboardColourState,
-        isGameOver: isGameOver,
-        popupMessage: popupMessage,
-        triggerWordShakeAnimation: triggerWordShakeAnimation,
-        triggerLettersFlipAnimation: triggerLettersFlipAnimation,
-        isKeyboardDisabled: isKeyboardDisabled
+        
+        player1Email: player1Email,
+        isPlayer1Ready: isPlayer1Ready,
+        player1_words: player1_words,
+        player1_wordIdx: player1_wordIdx,
+        player1_gridColourState: player1_gridColourState,
+        player1_keyboardColourState: player1_keyboardColourState,
+        player1_isGameOver: player1_isGameOver,
+        
+        player2Email: player2Email,
+        isPlayer2Ready: isPlayer2Ready,
+        player2_words: player2_words,
+        player2_wordIdx: player2_wordIdx,
+        player2_gridColourState: player2_gridColourState,
+        player2_keyboardColourState: player2_keyboardColourState,
+        player2_isGameOver: player2_isGameOver,
     })
 
     try {
@@ -129,10 +137,10 @@ router.delete("/:roomId", async (req: Request, res: Response) => {
         })
         return
     }
-    
+
     try {
         const game = await Game.findOneAndDelete({ _id: roomId })
-        
+
         if (game) {
             res.status(200).send({
                 message: `Successfully delete game: ${roomId}`,
@@ -166,13 +174,13 @@ router.put("/:roomId", async (req: Request, res: Response) => {
         })
         return
     }
-    
+
     try {
         const result = await Game.updateOne(
-            { _id: roomId }, 
+            { _id: roomId },
             { $set: message } // Updates only provided fields
         )
-        
+
         if (result.modifiedCount === 0) {
             res.status(404).send({
                 message: "Room not found or no changes made",

@@ -59,8 +59,8 @@ export type BattleStateType = {
     setopponent_wordIdx: React.Dispatch<React.SetStateAction<number>>;
     opponent_gridColourState: GridColourState[][];
     setopponent_gridColourState: React.Dispatch<React.SetStateAction<GridColourState[][]>>;
-    opponent_keyboardColourState: Record<Letter, KeyboardColourState>;
-    setopponent_keyboardColourState: React.Dispatch<React.SetStateAction<Record<Letter, KeyboardColourState>>>;
+    // opponent_keyboardColourState: Record<Letter, KeyboardColourState>;
+    // setopponent_keyboardColourState: React.Dispatch<React.SetStateAction<Record<Letter, KeyboardColourState>>>;
     opponent_triggerLettersFlipAnimation: boolean;
     setopponent_triggerLettersFlipAnimation: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -96,16 +96,8 @@ const BattleContextProvider = ({ children }: { children: ReactNode }) => {
     const [opponent_words, setopponent_words] = useState<string[]>(DEFAULT_WORDS);
     const [opponent_wordIdx, setopponent_wordIdx] = useState<number>(0);
     const [opponent_gridColourState, setopponent_gridColourState] = useState<GridColourState[][]>(DEFAULT_GRID_COLOUR_STATE);
-    const [opponent_keyboardColourState, setopponent_keyboardColourState] = useState<Record<Letter, KeyboardColourState>>(DEFAULT_KEYBOARD_COLOUR_STATE);
+    // const [opponent_keyboardColourState, setopponent_keyboardColourState] = useState<Record<Letter, KeyboardColourState>>(DEFAULT_KEYBOARD_COLOUR_STATE);
     const [opponent_triggerLettersFlipAnimation, setopponent_triggerLettersFlipAnimation] = useState<boolean>(false);
-
-    useEffect(() => {
-        // TODO: remove this
-        const randomWord = getRandomWord()
-        setSelectedWord(randomWord)
-        console.log(`selected word in battle is ${randomWord}`)
-    }, [])
-
 
     const battleState: BattleStateType = {
         roomId, setRoomId,
@@ -135,7 +127,7 @@ const BattleContextProvider = ({ children }: { children: ReactNode }) => {
         opponent_words, setopponent_words,
         opponent_wordIdx, setopponent_wordIdx,
         opponent_gridColourState, setopponent_gridColourState,
-        opponent_keyboardColourState, setopponent_keyboardColourState,
+        // opponent_keyboardColourState, setopponent_keyboardColourState,
         opponent_triggerLettersFlipAnimation, setopponent_triggerLettersFlipAnimation,
     }
 
