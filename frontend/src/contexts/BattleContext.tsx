@@ -1,7 +1,7 @@
 import React, { createContext, useState, ReactNode, useContext, useEffect } from "react"
 import { GridColourState, KeyboardColourState, Letter } from "@/types/WordleTypes"
 import { DEFAULT_GRID_COLOUR_STATE, DEFAULT_KEYBOARD_COLOUR_STATE, DEFAULT_WORDS } from "./DefaultStates";
-import { getRandomWord } from "@/apis/WordleApis";
+import { Socket, io } from "socket.io-client";
 
 export type BattleStateType = {
     // Modals
@@ -63,6 +63,10 @@ export type BattleStateType = {
     // setopponent_keyboardColourState: React.Dispatch<React.SetStateAction<Record<Letter, KeyboardColourState>>>;
     opponent_triggerLettersFlipAnimation: boolean;
     setopponent_triggerLettersFlipAnimation: React.Dispatch<React.SetStateAction<boolean>>;
+
+    // WebSocket
+    socket: Socket | null
+    setSocket: React.Dispatch<React.SetStateAction<Socket | null>>,
 };
 
 const BattleContext = createContext<BattleStateType | null>(null)
@@ -99,6 +103,18 @@ const BattleContextProvider = ({ children }: { children: ReactNode }) => {
     // const [opponent_keyboardColourState, setopponent_keyboardColourState] = useState<Record<Letter, KeyboardColourState>>(DEFAULT_KEYBOARD_COLOUR_STATE);
     const [opponent_triggerLettersFlipAnimation, setopponent_triggerLettersFlipAnimation] = useState<boolean>(false);
 
+    const [socket, setSocket] = useState<Socket | null>(null);
+
+    // connects to socket upon creating BattleContext
+    useEffect(() => {
+        if (socket !== null) return;
+        const s = io("http://localhost:7001") // 7001: Websocket port
+        setSocket(s)
+        return () => {
+            s.disconnect()
+        }
+    }, [])
+
     const battleState: BattleStateType = {
         roomId, setRoomId,
         isAreYouReadyModalOpen, setIsAreYouReadyModalOpen,
@@ -129,6 +145,8 @@ const BattleContextProvider = ({ children }: { children: ReactNode }) => {
         opponent_gridColourState, setopponent_gridColourState,
         // opponent_keyboardColourState, setopponent_keyboardColourState,
         opponent_triggerLettersFlipAnimation, setopponent_triggerLettersFlipAnimation,
+
+        socket, setSocket
     }
 
     return (

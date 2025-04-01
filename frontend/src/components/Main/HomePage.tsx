@@ -63,6 +63,7 @@ export default function HomePage() {
                     setTriggerLettersFlipAnimation={setTriggerLettersFlipAnimation}
                     isKeyboardDisabled={isKeyboardDisabled}
                     setIsKeyboardDisabled={setIsKeyboardDisabled}
+                    socket={null}
                 />
             </div>
         </>

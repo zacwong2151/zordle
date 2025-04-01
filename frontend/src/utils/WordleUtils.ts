@@ -1,10 +1,11 @@
 import { GridColourState } from "../types/WordleTypes"
 import { isWordInDB } from "../apis/WordleApis"
 import { KeyboardColourState, Letter } from "../types/WordleTypes"
+import { Socket } from "socket.io-client"
 
 const MAX_WORD_LENGTH = 5
 const MAX_NO_OF_WORDS = 6
-const LETTERS_FLIP_ANIMATION_TIME = 2000 // time taken for all letters of a word to flip
+export const LETTERS_FLIP_ANIMATION_TIME = 2000 // time taken for all letters of a word to flip
 const SHORT_POPUP_DURATION = 2000
 
 export function isCurrentWordFull(
@@ -23,7 +24,7 @@ export function isCurrentWordFull(
 export async function handleEnter(
     words: string[],
     wordIdx: number,
-    setWordIdx: React.Dispatch<React.SetStateAction<number>>, 
+    setWordIdx: React.Dispatch<React.SetStateAction<number>>,
     setWords: React.Dispatch<React.SetStateAction<string[]>>,
     selectedWord: string | null,
     gridColourState: GridColourState[][],
@@ -37,15 +38,16 @@ export async function handleEnter(
     setTriggerLettersFlipAnimation: React.Dispatch<React.SetStateAction<boolean>>,
     isKeyboardDisabled: boolean,
     setIsKeyboardDisabled: React.Dispatch<React.SetStateAction<boolean>>,
+    socket: Socket | null,
 ) {
     if (!selectedWord) {
         console.warn('Selected word should not be null')
-        return 
+        return
     }
-    
+
     if (isKeyboardDisabled) return
     setIsKeyboardDisabled(true)
-    
+
     if (isGameOver) {
         showPopupMessage('Game is over!', setPopupMessage, SHORT_POPUP_DURATION)
         setIsKeyboardDisabled(false)
@@ -65,11 +67,15 @@ export async function handleEnter(
         setIsKeyboardDisabled(false)
         return
     }
-    
 
-    changeGridColour(currentWord, selectedWord, wordIdx, gridColourState, setGridColourState)
+    const newGridColourState = changeGridColour(currentWord, selectedWord, wordIdx, gridColourState, setGridColourState)
     triggerLettersFlipAnimation(setTriggerLettersFlipAnimation)
-    
+
+    // Send the newGridColourState to websocket. 
+    if (socket) {
+        socket.emit('new-grid-colour', newGridColourState)
+    }
+
     setTimeout(() => {
         setWordIdx(prevIdx => prevIdx + 1)
         setIsKeyboardDisabled(false)
@@ -83,7 +89,7 @@ export async function handleEnter(
             showPopupMessage(selectedWord, setPopupMessage, 3600000) // show correct word for 1hr
         }
     }, LETTERS_FLIP_ANIMATION_TIME)
-    
+
 }
 
 function triggerWordShakeAnimation(setTriggerWordShakeAnimation: React.Dispatch<React.SetStateAction<boolean>>) {
@@ -93,7 +99,7 @@ function triggerWordShakeAnimation(setTriggerWordShakeAnimation: React.Dispatch<
     }, 500)
 }
 
-function triggerLettersFlipAnimation(setTriggerLettersFlipAnimation: React.Dispatch<React.SetStateAction<boolean>>) {
+export function triggerLettersFlipAnimation(setTriggerLettersFlipAnimation: React.Dispatch<React.SetStateAction<boolean>>) {
     setTriggerLettersFlipAnimation(true)
     setTimeout(() => {
         setTriggerLettersFlipAnimation(false)
@@ -112,7 +118,7 @@ function showPopupMessage(popupMessage: string, setPopupMessage: React.Dispatch<
 }
 
 /**
- * Change Grid colour to reflect new state.
+ * Change Grid colour to reflect new state. Return the new state.
  */
 function changeGridColour(
     currentWord: string,
@@ -140,14 +146,17 @@ function changeGridColour(
             letterFreq[currentWord[pos]] > 0) {
             letterFreq[currentWord[pos]]--
             newColourStateRow[pos] = "yellow"
-        } 
+        }
     }
-    
-    setGridColourState([
+
+    const newGridColourState = [
         ...gridColourState.slice(0, wordIdx),
         newColourStateRow,
         ...gridColourState.slice(wordIdx + 1, MAX_NO_OF_WORDS)
-    ])
+    ]
+
+    setGridColourState(newGridColourState)
+    return newGridColourState
 }
 
 /**
@@ -174,7 +183,7 @@ function changeKeyboardColour(
     keyboardColourState: Record<Letter, KeyboardColourState>,
     setKeyboardColourState: React.Dispatch<React.SetStateAction<Record<Letter, KeyboardColourState>>>,
 ) {
-    const newKeyboardColourState: Record<Letter, KeyboardColourState> = {...keyboardColourState}
+    const newKeyboardColourState: Record<Letter, KeyboardColourState> = { ...keyboardColourState }
 
     for (let pos = 0; pos < MAX_WORD_LENGTH; pos++) {
         if (currentWord[pos] === selectedWord[pos]) {
@@ -185,7 +194,7 @@ function changeKeyboardColour(
             newKeyboardColourState[currentWord[pos] as Letter] = "dark gray"
         }
     }
-    
+
     setKeyboardColourState(newKeyboardColourState)
 }
 
@@ -227,7 +236,7 @@ export function handleLetter(
     if (isCurrentWordFull(words, wordIdx)) {
         console.log('Hey, this word is full, you cannot enter any more letters')
         return
-    } 
+    }
 
     const newCurrWord = words[wordIdx] + letter
     const newWords = [

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { handleBackspace, handleEnter, handleLetter } from "../../utils/WordleUtils";
 import { GridColourState, KeyboardColourState, Letter } from "@/types/WordleTypes";
+import { Socket } from "socket.io-client";
 /**
  * Listens to keyboard presses from user.
  */
@@ -14,7 +15,8 @@ export default function KeyboardListener({
     setPopupMessage,
     setTriggerWordShakeAnimation,
     setTriggerLettersFlipAnimation,
-    isKeyboardDisabled, setIsKeyboardDisabled
+    isKeyboardDisabled, setIsKeyboardDisabled,
+    socket
 }: {
     words: string[],
     setWords: React.Dispatch<React.SetStateAction<string[]>>,
@@ -35,13 +37,14 @@ export default function KeyboardListener({
     setTriggerLettersFlipAnimation: React.Dispatch<React.SetStateAction<boolean>>,
     isKeyboardDisabled: boolean,
     setIsKeyboardDisabled: React.Dispatch<React.SetStateAction<boolean>>,
+    socket: Socket | null,
 }) {
     useEffect(() => {
         function handleKeyDown(event: KeyboardEvent) {
             const key: string = event.key.toLowerCase()
             switch (key) {
                 case "enter":
-                    handleEnter(words, wordIdx, setWordIdx, setWords, selectedWord, gridColourState, setGridColourState, keyboardColourState, setKeyboardColourState, isGameOver, setIsGameOver, setPopupMessage, setTriggerWordShakeAnimation, setTriggerLettersFlipAnimation, isKeyboardDisabled, setIsKeyboardDisabled)
+                    handleEnter(words, wordIdx, setWordIdx, setWords, selectedWord, gridColourState, setGridColourState, keyboardColourState, setKeyboardColourState, isGameOver, setIsGameOver, setPopupMessage, setTriggerWordShakeAnimation, setTriggerLettersFlipAnimation, isKeyboardDisabled, setIsKeyboardDisabled, socket)
                     break
                 case "backspace":
                     handleBackspace(words, wordIdx, setWords, isGameOver)

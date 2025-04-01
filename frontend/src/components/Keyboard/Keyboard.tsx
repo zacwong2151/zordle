@@ -2,6 +2,7 @@ import KeyboardRow from "./KeyboardRow";
 import KeyboardSymbol from "./KeyBoardSymbol";
 import KeyboardListener from "./KeyboardListener";
 import { GridColourState, KeyboardColourState, Letter } from "@/types/WordleTypes";
+import { Socket } from "socket.io-client";
 
 const KEYBOARD_TOP_ROW = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"]
 const KEYBOARD_MIDDLE_ROW = ["A", "S", "D", "F", "G", "H", "J", "K", "L"]
@@ -17,7 +18,8 @@ export default function Keyboard({
     popupMessage, setPopupMessage,
     triggerWordShakeAnimation, setTriggerWordShakeAnimation,
     triggerLettersFlipAnimation, setTriggerLettersFlipAnimation,
-    isKeyboardDisabled, setIsKeyboardDisabled
+    isKeyboardDisabled, setIsKeyboardDisabled,
+    socket
 }: {
     words: string[],
     setWords: React.Dispatch<React.SetStateAction<string[]>>,
@@ -38,6 +40,7 @@ export default function Keyboard({
     setTriggerLettersFlipAnimation: React.Dispatch<React.SetStateAction<boolean>>,
     isKeyboardDisabled: boolean,
     setIsKeyboardDisabled: React.Dispatch<React.SetStateAction<boolean>>,
+    socket: Socket | null,
 }) {
     return (
         <div className="flex flex-col items-center w-full max-w-[600px] px-1">
@@ -61,6 +64,7 @@ export default function Keyboard({
                 setTriggerLettersFlipAnimation={setTriggerLettersFlipAnimation}
                 isKeyboardDisabled={isKeyboardDisabled}
                 setIsKeyboardDisabled={setIsKeyboardDisabled}
+                socket={socket}
             />
             <KeyboardRow>
                 {KEYBOARD_TOP_ROW.map((symbol, index) => (

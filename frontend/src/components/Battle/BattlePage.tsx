@@ -14,6 +14,9 @@ import { Button } from "../ui/button"
 import { ExitGameModal } from "./PlayingModals/ExitGameModal"
 import { useBattleContext } from "@/contexts/BattleContext"
 import { DEFAULT_WORDS } from "@/contexts/DefaultStates"
+import { GridColourState } from "@/types/WordleTypes"
+import { triggerLettersFlipAnimation } from "@/utils/WordleUtils"
+import { LETTERS_FLIP_ANIMATION_TIME } from "@/utils/WordleUtils"
 
 export default function BattlePage() {
     const { id } = useParams()
@@ -22,7 +25,7 @@ export default function BattlePage() {
     const { email } = useUserContext()
     const {
         setIsExitGameModalOpen,
-        setRoomId,
+        roomId, setRoomId,
 
         selectedWord, setSelectedWord,
 
@@ -38,7 +41,9 @@ export default function BattlePage() {
         // opponent_words, setopponent_words,
         opponent_wordIdx, setopponent_wordIdx,
         opponent_gridColourState, setopponent_gridColourState,
-        opponent_triggerLettersFlipAnimation, setopponent_triggerLettersFlipAnimation
+        opponent_triggerLettersFlipAnimation, setopponent_triggerLettersFlipAnimation,
+
+        socket
     } = useBattleContext()
 
     /*
@@ -117,10 +122,30 @@ export default function BattlePage() {
                 throw new Error("should not reach here")
             }
 
+            if (!socket) {
+                throw new Error("socket is not initialised properly in BattleContext")
+            }
+            socket.emit('create-room', id)
+
             setIsLoading(false)
         }
         init()
     }, [email, id])
+
+    useEffect(() => {
+        if (!socket) return
+
+        // Received opponent's grid
+        socket.on('update-grid-colour', (newGridColourState: GridColourState[][]) => {
+            setopponent_gridColourState(newGridColourState)
+            triggerLettersFlipAnimation(setopponent_triggerLettersFlipAnimation)
+
+            setTimeout(() => {
+                setopponent_wordIdx(prevIdx => prevIdx + 1)
+            }, LETTERS_FLIP_ANIMATION_TIME)
+        })
+    }, [socket])
+
 
     if (isLoading) {
         return <LoadingPage />
@@ -208,6 +233,7 @@ export default function BattlePage() {
                                 setTriggerLettersFlipAnimation={setyour_triggerLettersFlipAnimation}
                                 isKeyboardDisabled={your_isKeyboardDisabled}
                                 setIsKeyboardDisabled={setyour_isKeyboardDisabled}
+                                socket={socket}
                             />
                         </div>
 
