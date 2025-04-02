@@ -165,7 +165,7 @@ router.delete("/:roomId", async (req: Request, res: Response) => {
  */
 router.put("/:roomId", async (req: Request, res: Response) => {
     const roomId = req.params.roomId
-    const message = req.body
+    const message = req.body // TODO: use zod library to define UpdateGameSchema and validate request body
 
     if (!roomId || Object.keys(message).length === 0) {
         res.status(400).send({

@@ -64,6 +64,8 @@ export default function HomePage() {
                     isKeyboardDisabled={isKeyboardDisabled}
                     setIsKeyboardDisabled={setIsKeyboardDisabled}
                     socket={null}
+                    youArePlayerOne={false} // actually should be null/undefined, but should be fine as a boolean
+                    roomId={""} // actually should be null/undefined, but should be fine as an empty string
                 />
             </div>
         </>

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getRandomWord } from "./WordleApis";
-import { Player, Game } from "@/types/BattleTypes";
+import { Player, Game, UpdateGameDto } from "@/types/BattleTypes";
 import { JSONResponse, INTERNAL_SERVER_ERROR_RESPONSE } from "@/types/ApiTypes";
 import { DEFAULT_WORDS, DEFAULT_GRID_COLOUR_STATE, DEFAULT_KEYBOARD_COLOUR_STATE } from "@/contexts/DefaultStates";
 
@@ -187,5 +187,13 @@ export async function removePlayerFromGame(email: string): Promise<boolean> {
     } catch (error) {
         console.error(error);
         return false
+    }
+}
+
+export async function updateGameInfo(roomId: string, updateGameDto: UpdateGameDto) : Promise<void> {
+    try {
+        await axios.put(DEV_BATTLE_SERVICE_URL + GAME_POV_URL + `/${roomId}`, updateGameDto)
+    } catch (error) {
+        console.error(error)
     }
 }

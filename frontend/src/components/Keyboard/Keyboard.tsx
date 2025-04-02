@@ -19,7 +19,9 @@ export default function Keyboard({
     triggerWordShakeAnimation, setTriggerWordShakeAnimation,
     triggerLettersFlipAnimation, setTriggerLettersFlipAnimation,
     isKeyboardDisabled, setIsKeyboardDisabled,
-    socket
+    socket,
+    youArePlayerOne,
+    roomId
 }: {
     words: string[],
     setWords: React.Dispatch<React.SetStateAction<string[]>>,
@@ -41,6 +43,8 @@ export default function Keyboard({
     isKeyboardDisabled: boolean,
     setIsKeyboardDisabled: React.Dispatch<React.SetStateAction<boolean>>,
     socket: Socket | null,
+    youArePlayerOne: boolean,
+    roomId: string
 }) {
     return (
         <div className="flex flex-col items-center w-full max-w-[600px] px-1">
@@ -65,6 +69,8 @@ export default function Keyboard({
                 isKeyboardDisabled={isKeyboardDisabled}
                 setIsKeyboardDisabled={setIsKeyboardDisabled}
                 socket={socket}
+                youArePlayerOne={youArePlayerOne}
+                roomId={roomId}
             />
             <KeyboardRow>
                 {KEYBOARD_TOP_ROW.map((symbol, index) => (

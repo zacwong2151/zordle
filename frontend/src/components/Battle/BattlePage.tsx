@@ -21,8 +21,11 @@ import { LETTERS_FLIP_ANIMATION_TIME } from "@/utils/WordleUtils"
 export default function BattlePage() {
     const { id } = useParams()
     const navigate = useNavigate()
-    const [isLoading, setIsLoading] = useState(true)
     const { email } = useUserContext()
+
+    const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [g, setG] = useState<Game | null>(null)
+
     const {
         setIsExitGameModalOpen,
         roomId, setRoomId,
@@ -86,9 +89,9 @@ export default function BattlePage() {
                 navigate("/battle")
                 return
             }
+            setG(game)
 
             console.log(game)
-
             setSelectedWord(game.selectedWord)
 
             if (game.player1Email === email) {
@@ -101,11 +104,7 @@ export default function BattlePage() {
                 setopponent_wordIdx(game.player2_wordIdx)
                 setopponent_gridColourState(game.player2_gridColourState)
 
-                if (game.player1_isGameOver) {
-                    setyour_isKeyboardDisabled(true)
-                }
-            }
-            else if (game.player2Email === email) {
+            } else if (game.player2Email === email) { // you are player 2
                 setyour_words(game.player2_words)
                 setyour_wordIdx(game.player2_wordIdx)
                 setyour_gridColourState(game.player2_gridColourState)
@@ -114,10 +113,7 @@ export default function BattlePage() {
     
                 setopponent_wordIdx(game.player1_wordIdx)
                 setopponent_gridColourState(game.player1_gridColourState)
-
-                if (game.player2_isGameOver) {
-                    setyour_isKeyboardDisabled(true)
-                }
+                
             } else {
                 throw new Error("should not reach here")
             }
@@ -129,8 +125,8 @@ export default function BattlePage() {
 
             setIsLoading(false)
         }
-        init()
-    }, [email, id])
+        if (socket) init()
+    }, [email, id, socket])
 
     useEffect(() => {
         if (!socket) return
@@ -234,6 +230,8 @@ export default function BattlePage() {
                                 isKeyboardDisabled={your_isKeyboardDisabled}
                                 setIsKeyboardDisabled={setyour_isKeyboardDisabled}
                                 socket={socket}
+                                youArePlayerOne={g!.player1Email === email}
+                                roomId={roomId}
                             />
                         </div>
 

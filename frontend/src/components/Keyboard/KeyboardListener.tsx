@@ -16,7 +16,9 @@ export default function KeyboardListener({
     setTriggerWordShakeAnimation,
     setTriggerLettersFlipAnimation,
     isKeyboardDisabled, setIsKeyboardDisabled,
-    socket
+    socket,
+    youArePlayerOne,
+    roomId
 }: {
     words: string[],
     setWords: React.Dispatch<React.SetStateAction<string[]>>,
@@ -38,16 +40,18 @@ export default function KeyboardListener({
     isKeyboardDisabled: boolean,
     setIsKeyboardDisabled: React.Dispatch<React.SetStateAction<boolean>>,
     socket: Socket | null,
+    youArePlayerOne: boolean,
+    roomId: string
 }) {
     useEffect(() => {
         function handleKeyDown(event: KeyboardEvent) {
             const key: string = event.key.toLowerCase()
             switch (key) {
                 case "enter":
-                    handleEnter(words, wordIdx, setWordIdx, setWords, selectedWord, gridColourState, setGridColourState, keyboardColourState, setKeyboardColourState, isGameOver, setIsGameOver, setPopupMessage, setTriggerWordShakeAnimation, setTriggerLettersFlipAnimation, isKeyboardDisabled, setIsKeyboardDisabled, socket)
+                    handleEnter(words, wordIdx, setWordIdx, setWords, selectedWord, gridColourState, setGridColourState, keyboardColourState, setKeyboardColourState, isGameOver, setIsGameOver, setPopupMessage, setTriggerWordShakeAnimation, setTriggerLettersFlipAnimation, isKeyboardDisabled, setIsKeyboardDisabled, socket, youArePlayerOne, roomId)
                     break
                 case "backspace":
-                    handleBackspace(words, wordIdx, setWords, isGameOver)
+                    handleBackspace(words, wordIdx, setWords, isGameOver, isKeyboardDisabled)
                     break
                 case "a":
                     handleLetter("A", words, wordIdx, setWords, isGameOver, isKeyboardDisabled)
