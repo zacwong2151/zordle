@@ -24,13 +24,27 @@ export default function BattlePage() {
     const { email } = useUserContext()
 
     const [isLoading, setIsLoading] = useState<boolean>(true)
-    const [g, setG] = useState<Game | null>(null)
+    const [time, setTime] = useState<number>(0)
+
+    const minutes = new String(Math.floor(time / 60))
+    let seconds = new String(time % 60)
+    if ((time % 60) < 10) {
+        seconds = "0" + seconds
+    }
 
     const {
-        setIsExitGameModalOpen,
         roomId, setRoomId,
+        setIsWaitingForOtherPlayerModalOpen,
+        setIsExitGameModalOpen,
+
+        player1Email, setPlayer1Email,
+        player2Email, setPlayer2Email,
+        isPlayer1Ready, setIsPlayer1Ready,
+        isPlayer2Ready, setIsPlayer2Ready,
+        atReadyPage, setAtReadyPage,
 
         selectedWord, setSelectedWord,
+        timer, setTimer,
 
         your_words, setyour_words,
         your_wordIdx, setyour_wordIdx,
@@ -58,8 +72,8 @@ export default function BattlePage() {
                 Verify user authentication
             */
 
-            if (!email) {
-                return // wait for email to be initialised
+            if (!email || !socket) {
+                return // wait for email and socket to be initialised
             }
 
             if (!id) { // empty id
@@ -89,10 +103,11 @@ export default function BattlePage() {
                 navigate("/battle")
                 return
             }
-            setG(game)
 
-            console.log(game)
             setSelectedWord(game.selectedWord)
+            setPlayer1Email(game.player1Email ?? "")
+            setPlayer2Email(game.player2Email ?? "")
+            setAtReadyPage(game.atReadyPage)
 
             if (game.player1Email === email) {
                 setyour_words(game.player1_words)
@@ -100,7 +115,7 @@ export default function BattlePage() {
                 setyour_gridColourState(game.player1_gridColourState)
                 setyour_keyboardColourState(game.player1_keyboardColourState)
                 setyour_isGameOver(game.player1_isGameOver)
-                
+
                 setopponent_wordIdx(game.player2_wordIdx)
                 setopponent_gridColourState(game.player2_gridColourState)
 
@@ -110,22 +125,29 @@ export default function BattlePage() {
                 setyour_gridColourState(game.player2_gridColourState)
                 setyour_keyboardColourState(game.player2_keyboardColourState)
                 setyour_isGameOver(game.player2_isGameOver)
-    
+
                 setopponent_wordIdx(game.player1_wordIdx)
                 setopponent_gridColourState(game.player1_gridColourState)
-                
+
             } else {
                 throw new Error("should not reach here")
             }
 
-            if (!socket) {
-                throw new Error("socket is not initialised properly in BattleContext")
-            }
             socket.emit('create-room', id)
 
+            if (game.atReadyPage) {
+                setyour_isKeyboardDisabled(true)
+                setIsWaitingForOtherPlayerModalOpen(true)
+            } else {
+                socket.emit('start-timer') // only reach here if page is refreshed. If normal game, emit 'start-timer' at GameStartingModal
+            }
+
             setIsLoading(false)
+
         }
-        if (socket) init()
+        init()
+
+        // TODO: stop timer when the game is deleted
     }, [email, id, socket])
 
     useEffect(() => {
@@ -140,6 +162,16 @@ export default function BattlePage() {
                 setopponent_wordIdx(prevIdx => prevIdx + 1)
             }, LETTERS_FLIP_ANIMATION_TIME)
         })
+
+        // Receive new time
+        socket.on('update-time', (time: number) => {
+            setTime(time)
+        })
+
+        return () => {
+            socket.off('update-grid-colour')
+            socket.off('update-time')
+        }
     }, [socket])
 
 
@@ -170,7 +202,7 @@ export default function BattlePage() {
                     {/* position absolute - Timer */}
                     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 mt-4">
                         <div className="border border-gray-400 px-10 py-4 text-center">
-                            <span className="text-4xl font-bold">0:00</span>
+                            <span className="text-4xl font-bold">{`${minutes}:${seconds}`}</span>
                         </div>
                     </div>
 
@@ -230,7 +262,7 @@ export default function BattlePage() {
                                 isKeyboardDisabled={your_isKeyboardDisabled}
                                 setIsKeyboardDisabled={setyour_isKeyboardDisabled}
                                 socket={socket}
-                                youArePlayerOne={g!.player1Email === email}
+                                youArePlayerOne={player1Email === email}
                                 roomId={roomId}
                             />
                         </div>

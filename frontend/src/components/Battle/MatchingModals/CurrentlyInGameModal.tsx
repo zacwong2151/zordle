@@ -13,11 +13,16 @@ import { Game } from "@/types/BattleTypes"
 import { useUserContext } from "@/contexts/UserContext"
 import { useNavigate } from "react-router-dom"
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
+import { useBattleContext } from "@/contexts/BattleContext"
+
+type JSONResponse = {
+    success: boolean
+}
 
 export function CurrentlyInGameModal() {
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
     const { isCurrentlyInGameModalOpen, setIsCurrentlyInGameModalOpen } = useMatchingContext()
-    const [game, setGame] = useState<Game | null>(null)
+    const { socket, setSocket } = useBattleContext()
     const [roomId, setRoomId] = useState<string>("")
     const [opponentName, setOpponentName] = useState<string>("")
     const { email } = useUserContext()
@@ -28,48 +33,57 @@ export function CurrentlyInGameModal() {
     */
     useEffect(() => {
         const init = async () => {
-            const id: string | null = await getPlayerRoomId(email)
-            if (!id) {
+            if (!socket) return
+
+            const roomId: string | null = await getPlayerRoomId(email)
+            if (!roomId) {
                 throw new Error("This should not happen")
             }
-            setRoomId(id)
+            setRoomId(roomId)
 
-            const g: Game | null = await getGameInfo(id)
-            if (!g) {
+            const game: Game | null = await getGameInfo(roomId)
+            if (!game) {
                 throw new Error("This should not happen")
             }
-            setGame(g)
+            socket.emit('create-room', roomId) // connect to server to clean up server properly upon leaving game
 
-            if (email === g.player1Email && g.player2Email) {
-                setOpponentName(g.player2Email)
-            } else if (email === g.player2Email && g.player1Email) {
-                setOpponentName(g.player1Email)
+            if (email === game.player1Email && game.player2Email) {
+                setOpponentName(game.player2Email)
+            } else if (email === game.player2Email && game.player1Email) {
+                setOpponentName(game.player1Email)
             } else {
                 setOpponentName("YOURSELF")
             }
         }
         if (isCurrentlyInGameModalOpen) init()
-    }, [email, isCurrentlyInGameModalOpen])
+    }, [email, isCurrentlyInGameModalOpen, socket])
 
     async function handleLeaveGame() {
         if (isButtonDisabled) return
-        
+
         setIsButtonDisabled(true)
         const removed = await removePlayerFromGame(email)
-        
-        if (removed) {
-            setIsCurrentlyInGameModalOpen(false)
-            navigate("/battle")
+
+        if (removed && socket) {
+            socket.emit('exit-game', email, (response: JSONResponse) => { // wait for ack
+                if (response.success) {
+                    socket.disconnect()
+                    setSocket(null)
+
+                    setIsCurrentlyInGameModalOpen(false)
+                    navigate("/battle")
+                }
+            })
         } else {
             setIsButtonDisabled(false)
             console.warn("reached here")
         }
 
     }
-    
+
     function handleResumeGame() {
         if (isButtonDisabled) return
-    
+
         setIsButtonDisabled(true)
         setIsCurrentlyInGameModalOpen(false)
         navigate(`/battle/${roomId}`)
@@ -91,7 +105,7 @@ export function CurrentlyInGameModal() {
                             className="bg-red-600 hover:brightness-75"
                             disabled={isButtonDisabled}
                             onClick={handleLeaveGame}
-                            >
+                        >
                             Leave game
                         </Button>
                         <Button

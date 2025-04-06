@@ -107,13 +107,22 @@ const BattleContextProvider = ({ children }: { children: ReactNode }) => {
 
     // connects to socket upon creating BattleContext
     useEffect(() => {
-        if (socket !== null) return;
-        const s = io("http://localhost:7001") // 7001: Websocket port
+        if (socket) return
+
+        const s = io("http://localhost:7001")
+        console.log('intiailising a new socket instance..')
+        /*
+            The above line creates a new Socket.IO client instance and attempts to connect to the Socket.IO server running at http://localhost:7001.
+            When the Socket.IO server receives and accepts the connection, it emits the 'connection' event. 
+        */
         setSocket(s)
         return () => {
-            s.disconnect()
+            if (s && s.connected) {
+                console.log('disconnecting socket in BattleContext..')
+                s.disconnect()
+            }
         }
-    }, [])
+    }, [socket])
 
     const battleState: BattleStateType = {
         roomId, setRoomId,

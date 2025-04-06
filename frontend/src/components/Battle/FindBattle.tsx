@@ -12,6 +12,7 @@ import { useUserContext } from "@/contexts/UserContext"
 import { generateUniqueRoomId } from "@/utils/BattleUtils"
 import { useMatchingContext } from "@/contexts/MatchingContext"
 import LoadingPage from "../Misc/LoadingPage"
+import { BattleContextProvider } from "@/contexts/BattleContext"
 
 export default function FindBattle() {
     const {
@@ -75,7 +76,9 @@ export default function FindBattle() {
             <CreateRoomModal />
             <JoinRoomModal roomId={roomId} />
             <InvalidRoomModal />
-            <CurrentlyInGameModal />
+            <BattleContextProvider>
+                <CurrentlyInGameModal /> {/* Needs access to socket, hence needs BattleContext */}
+            </BattleContextProvider>
 
             <div className="flex flex-col min-h-screen">
                 <FindbattleNavbar />
